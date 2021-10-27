@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import { LoginParams, LoginResultModel } from './model/userModel'; //, GetUserInfoModel
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -29,7 +29,8 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+  return {};
+  // return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
 }
 
 export function getPermCode() {
