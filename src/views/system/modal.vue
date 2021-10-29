@@ -20,7 +20,7 @@
 
       const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
-        schemas: accountFormSchema,
+        schemas: accountFormSchema(isUpdate),
         showActionButtonGroup: false,
         actionColOptions: {
           span: 23,
@@ -52,9 +52,7 @@
           if (!unref(isUpdate)) {
             await add({ ...values });
           } else {
-            console.log('🚀values👉👉', values);
-
-            await update({ ...values });
+            await update({ ...values, id: rowId.value });
           }
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
@@ -62,7 +60,6 @@
           setModalProps({ confirmLoading: false });
         }
       }
-
       return { registerModal, registerForm, getTitle, handleSubmit };
     },
   });

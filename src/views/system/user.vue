@@ -49,6 +49,7 @@
         title: '账号列表',
         api: getList,
         rowKey: 'id',
+        // setPagination: setPagination,
         columns,
         formConfig: {
           labelWidth: 120,
@@ -75,9 +76,15 @@
           isUpdate: false,
         });
       }
+      // function setPagination() {
+      //   const page = { pageNo: number, pageSize: number }
+      //     return page?any {
+      //         page
+      //     }
+      // }
 
       function handleEdit(record: Recordable) {
-        console.log(record);
+        console.log(record.id);
         openModal(true, {
           record,
           isUpdate: true,

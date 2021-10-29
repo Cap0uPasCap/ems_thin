@@ -24,15 +24,9 @@ const routeModuleList: AppRouteModule[] = [];
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {};
   const modList = Array.isArray(mod) ? [...mod] : [mod];
-  console.log('🚀routeModuleList👉👉', routeModuleList);
 
   routeModuleList.push(...modList);
 });
-console.log(
-  '🚀PAGE_NOT_FOUND_ROUTE, ...routeModuleList👉👉',
-  PAGE_NOT_FOUND_ROUTE,
-  routeModuleList,
-);
 
 export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
 

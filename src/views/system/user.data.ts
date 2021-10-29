@@ -33,36 +33,36 @@ export const searchFormSchema: FormSchema[] = [
   },
 ];
 
-export const accountFormSchema: FormSchema[] = [
-  {
-    field: 'loginName',
-    label: '登录账号',
-    component: 'Input',
-    required: true,
-    helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
-  },
-  {
-    field: 'name',
-    label: '用户名',
-    component: 'Input',
-    required: true,
-    helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
-  },
-  {
-    field: 'password',
-    label: '密码',
-    component: 'InputPassword',
-    required: true,
-    // ifShow: false,
-    ifShow: (_column) => {
-      console.log('🚀_column👉👉', _column);
-
-      return true; // 根据业务控制是否显示
+export function accountFormSchema(isUpdate) {
+  const userFormSchema: FormSchema[] = [
+    {
+      field: 'loginName',
+      label: '登录账号',
+      component: 'Input',
+      required: true,
+      helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
     },
-  },
-  {
-    label: '备注',
-    field: 'remark',
-    component: 'InputTextArea',
-  },
-];
+    {
+      field: 'name',
+      label: '用户名',
+      component: 'Input',
+      required: true,
+      helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
+    },
+    {
+      field: 'password',
+      label: '密码',
+      component: 'InputPassword',
+      required: true,
+      ifShow: (_column) => {
+        return !isUpdate.value; // 根据业务控制是否显示
+      },
+    },
+    {
+      label: '备注',
+      field: 'remark',
+      component: 'InputTextArea',
+    },
+  ];
+  return userFormSchema;
+}
