@@ -15,6 +15,27 @@ const ROOT_PATH = RootRoute.path;
 
 const whitePathList: PageEnum[] = [LOGIN_PATH];
 
+import type { AppRouteModule } from '/@/router/types';
+
+const modules = import.meta.globEager('../routes/modules/**/*.ts');
+
+const routeModuleList: AppRouteModule[] = [];
+
+Object.keys(modules).forEach((key) => {
+  const mod = modules[key].default || {};
+  const modList = Array.isArray(mod) ? [...mod] : [mod];
+  console.log('🚀routeModuleList👉👉', routeModuleList);
+
+  routeModuleList.push(...modList);
+});
+console.log(
+  '🚀PAGE_NOT_FOUND_ROUTE, ...routeModuleList👉👉',
+  PAGE_NOT_FOUND_ROUTE,
+  routeModuleList,
+);
+
+export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
+
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
@@ -81,9 +102,20 @@ export function createPermissionGuard(router: Router) {
     }
 
     // get userinfo while last fetch time is empty
+
+    /*
+     * cap
+     * 去除了权限判断分配菜单
+     * */
     if (userStore.getLastUpdateTime === 0) {
       try {
-        await userStore.getUserInfoAction();
+        // await userStore.getUserInfoAction();
+        asyncRoutes.forEach((route) => {
+          router.addRoute(route as unknown as RouteRecordRaw);
+        });
+        setTimeout(() => {
+          next();
+        }, 100);
       } catch (err) {
         next();
         return;
@@ -100,7 +132,6 @@ export function createPermissionGuard(router: Router) {
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw);
     });
-
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
 
     permissionStore.setDynamicAddedRoute(true);
