@@ -1,61 +1,117 @@
 <template>
-  <div class="p-4">
-    <BasicTable
-      title="用户管理"
-      titleHelpMessage="温馨提醒"
-      :columns="columns"
-      :dataSource="data"
-      :canResize="canResize"
-      :loading="loading"
-      :striped="striped"
-      :bordered="border"
-      showTableSetting
-      :pagination="pagination"
-      @columns-change="handleColumnChange"
-    >
+  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
+    <BasicTable @register="registerTable" :searchInfo="searchInfo">
       <template #toolbar>
-        <!--        <a-button type="primary" @click="toggleBorder">-->
-        <!--          {{ !border ? '显示边框' : '隐藏边框' }}-->
-        <!--        </a-button>-->
+        <a-button type="primary" @click="handleCreate">新增账号</a-button>
+      </template>
+      <template #action="{ record }">
+        <TableAction
+          :actions="[
+            {
+              icon: 'clarity:note-edit-line',
+              tooltip: '编辑用户资料',
+              onClick: handleEdit.bind(null, record),
+            },
+            {
+              icon: 'ant-design:delete-outlined',
+              color: 'error',
+              tooltip: '删除此账号',
+              popConfirm: {
+                title: '是否确认删除',
+                confirm: handleDelete.bind(null, record),
+              },
+            },
+          ]"
+        />
       </template>
     </BasicTable>
-  </div>
+    <AccountModal @register="registerModal" @success="handleSuccess" />
+  </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicTable, ColumnChangeParam } from '/@/components/Table';
-  import { getBasicColumns, getBasicData } from './tableData';
+  import { defineComponent, reactive } from 'vue';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { getList, del } from '/@/api/system/user';
+  import { PageWrapper } from '/@/components/Page';
+  import { useModal } from '/@/components/Modal';
+  import AccountModal from './modal.vue';
+  import { columns, searchFormSchema } from './user.data';
+  // import { useGo } from '/@/hooks/web/usePage';
 
   export default defineComponent({
-    components: { BasicTable },
+    name: 'AccountManagement',
+    components: { BasicTable, PageWrapper, AccountModal, TableAction },
     setup() {
-      const canResize = ref(true);
-      const loading = ref(false);
-      const striped = ref(true);
-      const border = ref(true);
-      const pagination = ref<any>(false);
-      function toggleLoading() {
-        loading.value = true;
-        setTimeout(() => {
-          loading.value = false;
-          pagination.value = { pageSize: 20 };
-        }, 3000);
+      // const go = useGo();
+      const [registerModal, { openModal }] = useModal();
+      const searchInfo = reactive<Recordable>({});
+      const [registerTable, { reload, updateTableDataRecord }] = useTable({
+        title: '账号列表',
+        api: getList,
+        rowKey: 'id',
+        columns,
+        formConfig: {
+          labelWidth: 120,
+          schemas: searchFormSchema,
+          autoSubmitOnEnter: true,
+        },
+        useSearchForm: true,
+        showTableSetting: true,
+        bordered: true,
+        handleSearchInfoFn(info) {
+          console.log('handleSearchInfoFn', info);
+          return info;
+        },
+        actionColumn: {
+          width: 120,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+        },
+      });
+
+      function handleCreate() {
+        openModal(true, {
+          isUpdate: false,
+        });
       }
 
-      function handleColumnChange(data: ColumnChangeParam[]) {
-        console.log('ColumnChanged', data);
+      function handleEdit(record: Recordable) {
+        console.log(record);
+        openModal(true, {
+          record,
+          isUpdate: true,
+        });
       }
+
+      function handleDelete(record: Recordable) {
+        del(record.id);
+        reload();
+      }
+
+      function handleSuccess({ isUpdate, values }) {
+        if (isUpdate) {
+          // 演示不刷新表格直接更新内部数据。
+          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+          const result = updateTableDataRecord(values.id, values);
+          console.log(result);
+        } else {
+          reload();
+        }
+      }
+
+      // function handleView(record: Recordable) {
+      //     go('/system/account_detail/' + record.id);
+      // }
 
       return {
-        columns: getBasicColumns(),
-        data: getBasicData(),
-        canResize,
-        loading,
-        striped,
-        border,
-        toggleLoading,
-        pagination,
-        handleColumnChange,
+        registerTable,
+        registerModal,
+        handleCreate,
+        handleEdit,
+        handleDelete,
+        handleSuccess,
+        searchInfo,
       };
     },
   });

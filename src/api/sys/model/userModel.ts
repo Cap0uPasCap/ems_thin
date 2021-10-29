@@ -2,7 +2,7 @@
  * @description: Login interface parameters
  */
 export interface LoginParams {
-  username: string;
+  loginName: string;
   password: string;
 }
 
@@ -35,4 +35,6 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  // 用户名
+  loginName: string;
 }
