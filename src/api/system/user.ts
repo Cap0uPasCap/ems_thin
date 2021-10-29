@@ -1,4 +1,4 @@
-import { ResultModel } from './model/user';
+import { ResultModel, QuerySchema } from './model/user';
 import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
@@ -11,8 +11,20 @@ enum Api {
   updateUserPassword = '/user/updateUserPassword',
 }
 
-export const getList = (page: { pageNo: number; pageSize: number }, data: any) =>
-  defHttp.post<ResultModel>({ url: Api.getList, params: { page, data } });
+export const getList = (params: any) => {
+  const query: QuerySchema = {
+    page: {
+      pageNo: params.page,
+      pageSize: params.pageSize,
+    },
+    loginName: params.loginName,
+  };
+
+  return defHttp.post<ResultModel>({
+    url: Api.getList,
+    params: query,
+  });
+};
 
 export const add = (data: any) => defHttp.post<ResultModel>({ url: Api.add, params: data });
 

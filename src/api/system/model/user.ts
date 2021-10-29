@@ -3,10 +3,10 @@ export interface page {
   pageSize: number;
 }
 
-export interface ListParams {
-  page: page;
-}
-
 export interface ResultModel {
   data: any;
+}
+export interface QuerySchema {
+  page: page;
+  loginName: string;
 }
