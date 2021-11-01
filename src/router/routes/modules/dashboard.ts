@@ -2,6 +2,7 @@ import type { AppRouteModule } from '/@/router/types';
 
 import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
+const isDev = process.env.NODE_ENV === 'development';
 
 const dashboard: AppRouteModule = {
   path: '/dashboard',
@@ -12,6 +13,7 @@ const dashboard: AppRouteModule = {
     orderNo: 10,
     icon: 'ion:grid-outline',
     title: t('routes.dashboard.dashboard'),
+    hideMenu: !isDev,
   },
   children: [
     {

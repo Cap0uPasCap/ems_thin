@@ -2,42 +2,10 @@
   <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
     <BasicTable :searchInfo="searchInfo" @register="registerTable">
       <template #toolbar>
-        <a-button @click="handleCreate" type="primary">新增账号</a-button>
+        <a-button @click="handleCreate" type="primary">{{ t('system.action.addText') }}</a-button>
       </template>
       <template #action="{ record }">
-        <TableAction
-          :actions="[
-            {
-              icon: 'clarity:note-edit-line',
-              tooltip: '编辑用户资料',
-              onClick: handleEdit.bind(null, record),
-            },
-            {
-              icon: 'ant-design:delete-outlined',
-              color: 'error',
-              tooltip: '删除此账号',
-              popConfirm: {
-                title: '是否确认删除',
-                confirm: handleDelete.bind(null, record),
-              },
-            },
-            {
-              icon: 'ant-design:tool',
-              // color: 'error',
-              tooltip: '修改密码',
-              onClick: handleReset.bind(null, record),
-            },
-            {
-              icon: 'ant-design:undo',
-              // color: 'error',
-              tooltip: '重置密码',
-              popConfirm: {
-                title: '是否确认重置',
-                confirm: handleReset.bind(null, record),
-              },
-            },
-          ]"
-        />
+        <TableAction :actions="fetchAction(record)" />
       </template>
     </BasicTable>
     <AccountModal @register="registerModal" @success="handleSuccess" />
@@ -51,25 +19,28 @@
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import AccountModal from './modal.vue';
-  import { columns, searchFormSchema } from './user.data';
+  import { getSearchFormSchema, getColumns } from './user.data';
   // import { useGo } from '/@/hooks/web/usePage';
+
+  import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
     name: 'AccountManagement',
     components: { BasicTable, PageWrapper, AccountModal, TableAction },
     setup() {
+      const { t } = useI18n();
       // const go = useGo();
+
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
       const [registerTable, { reload, updateTableDataRecord }] = useTable({
-        title: '账号列表',
+        title: t('system.title'),
         api: getList,
         rowKey: 'id',
-        // setPagination: setPagination,
-        columns,
+        columns: getColumns(),
         formConfig: {
           labelWidth: 120,
-          schemas: searchFormSchema,
+          schemas: getSearchFormSchema(),
           autoSubmitOnEnter: true,
         },
         useSearchForm: true,
@@ -81,24 +52,51 @@
         },
         actionColumn: {
           width: 120,
-          title: '操作',
+          title: t('system.column.action'),
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
       });
+
+      function fetchAction(record) {
+        return [
+          {
+            icon: 'clarity:note-edit-line',
+            tooltip: t('system.action.editBtnTip'),
+            onClick: handleEdit.bind(null, record),
+          },
+          {
+            icon: 'ant-design:delete-outlined',
+            color: 'error',
+            tooltip: t('system.action.delBtnTip'),
+            popConfirm: {
+              title: t('system.action.delBtnConfirm'),
+              confirm: handleDelete.bind(null, record),
+            },
+          },
+          {
+            icon: 'ant-design:tool',
+            // color: 'error',
+            tooltip: t('system.action.editUserBtnTip'),
+            onClick: handleReset.bind(null, record),
+          },
+          {
+            icon: 'ant-design:undo',
+            // color: 'error',
+            tooltip: t('system.action.resetBtnTip'),
+            popConfirm: {
+              title: t('system.action.resetBtnConfirm'),
+              confirm: handleReset.bind(null, record),
+            },
+          },
+        ];
+      }
 
       function handleCreate() {
         openModal(true, {
           isUpdate: false,
         });
       }
-
-      // function setPagination() {
-      //   const page = { pageNo: number, pageSize: number }
-      //     return page?any {
-      //         page
-      //     }
-      // }
 
       function handleEdit(record: Recordable) {
         console.log(record.id);
@@ -110,13 +108,13 @@
 
       function handleDelete(record: Recordable) {
         del(record.id);
-        message.success('成功');
+        message.success(t('system.msg.success'));
         reload();
       }
 
       function handleReset(record: Recordable) {
         resetUserPassword(record.id);
-        message.success('成功');
+        message.success(t('system.msg.success'));
         reload();
       }
 
@@ -125,7 +123,7 @@
           // 演示不刷新表格直接更新内部数据。
           // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
           const result = updateTableDataRecord(values.id, values);
-          message.success('成功');
+          message.success(t('system.msg.success'));
           console.log(result);
         } else {
           reload();
@@ -145,6 +143,8 @@
         handleReset,
         handleSuccess,
         searchInfo,
+        fetchAction,
+        t,
       };
     },
   });

@@ -75,6 +75,7 @@
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
+  const isDev = process.env.NODE_ENV === 'development';
 
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
@@ -84,8 +85,8 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'admin',
-    password: '123456',
+    account: isDev ? 'admin' : '',
+    password: isDev ? '123456' : '',
   });
 
   const { validForm } = useFormValid(formRef);
