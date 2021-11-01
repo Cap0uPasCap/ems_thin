@@ -121,6 +121,7 @@ export const useUserStore = defineStore({
       }
       // cap 将userInfo 存入 localStorage
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      this.setUserInfo(userInfo);
       return userInfo;
     },
     // async getUserInfoAction(): Promise<UserInfo | null> {

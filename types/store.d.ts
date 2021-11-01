@@ -33,6 +33,7 @@ export interface ErrorLogInfo {
 export interface UserInfo {
   userId: string | number;
   username: string;
+  loginName: string;
   realName: string;
   avatar: string;
   desc?: string;
