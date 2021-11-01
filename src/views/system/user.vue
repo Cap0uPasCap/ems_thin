@@ -1,8 +1,8 @@
 <template>
-  <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <BasicTable @register="registerTable" :searchInfo="searchInfo">
+  <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
+    <BasicTable :searchInfo="searchInfo" @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate">新增账号</a-button>
+        <a-button @click="handleCreate" type="primary">新增账号</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -21,6 +21,21 @@
                 confirm: handleDelete.bind(null, record),
               },
             },
+            {
+              icon: 'ant-design:tool',
+              // color: 'error',
+              tooltip: '修改密码',
+              onClick: handleReset.bind(null, record),
+            },
+            {
+              icon: 'ant-design:undo',
+              // color: 'error',
+              tooltip: '重置密码',
+              popConfirm: {
+                title: '是否确认重置',
+                confirm: handleReset.bind(null, record),
+              },
+            },
           ]"
         />
       </template>
@@ -29,9 +44,10 @@
   </PageWrapper>
 </template>
 <script lang="ts">
+  import { message } from 'ant-design-vue';
   import { defineComponent, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getList, del } from '/@/api/system/user';
+  import { getList, del, resetUserPassword } from '/@/api/system/user';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import AccountModal from './modal.vue';
@@ -76,6 +92,7 @@
           isUpdate: false,
         });
       }
+
       // function setPagination() {
       //   const page = { pageNo: number, pageSize: number }
       //     return page?any {
@@ -93,6 +110,13 @@
 
       function handleDelete(record: Recordable) {
         del(record.id);
+        message.success('成功');
+        reload();
+      }
+
+      function handleReset(record: Recordable) {
+        resetUserPassword(record.id);
+        message.success('成功');
         reload();
       }
 
@@ -101,6 +125,7 @@
           // 演示不刷新表格直接更新内部数据。
           // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
           const result = updateTableDataRecord(values.id, values);
+          message.success('成功');
           console.log(result);
         } else {
           reload();
@@ -117,6 +142,7 @@
         handleCreate,
         handleEdit,
         handleDelete,
+        handleReset,
         handleSuccess,
         searchInfo,
       };

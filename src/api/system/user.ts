@@ -36,3 +36,6 @@ export const del = (id: string | number) =>
 
 export const getDetails = (id: string | number) =>
   defHttp.get<ResultModel>({ url: Api.getDetails, params: { id } });
+
+export const resetUserPassword = (id: string | number) =>
+  defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { id } });
