@@ -9,7 +9,7 @@ const dashboard: AppRouteModule = {
   component: LAYOUT,
   redirect: '/system/user',
   meta: {
-    orderNo: 101,
+    orderNo: 8,
     icon: 'ion:grid-outline',
     title: t('routes.system.system'),
   },
