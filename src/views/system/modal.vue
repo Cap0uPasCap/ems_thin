@@ -9,12 +9,13 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { accountFormSchema } from './user.data';
   import { add, update } from '/@/api/system/user';
-
+  import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'AccountModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
+      const { t } = useI18n();
       const isUpdate = ref(true);
       const rowId = ref('');
 
@@ -40,7 +41,9 @@
         }
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增账号' : '编辑账号'));
+      const getTitle = computed(() =>
+        !unref(isUpdate) ? t('system.action.addText') : t('system.action.editBtnTip'),
+      );
 
       async function handleSubmit() {
         try {

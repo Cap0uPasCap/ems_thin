@@ -74,12 +74,12 @@
               confirm: handleDelete.bind(null, record),
             },
           },
-          {
-            icon: 'ant-design:tool',
-            // color: 'error',
-            tooltip: t('system.action.editUserBtnTip'),
-            onClick: handleReset.bind(null, record),
-          },
+          // {
+          //   icon: 'ant-design:tool',
+          //   // color: 'error',
+          //   tooltip: t('system.action.editUserBtnTip'),
+          //   onClick: handleEditPassword.bind(null, record),
+          // },
           {
             icon: 'ant-design:undo',
             // color: 'error',
@@ -105,6 +105,13 @@
           isUpdate: true,
         });
       }
+      // function handleEditPassword(record: Recordable) {
+      //   console.log(record.id);
+      //   openModal(true, {
+      //     record,
+      //     isEditPassword: true,
+      //   });
+      // }
 
       function handleDelete(record: Recordable) {
         del(record.id);
