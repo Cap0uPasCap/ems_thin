@@ -16,6 +16,10 @@ export default {
     editUserBtnTip: 'Edit Password',
     resetBtnTip: 'Reset Password',
     resetBtnConfirm: 'Confirm Reset?',
+    updatePassWordTip: "Can't be empty",
+    updatePassWordTitle: 'Edit Password',
+    okText: 'ok',
+    cancelText: 'cancel',
   },
   msg: {
     success: 'success',

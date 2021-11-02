@@ -9,25 +9,26 @@
       </template>
     </BasicTable>
     <AccountModal @register="registerModal" @success="handleSuccess" />
+    <!--:confirm-loading="confirmLoading"-->
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { message } from 'ant-design-vue';
-  import { defineComponent, reactive } from 'vue';
+  import { message, Modal } from 'ant-design-vue';
+  import { defineComponent, reactive, ref, createVNode } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getList, del, resetUserPassword } from '/@/api/system/user';
+  import { getList, del, resetUserPassword, updateUserPassword } from '/@/api/system/user';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import AccountModal from './modal.vue';
-  import { getSearchFormSchema, getColumns } from './user.data';
+  import { getSearchFormSchema, getColumns } from './data';
   // import { useGo } from '/@/hooks/web/usePage';
-
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
     name: 'AccountManagement',
     components: { BasicTable, PageWrapper, AccountModal, TableAction },
     setup() {
+      const password = ref('');
       const { t } = useI18n();
       // const go = useGo();
 
@@ -47,7 +48,6 @@
         showTableSetting: true,
         bordered: true,
         handleSearchInfoFn(info) {
-          console.log('handleSearchInfoFn', info);
           return info;
         },
         actionColumn: {
@@ -64,6 +64,9 @@
             icon: 'clarity:note-edit-line',
             tooltip: t('system.action.editBtnTip'),
             onClick: handleEdit.bind(null, record),
+            ifShow: (_column) => {
+              return record.sysMark !== 1;
+            },
           },
           {
             icon: 'ant-design:delete-outlined',
@@ -73,13 +76,16 @@
               title: t('system.action.delBtnConfirm'),
               confirm: handleDelete.bind(null, record),
             },
+            ifShow: (_column) => {
+              return record.sysMark !== 1;
+            },
           },
-          // {
-          //   icon: 'ant-design:tool',
-          //   // color: 'error',
-          //   tooltip: t('system.action.editUserBtnTip'),
-          //   onClick: handleEditPassword.bind(null, record),
-          // },
+          {
+            icon: 'ant-design:tool',
+            // color: 'error',
+            tooltip: t('system.action.editUserBtnTip'),
+            onClick: handleEditPassword.bind(null, record),
+          },
           {
             icon: 'ant-design:undo',
             // color: 'error',
@@ -87,6 +93,9 @@
             popConfirm: {
               title: t('system.action.resetBtnConfirm'),
               confirm: handleReset.bind(null, record),
+            },
+            ifShow: (_column) => {
+              return record.sysMark !== 1;
             },
           },
         ];
@@ -105,13 +114,34 @@
           isUpdate: true,
         });
       }
-      // function handleEditPassword(record: Recordable) {
-      //   console.log(record.id);
-      //   openModal(true, {
-      //     record,
-      //     isEditPassword: true,
-      //   });
-      // }
+
+      function handleEditPassword(record: Recordable) {
+        console.log(record.id);
+        Modal.confirm({
+          title: t('system.action.updatePassWordTitle'),
+          content: () =>
+            createVNode('input', {
+              value: password.value,
+              type: 'text',
+              style: 'border: 1px solid;width: 90%;',
+              onChange: (e) => {
+                password.value = e.target.value;
+              },
+            }),
+          okText: t('system.action.okText'),
+          cancelText: t('system.action.cancelText'),
+          onOk: () => {
+            if (!!password.value) {
+              updateUserPassword(password.value, record.id);
+              message.success(t('system.msg.success'));
+              password.value = '';
+            } else {
+              message.error(t('system.action.updatePassWordTip'));
+            }
+          },
+          onCancel: () => (password.value = ''),
+        });
+      }
 
       function handleDelete(record: Recordable) {
         del(record.id);
@@ -152,7 +182,13 @@
         searchInfo,
         fetchAction,
         t,
+        password,
       };
     },
   });
 </script>
+<style scoped>
+  input[type='text'] {
+    border: 1px solid #aaa !important;
+  }
+</style>

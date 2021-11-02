@@ -7,7 +7,7 @@
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { accountFormSchema } from './user.data';
+  import { accountFormSchema } from './data';
   import { add, update } from '/@/api/system/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({

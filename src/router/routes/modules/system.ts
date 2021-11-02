@@ -17,7 +17,7 @@ const dashboard: AppRouteModule = {
     {
       path: 'user',
       name: 'User',
-      component: () => import('/@/views/system/user.vue'),
+      component: () => import('/@/views/system/user/index.vue'),
       meta: {
         // affix: true,
         title: t('routes.system.user'),

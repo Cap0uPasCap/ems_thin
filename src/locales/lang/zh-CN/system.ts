@@ -16,6 +16,10 @@ export default {
     editUserBtnTip: '修改密码',
     resetBtnTip: '重置密码',
     resetBtnConfirm: '是否重置密码',
+    updatePassWordTip: '不能为空',
+    updatePassWordTitle: '修改密码',
+    okText: '确认',
+    cancelText: '取消',
   },
   msg: {
     success: '成功',

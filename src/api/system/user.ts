@@ -39,3 +39,6 @@ export const getDetails = (id: string | number) =>
 
 export const resetUserPassword = (id: string | number) =>
   defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { id } });
+
+export const updateUserPassword = (password: string | number, id: string | number) =>
+  defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { password, id } });
