@@ -15,7 +15,6 @@ Object.keys(modules).forEach((key) => {
   const modList = Array.isArray(mod) ? [...mod] : [mod];
   routeModuleList.push(...modList);
 });
-console.log('🚀routeModuleList👉👉', routeModuleList);
 
 export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
 

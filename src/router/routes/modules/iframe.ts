@@ -62,6 +62,15 @@ const iframe: AppRouteModule = {
         title: 'Vite',
       },
     },
+    {
+      path: 'swagger',
+      name: 'Swagger',
+      component: IFrame,
+      meta: {
+        frameSrc: 'http://192.168.0.226/restful-agent/swagger-ui.html#/',
+        title: 'Swagger',
+      },
+    },
 
     // {
     //     path: 'https://vvbin.cn/doc-next/',

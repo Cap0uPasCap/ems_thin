@@ -12,12 +12,13 @@ enum Api {
 }
 
 export const getList = (params: any) => {
+  const { pageNo, pageSize, loginName } = params;
   const query: QuerySchema = {
     page: {
-      pageNo: params.page,
-      pageSize: params.pageSize,
+      pageNo,
+      pageSize,
     },
-    loginName: params.loginName,
+    loginName,
   };
 
   return defHttp.post<ResultModel>({
@@ -41,4 +42,4 @@ export const resetUserPassword = (id: string | number) =>
   defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { id } });
 
 export const updateUserPassword = (password: string | number, id: string | number) =>
-  defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { password, id } });
+  defHttp.post<ResultModel>({ url: Api.updateUserPassword, params: { password, id } });

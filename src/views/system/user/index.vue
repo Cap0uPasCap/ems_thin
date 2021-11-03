@@ -33,7 +33,7 @@
 
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
-      const [registerTable, { reload, updateTableDataRecord }] = useTable({
+      const [registerTable, { reload, updateTableDataRecord, setLoading }] = useTable({
         title: t('system.title'),
         api: getList,
         rowKey: 'id',
@@ -56,6 +56,13 @@
           slots: { customRender: 'action' },
         },
       });
+
+      function changeLoading() {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
 
       function fetchAction(record) {
         return [
@@ -107,7 +114,6 @@
       }
 
       function handleEdit(record: Recordable) {
-        console.log(record.id);
         openModal(true, {
           record,
           isUpdate: true,
@@ -132,7 +138,6 @@
           onOk: () => {
             if (!!password.value) {
               updateUserPassword(password.value, record.id);
-              message.success(t('system.msg.success'));
               password.value = '';
             } else {
               message.error(t('system.action.updatePassWordTip'));
@@ -143,25 +148,26 @@
       }
 
       function handleDelete(record: Recordable) {
-        del(record.id);
-        message.success(t('system.msg.success'));
-        reload();
+        del(record.id).then(() => {
+          changeLoading();
+          reload();
+        });
       }
 
       function handleReset(record: Recordable) {
-        resetUserPassword(record.id);
-        message.success(t('system.msg.success'));
-        reload();
+        resetUserPassword(record.id).then(() => {
+          changeLoading();
+          reload();
+        });
       }
 
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
           // 演示不刷新表格直接更新内部数据。
           // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          const result = updateTableDataRecord(values.id, values);
-          message.success(t('system.msg.success'));
-          console.log(result);
+          updateTableDataRecord(values.id, values);
         } else {
+          changeLoading();
           reload();
         }
       }
@@ -178,6 +184,7 @@
         handleDelete,
         handleReset,
         handleSuccess,
+        changeLoading,
         searchInfo,
         fetchAction,
         t,
