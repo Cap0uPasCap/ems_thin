@@ -9,7 +9,6 @@
       </template>
     </BasicTable>
     <AccountModal @register="registerModal" @success="handleSuccess" />
-    <!--:confirm-loading="confirmLoading"-->
   </PageWrapper>
 </template>
 <script lang="ts">
