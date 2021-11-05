@@ -3,9 +3,9 @@ import type { AppRouteModule } from '/@/router/types';
 import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
-const dashboard: AppRouteModule = {
+const system: AppRouteModule = {
   path: '/system',
-  name: 'system',
+  name: 'System',
   component: LAYOUT,
   redirect: '/system/user',
   meta: {
@@ -19,11 +19,10 @@ const dashboard: AppRouteModule = {
       name: 'User',
       component: () => import('/@/views/system/user/index.vue'),
       meta: {
-        // affix: true,
         title: t('routes.system.user'),
       },
     },
   ],
 };
 
-export default dashboard;
+export default system;
