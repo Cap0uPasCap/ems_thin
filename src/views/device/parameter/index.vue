@@ -3,14 +3,14 @@
     <ParameterTree @select="handleSelect" class="w-1/4 xl:w-1/5" />
     <div class="w-3/4 xl:w-4/5 bg-white m-4 mr-0 overflow-hidden">
       <BasicTable
+        :rowSelection="{ type: 'checkbox' }"
         :title="selectParameterName"
         @register="registerTable"
-        :rowSelection="{ type: 'checkbox' }"
       >
         <template #toolbar>
-          <a-button type="primary"> 查询参数列表 </a-button>
-          <a-button type="primary"> 查询参数值 </a-button>
-          <a-button type="primary"> 批量提交 </a-button>
+          <a-button type="primary"> 查询参数列表</a-button>
+          <a-button type="primary"> 查询参数值</a-button>
+          <a-button type="primary"> 批量提交</a-button>
         </template>
       </BasicTable>
     </div>
@@ -33,7 +33,6 @@
       const { t } = useI18n();
       const searchInfo = reactive<Recordable>({ tr069: false });
       const [registerTable, { reload }] = useTable({
-        // title: selectParameterName.value,
         api: findParameterList,
         rowKey: 'id',
         columns: getColumns(searchInfo.tr069),
@@ -51,12 +50,13 @@
       });
 
       function handleSelect(parameter) {
-        selectParameterName.value = parameter.fullName;
-        console.log('🚀selectParameterName👉👉', selectParameterName.value);
-
-        searchInfo.searchName = parameter.fullName;
-        searchInfo.tr069 = parameter.tr069;
-        reload();
+        const { fullName, tr069 } = parameter;
+        selectParameterName.value = fullName;
+        searchInfo.searchName = fullName;
+        searchInfo.tr069 = tr069;
+        reload({
+          searchInfo,
+        });
       }
 
       return {

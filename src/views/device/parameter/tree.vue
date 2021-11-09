@@ -59,12 +59,16 @@
         treeData.value = [(await findParametersTree(params)) as unknown as TreeItem[]];
         compState.loading = false;
       }
-
-      function handleSelect(keys) {
-        emit('select', {
-          fullName: keys[0],
-          tr069: checked.value,
-        });
+      //:{selected: bool, selectedNodes, node, event}
+      function handleSelect(_, e) {
+        if (!e?.selectedNodes[0]?.props) return;
+        const { fullName, treeType } = e?.selectedNodes[0]?.props;
+        if (treeType !== 0) {
+          emit('select', {
+            fullName,
+            tr069: checked.value,
+          });
+        }
       }
 
       function getRightMenuList(node: any): ContextMenuItem[] {
