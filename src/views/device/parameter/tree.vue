@@ -59,7 +59,10 @@
       }
 
       function handleSelect(keys) {
-        emit('select', keys[0]);
+        emit('select', {
+          fullName: keys[0],
+          tr069: checked.value,
+        });
       }
 
       function getRightMenuList(node: any): ContextMenuItem[] {
