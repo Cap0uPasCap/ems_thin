@@ -76,7 +76,7 @@ export function getColumns(tr069) {
         const color = enable ? 'gray' : 'success';
         const text = enable
           ? t('device.parameter.column.readOnly')
-          : t('device.parameter.column.writable');
+          : t('device.parameter.column.writeable');
         return h(Tag, { color: color }, () => text);
       },
     },

@@ -18,10 +18,12 @@
       </Row>
     </div>
     <BasicTree
+      v-if="treeData.length"
       :beforeRightClick="getRightMenuList"
       :clickRowToExpand="false"
       :replaceFields="{ key: 'fullName', title: 'nodeName' }"
       :treeData="treeData"
+      defaultExpandLevel="1"
       @select="handleSelect"
     />
     <Loading :absolute="absolute" :loading="loading" :tip="tip" />
