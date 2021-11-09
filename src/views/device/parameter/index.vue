@@ -13,7 +13,7 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
   import ParameterTree from './tree.vue';
-  import { columns } from './data'; //, searchFormSchema
+  import { getColumns } from './data'; //, searchFormSchema
   import { findParameterList } from '/@/api/device/parameter';
   import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -22,12 +22,12 @@
     components: { BasicTable, PageWrapper, ParameterTree },
     setup() {
       const { t } = useI18n();
-      const searchInfo = reactive<Recordable>({});
+      const searchInfo = reactive<Recordable>({ tr069: false });
       const [registerTable, { reload }] = useTable({
         title: t('device.parameter.title'),
         api: findParameterList,
         rowKey: 'id',
-        columns,
+        columns: getColumns(searchInfo.tr069),
         formConfig: {
           labelWidth: 120,
           // schemas: searchFormSchema,

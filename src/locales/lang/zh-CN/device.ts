@@ -6,7 +6,8 @@ export default {
       action: '操作',
       location: '连接模块',
       parameterName: '参数名',
-      omcParameterName: 'OMC参数名',
+      lastNodeName: '参数节点名',
+      parameterTreeName: '参数树名',
       type: '类型',
       writable: '是否可写', // 1 可写 0 只读
     },

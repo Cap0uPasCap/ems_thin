@@ -6,9 +6,10 @@ export default {
       action: 'Action',
       location: 'Location',
       parameterName: 'ParameterName',
-      omcParameterName: 'OmcParameterName',
-      type: 'type',
-      writable: 'writable', // 1 可写 0 只读
+      lastNodeName: 'LastNodeName',
+      parameterTreeName: 'ParameterTreeName',
+      type: 'Type',
+      writable: 'Writable', // 1 可写 0 只读
     },
     addText: 'Add User',
     action: {
