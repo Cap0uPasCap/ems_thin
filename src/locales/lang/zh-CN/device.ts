@@ -10,6 +10,8 @@ export default {
       parameterTreeName: '参数树名',
       type: '类型',
       writable: '是否可写', // 1 可写 0 只读
+      readOnly: '只读',
+      writeable: '可写',
     },
     action: {
       // addText: '新增',

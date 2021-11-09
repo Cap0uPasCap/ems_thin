@@ -74,7 +74,9 @@ export function getColumns(tr069) {
         const writable = record.writable;
         const enable = ~~writable === 0;
         const color = enable ? 'gray' : 'success';
-        const text = enable ? '只读' : '可写';
+        const text = enable
+          ? t('device.parameter.column.readOnly')
+          : t('device.parameter.column.writable');
         return h(Tag, { color: color }, () => text);
       },
     },

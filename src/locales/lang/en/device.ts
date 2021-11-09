@@ -10,6 +10,8 @@ export default {
       parameterTreeName: 'ParameterTreeName',
       type: 'Type',
       writable: 'Writable', // 1 可写 0 只读
+      readOnly: 'ReadOnly',
+      writeable: 'Writeable',
     },
     addText: 'Add User',
     action: {
