@@ -12,6 +12,7 @@ export default {
       writable: 'Writable', // 1 可写 0 只读
       readOnly: 'ReadOnly',
       writeable: 'Writeable',
+      parameterValue: 'ParameterValue',
     },
     addText: 'Add User',
     action: {

@@ -12,6 +12,7 @@ export default {
       writable: '是否可写', // 1 可写 0 只读
       readOnly: '只读',
       writeable: '可写',
+      parameterValue: '参数值',
     },
     action: {
       // addText: '新增',

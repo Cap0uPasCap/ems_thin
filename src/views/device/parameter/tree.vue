@@ -21,7 +21,7 @@
       v-if="treeData.length"
       :beforeRightClick="getRightMenuList"
       :clickRowToExpand="false"
-      :replaceFields="{ key: 'fullName', title: 'nodeName' }"
+      :replaceFields="{ key: 'identity', title: 'title' }"
       :treeData="treeData"
       defaultExpandLevel="1"
       @select="handleSelect"

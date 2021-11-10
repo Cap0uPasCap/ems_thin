@@ -9,21 +9,27 @@
       >
         <template #toolbar>
           <a-button type="primary"> 查询参数列表</a-button>
-          <a-button type="primary"> 查询参数值</a-button>
-          <a-button type="primary"> 批量提交</a-button>
+          <a-button @click="handleSearchParameterValue" type="primary"> 查询参数值</a-button>
+          <a-button @click="handleSetParameterValue" type="primary"> 批量提交</a-button>
         </template>
       </BasicTable>
     </div>
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, ref } from 'vue';
+  import { message } from 'ant-design-vue';
+  import { defineComponent, reactive, ref, onMounted } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
   import ParameterTree from './tree.vue';
-  import { getColumns } from './data'; //, searchFormSchema
-  import { findParameterList } from '/@/api/device/parameter';
+  import { getColumns } from './data';
+  import {
+    findParameterList,
+    getParameterValues,
+    setParameterValues,
+  } from '/@/api/device/parameter';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { ParameterValuesResult } from '/@/api/device/model/parameter';
 
   export default defineComponent({
     name: 'AccountManagement',
@@ -31,11 +37,21 @@
     setup() {
       const selectParameterName = ref('');
       const { t } = useI18n();
+      const listData = ref<any>([]);
       const searchInfo = reactive<Recordable>({ tr069: false });
-      const [registerTable, { reload }] = useTable({
+      const [
+        registerTable,
+        { reload, getRowSelection, setShowPagination, updateTableDataRecord, clearSelectedRowKeys },
+      ] = useTable({
         api: findParameterList,
-        rowKey: 'id',
+        rowKey: searchInfo.tr069 ? 'omcParameterName' : 'parameterName',
+        showIndexColumn: false,
+        clickToRowSelect: false,
         columns: getColumns(searchInfo.tr069),
+        afterFetch(data) {
+          listData.value = data;
+          return data;
+        },
         formConfig: {
           labelWidth: 120,
           // schemas: searchFormSchema,
@@ -49,6 +65,64 @@
         },
       });
 
+      async function handleSearchParameterValue() {
+        const selectedRowKeys: any = getRowSelection().selectedRowKeys;
+
+        if (!selectedRowKeys?.length) return message.warning('请至少选择一项操作');
+        let parameterNames: string[] = [];
+        for (let i in selectedRowKeys) {
+          if (selectedRowKeys.hasOwnProperty(i)) {
+            parameterNames.push(selectedRowKeys[i]);
+          }
+        }
+
+        const data = await getParameterValues({ parameterNames });
+        if (!data?.length) return;
+
+        data.forEach((e) => {
+          let record = listData.value.filter(
+            (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
+          );
+          updateTableDataRecord(e.name, {
+            ...record,
+            parameterValue: e.value,
+          });
+        });
+        clearSelectedRowKeys();
+      }
+
+      async function handleSetParameterValue() {
+        const selectedRowKeys: any = getRowSelection().selectedRowKeys;
+
+        if (!selectedRowKeys?.length) return message.warning('请至少选择一项操作');
+        let parameterList: ParameterValuesResult[] = [];
+        for (let i in selectedRowKeys) {
+          if (selectedRowKeys.hasOwnProperty(i)) {
+            listData.value.forEach((item) => {
+              if (
+                item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === selectedRowKeys[i]
+              ) {
+                parameterList.push({
+                  name: selectedRowKeys[i],
+                  value: item.parameterCurrentValue,
+                });
+              }
+            });
+          }
+        }
+        await setParameterValues({ parameterList });
+        parameterList.forEach((e) => {
+          let record = listData.value.filter(
+            (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
+          );
+          updateTableDataRecord(e.name, {
+            ...record,
+            parameterValue: e.value,
+          });
+        });
+        clearSelectedRowKeys();
+      }
+
       function handleSelect(parameter) {
         const { fullName, tr069 } = parameter;
         selectParameterName.value = fullName;
@@ -59,10 +133,16 @@
         });
       }
 
+      onMounted(() => {
+        setShowPagination(false);
+      });
       return {
         registerTable,
         handleSelect,
+        listData,
         selectParameterName,
+        handleSearchParameterValue,
+        handleSetParameterValue,
         searchInfo,
         t,
       };

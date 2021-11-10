@@ -121,7 +121,6 @@
       }
 
       function handleEditPassword(record: Recordable) {
-        console.log(record.id);
         Modal.confirm({
           title: t('system.action.updatePassWordTitle'),
           content: () =>
