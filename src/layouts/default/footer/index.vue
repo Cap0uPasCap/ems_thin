@@ -1,5 +1,5 @@
 <template>
-  <Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
+  <Footer :class="prefixCls" ref="footerRef" v-if="getShowLayoutFooter">
     <div :class="`${prefixCls}__links`">
       <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>
       <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
@@ -28,10 +28,8 @@
       const { getShowFooter } = useRootSetting();
       const { currentRoute } = useRouter();
       const { prefixCls } = useDesign('layout-footer');
-
       const footerRef = ref<ComponentRef>(null);
       const { setFooterHeight } = useLayoutHeight();
-
       const getShowLayoutFooter = computed(() => {
         if (unref(getShowFooter)) {
           const footerEl = unref(footerRef)?.$el;

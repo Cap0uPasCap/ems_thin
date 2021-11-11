@@ -8,7 +8,6 @@
         @register="registerTable"
       >
         <template #toolbar>
-          <a-button type="primary"> 查询参数列表</a-button>
           <a-button @click="handleSearchParameterValue" type="primary"> 查询参数值</a-button>
           <a-button @click="handleSetParameterValue" type="primary"> 批量提交</a-button>
         </template>
@@ -34,8 +33,8 @@
   export default defineComponent({
     name: 'AccountManagement',
     components: { BasicTable, PageWrapper, ParameterTree },
-    setup() {
-      const selectParameterName = ref('');
+    setup: function () {
+      const selectParameterName = ref<string>('');
       const { t } = useI18n();
       const listData = ref<any>([]);
       const searchInfo = reactive<Recordable>({ tr069: false });
@@ -137,14 +136,14 @@
         setShowPagination(false);
       });
       return {
-        registerTable,
-        handleSelect,
+        t,
         listData,
+        searchInfo,
+        registerTable,
         selectParameterName,
+        handleSelect,
         handleSearchParameterValue,
         handleSetParameterValue,
-        searchInfo,
-        t,
       };
     },
   });
