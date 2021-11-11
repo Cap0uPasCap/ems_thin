@@ -38,12 +38,6 @@ export function getColumns(tr069: boolean) {
       dataIndex: 'parameterCurrentValue',
       width: 250,
       customRender: ({ record }) => {
-        // const writable = record.writable;
-        // const enable = ~~writable === 0;
-        // const color = enable ? 'gray' : 'success';
-        // const text = enable
-        //   ? t('device.parameter.column.readOnly')
-        //   : t('device.parameter.column.writeable');
         return h(
           Input,
           {

@@ -37,7 +37,7 @@ export function getSearchFormSchema() {
   return searchFormSchema;
 }
 
-export function accountFormSchema(isUpdate) {
+export function accountFormSchema(isUpdate: boolean) {
   const userFormSchema: FormSchema[] = [
     {
       field: 'loginName',
@@ -59,7 +59,7 @@ export function accountFormSchema(isUpdate) {
       component: 'InputPassword',
       required: true,
       ifShow: (_column) => {
-        return !isUpdate.value; // 根据业务控制是否显示
+        return !isUpdate; // 根据业务控制是否显示
       },
     },
     {

@@ -18,13 +18,13 @@
       </Row>
     </div>
     <BasicTree
-      v-if="treeData.length"
       :beforeRightClick="getRightMenuList"
       :clickRowToExpand="false"
       :replaceFields="{ key: 'identity', title: 'title' }"
       :treeData="treeData"
-      defaultExpandLevel="1"
       @select="handleSelect"
+      defaultExpandLevel="1"
+      v-if="treeData.length"
     />
     <Loading :absolute="absolute" :loading="loading" :tip="tip" />
   </div>
@@ -59,7 +59,7 @@
         treeData.value = [(await findParametersTree(params)) as unknown as TreeItem[]];
         compState.loading = false;
       }
-      //:{selected: bool, selectedNodes, node, event}
+
       function handleSelect(_, e) {
         if (!e?.selectedNodes[0]?.props) return;
         const { fullName, treeType } = e?.selectedNodes[0]?.props;

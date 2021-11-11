@@ -20,7 +20,6 @@
   import { useModal } from '/@/components/Modal';
   import AccountModal from './modal.vue';
   import { getSearchFormSchema, getColumns } from './data';
-  // import { useGo } from '/@/hooks/web/usePage';
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
@@ -29,8 +28,6 @@
     setup() {
       const password = ref('');
       const { t } = useI18n();
-      // const go = useGo();
-
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
       const [registerTable, { reload, updateTableDataRecord, setLoading }] = useTable({
@@ -170,10 +167,6 @@
           reload();
         }
       }
-
-      // function handleView(record: Recordable) {
-      //     go('/system/account_detail/' + record.id);
-      // }
 
       return {
         registerTable,

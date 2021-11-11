@@ -33,14 +33,21 @@
   export default defineComponent({
     name: 'AccountManagement',
     components: { BasicTable, PageWrapper, ParameterTree },
-    setup: function () {
+    setup() {
       const selectParameterName = ref<string>('');
       const { t } = useI18n();
       const listData = ref<any>([]);
       const searchInfo = reactive<Recordable>({ tr069: false });
       const [
         registerTable,
-        { reload, getRowSelection, setShowPagination, updateTableDataRecord, clearSelectedRowKeys },
+        {
+          reload,
+          getRowSelection,
+          setShowPagination,
+          updateTableDataRecord,
+          clearSelectedRowKeys,
+          setLoading,
+        },
       ] = useTable({
         api: findParameterList,
         rowKey: searchInfo.tr069 ? 'omcParameterName' : 'parameterName',
@@ -53,7 +60,6 @@
         },
         formConfig: {
           labelWidth: 120,
-          // schemas: searchFormSchema,
           autoSubmitOnEnter: true,
         },
         useSearchForm: false,
@@ -63,6 +69,13 @@
           return info;
         },
       });
+
+      function changeLoading() {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      }
 
       async function handleSearchParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
@@ -87,6 +100,7 @@
             parameterValue: e.value,
           });
         });
+        changeLoading();
         clearSelectedRowKeys();
       }
 
@@ -119,6 +133,7 @@
             parameterValue: e.value,
           });
         });
+        changeLoading();
         clearSelectedRowKeys();
       }
 
@@ -142,6 +157,7 @@
         registerTable,
         selectParameterName,
         handleSelect,
+        changeLoading,
         handleSearchParameterValue,
         handleSetParameterValue,
       };

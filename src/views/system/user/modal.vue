@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
+  <BasicModal :title="getTitle" @ok="handleSubmit" @register="registerModal" v-bind="$attrs">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -10,18 +10,19 @@
   import { accountFormSchema } from './data';
   import { add, update } from '/@/api/system/user';
   import { useI18n } from '/@/hooks/web/useI18n';
+
   export default defineComponent({
     name: 'AccountModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const { t } = useI18n();
-      const isUpdate = ref(true);
+      const isUpdate = ref<boolean>(true);
       const rowId = ref('');
 
       const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
-        schemas: accountFormSchema(isUpdate),
+        schemas: accountFormSchema(isUpdate.value),
         showActionButtonGroup: false,
         actionColOptions: {
           span: 23,
@@ -29,13 +30,13 @@
       });
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-        resetFields();
+        await resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
           rowId.value = data.record.id;
-          setFieldsValue({
+          await setFieldsValue({
             ...data.record,
           });
         }
@@ -50,8 +51,6 @@
           const values = await validate();
           setModalProps({ confirmLoading: true });
           // custom api
-          console.log('values', values);
-          // add()
           if (!unref(isUpdate)) {
             await add({ ...values });
           } else {
@@ -63,6 +62,7 @@
           setModalProps({ confirmLoading: false });
         }
       }
+
       return { registerModal, registerForm, getTitle, handleSubmit };
     },
   });
