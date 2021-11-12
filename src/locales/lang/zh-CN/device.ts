@@ -15,6 +15,9 @@ export default {
       parameterValue: '参数值',
     },
     action: {
+      selectTip: '请至少选择一项操作',
+      queryParameterBtn: '查询参数值',
+      batch: '批量提交',
       // addText: '新增',
       // editBtnTip: '编辑用户资料',
       // delBtnTip: '删除此账号',

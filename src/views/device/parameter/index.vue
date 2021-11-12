@@ -8,8 +8,12 @@
         @register="registerTable"
       >
         <template #toolbar>
-          <a-button @click="handleSearchParameterValue" type="primary"> 查询参数值</a-button>
-          <a-button @click="handleSetParameterValue" type="primary"> 批量提交</a-button>
+          <a-button @click="handleSearchParameterValue" type="primary">{{
+            t('device.parameter.action.queryParameterBtn')
+          }}</a-button>
+          <a-button @click="handleSetParameterValue" type="primary">
+            {{ t('device.parameter.action.batch') }}</a-button
+          >
         </template>
       </BasicTable>
     </div>
@@ -80,7 +84,8 @@
       async function handleSearchParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
 
-        if (!selectedRowKeys?.length) return message.warning('请至少选择一项操作');
+        if (!selectedRowKeys?.length)
+          return message.warning(t('device.parameter.action.selectTip'));
         let parameterNames: string[] = [];
         for (let i in selectedRowKeys) {
           if (selectedRowKeys.hasOwnProperty(i)) {

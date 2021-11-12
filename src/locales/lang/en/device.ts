@@ -16,6 +16,9 @@ export default {
     },
     addText: 'Add User',
     action: {
+      selectTip: 'Select at least one item',
+      queryParameterBtn: 'Query Parameter Value',
+      batch: 'Batch Submit',
       editBtnTip: 'Edit User',
       delBtnTip: 'Delete User',
       delBtnConfirm: 'Confirm deletion?',
