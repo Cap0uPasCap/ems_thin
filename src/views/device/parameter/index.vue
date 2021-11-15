@@ -8,12 +8,12 @@
         @register="registerTable"
       >
         <template #toolbar>
-          <a-button @click="handleSearchParameterValue" type="primary">{{
-            t('device.parameter.action.queryParameterBtn')
-          }}</a-button>
+          <a-button @click="handleSearchParameterValue" type="primary">
+            {{ t('device.parameter.action.queryParameterBtn') }}
+          </a-button>
           <a-button @click="handleSetParameterValue" type="primary">
-            {{ t('device.parameter.action.batch') }}</a-button
-          >
+            {{ t('device.parameter.action.batch') }}
+          </a-button>
         </template>
       </BasicTable>
     </div>
@@ -83,7 +83,6 @@
 
       async function handleSearchParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
-
         if (!selectedRowKeys?.length)
           return message.warning(t('device.parameter.action.selectTip'));
         let parameterNames: string[] = [];
@@ -92,10 +91,10 @@
             parameterNames.push(selectedRowKeys[i]);
           }
         }
-
         const data = await getParameterValues({ parameterNames });
+        changeLoading();
+        clearSelectedRowKeys();
         if (!data?.length) return;
-
         data.forEach((e) => {
           let record = listData.value.filter(
             (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
@@ -105,13 +104,10 @@
             parameterValue: e.value,
           });
         });
-        changeLoading();
-        clearSelectedRowKeys();
       }
 
       async function handleSetParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
-
         if (!selectedRowKeys?.length) return message.warning('请至少选择一项操作');
         let parameterList: ParameterValuesResult[] = [];
         for (let i in selectedRowKeys) {
@@ -129,6 +125,8 @@
           }
         }
         await setParameterValues({ parameterList });
+        changeLoading();
+        clearSelectedRowKeys();
         parameterList.forEach((e) => {
           let record = listData.value.filter(
             (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
@@ -138,8 +136,6 @@
             parameterValue: e.value,
           });
         });
-        changeLoading();
-        clearSelectedRowKeys();
       }
 
       function handleSelect(parameter) {
@@ -155,16 +151,17 @@
       onMounted(() => {
         setShowPagination(false);
       });
+
       return {
         t,
         listData,
         searchInfo,
-        registerTable,
-        selectParameterName,
         handleSelect,
         changeLoading,
-        handleSearchParameterValue,
+        registerTable,
+        selectParameterName,
         handleSetParameterValue,
+        handleSearchParameterValue,
       };
     },
   });
