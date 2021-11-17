@@ -2,19 +2,19 @@
   <div class="bg-white m-4 mr-0 parameter_tree">
     <div class="search_form">
       <Row :gutter="16">
-        <Col :span="16">
+        <Col :span="24">
           <input-search
             @search="fetch"
             placeholder="input search parameter"
             v-model.trim:value="searchName"
           />
         </Col>
-        <Col :span="8" class="switch_box">
-          <Switch @click="fetch" v-model:checked="checked">
-            <template #checkedChildren>✔ tr069</template>
-            <template #unCheckedChildren>✖ tr069</template>
-          </Switch>
-        </Col>
+        <!--        <Col :span="8" class="switch_box">-->
+        <!--          <Switch @click="fetch" v-model:checked="checked">-->
+        <!--            <template #checkedChildren>✔ tr069</template>-->
+        <!--            <template #unCheckedChildren>✖ tr069</template>-->
+        <!--          </Switch>-->
+        <!--        </Col>-->
       </Row>
     </div>
     <BasicTree
@@ -31,18 +31,18 @@
 </template>
 <script lang="ts">
   import { defineComponent, onMounted, ref, reactive, toRefs } from 'vue';
-  import { InputSearch, Switch, Row, Col } from 'ant-design-vue';
+  import { InputSearch, Row, Col } from 'ant-design-vue'; // Switch,
   import { BasicTree, TreeItem, ContextMenuItem } from '/@/components/Tree';
   import { findParametersTree } from '/@/api/device/parameter';
   import { Loading } from '/@/components/Loading';
 
   export default defineComponent({
     name: 'DeptTree',
-    components: { BasicTree, InputSearch, Switch, Row, Col, Loading },
+    components: { BasicTree, InputSearch, Row, Col, Loading }, // Switch,
     emits: ['select'],
     setup(_, { emit }) {
       const searchName = ref<string>('');
-      const checked = ref<boolean>(false);
+      // const checked = ref<boolean>(false);
       const treeData = ref<TreeItem[]>([]);
       const compState = reactive({
         absolute: true,
@@ -53,7 +53,7 @@
       async function fetch() {
         compState.loading = true;
         const params = {
-          tr069: checked.value,
+          // tr069: checked.value,
           ...(!!searchName.value && { searchName: searchName.value }),
         };
         treeData.value = [(await findParametersTree(params)) as unknown as TreeItem[]];
@@ -66,7 +66,7 @@
         if (treeType !== 0) {
           emit('select', {
             fullName,
-            tr069: checked.value,
+            // tr069: checked.value,
           });
         }
       }
@@ -103,7 +103,7 @@
         ...toRefs(compState),
         treeData,
         searchName,
-        checked,
+        // checked,
       };
     },
   });
@@ -118,11 +118,5 @@
   .parameter_tree {
     position: relative;
     padding: 0 10px;
-  }
-
-  .switch_box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 </style>

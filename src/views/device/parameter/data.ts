@@ -4,25 +4,33 @@ import { h } from 'vue';
 import { Input } from 'ant-design-vue'; //Tag
 const { t } = useI18n();
 
-export function getColumns(tr069: boolean) {
+export function getColumns() {
+  //tr069: boolean
   // 根据 tr069 判断显示 true 取 omc前缀 属性字段
   const columns: BasicColumn[] = [
     {
       title: t('device.parameter.column.lastNodeName'),
       dataIndex: 'lastNodeName',
       width: 200,
-      ifShow: (_column) => {
-        return !tr069;
-      },
+      // ifShow: (_column) => {
+      //   return !tr069;
+      // },
     },
     {
-      title: t('device.parameter.column.lastNodeName'),
-      dataIndex: 'omcLastNodeName',
+      dataIndex: 'fullName',
       width: 200,
       ifShow: (_column) => {
-        return tr069;
+        return false;
       },
     },
+    // {
+    //   title: t('device.parameter.column.lastNodeName'),
+    //   dataIndex: 'omcLastNodeName',
+    //   width: 200,
+    //   ifShow: (_column) => {
+    //     return tr069;
+    //   },
+    // },
     {
       title: t('device.parameter.column.type'),
       dataIndex: 'type',

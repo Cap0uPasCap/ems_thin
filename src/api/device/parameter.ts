@@ -43,7 +43,7 @@ export const findParametersTree = async function (params: any) {
 };
 export const findParameterList = async function (params: RequestModel) {
   if (params?.tr069 ?? true) return;
-  const data: ParameterListModel[] = await defHttp.post({
+  const data = await defHttp.post<ParameterListModel[]>({
     url: Api.parameterList,
     params: {
       searchName: params.searchName,

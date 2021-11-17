@@ -54,10 +54,10 @@
         },
       ] = useTable({
         api: findParameterList,
-        rowKey: searchInfo.tr069 ? 'omcParameterName' : 'parameterName',
+        rowKey: 'parameterName', //searchInfo.tr069 ? 'omcParameterName' :
         showIndexColumn: false,
         clickToRowSelect: false,
-        columns: getColumns(searchInfo.tr069),
+        columns: getColumns(), //searchInfo.tr069
         afterFetch(data) {
           listData.value = data;
           return data;
@@ -97,7 +97,7 @@
         if (!data?.length) return;
         data.forEach((e) => {
           let record = listData.value.filter(
-            (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
+            (item) => item['parameterName'] === e.name, //searchInfo.tr069 ? 'omcParameterName' :
           );
           updateTableDataRecord(e.name, {
             ...record,
@@ -114,7 +114,7 @@
           if (selectedRowKeys.hasOwnProperty(i)) {
             listData.value.forEach((item) => {
               if (
-                item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === selectedRowKeys[i]
+                item['parameterName'] === selectedRowKeys[i] //searchInfo.tr069 ? 'omcParameterName' :
               ) {
                 parameterList.push({
                   name: selectedRowKeys[i],
@@ -129,7 +129,7 @@
         clearSelectedRowKeys();
         parameterList.forEach((e) => {
           let record = listData.value.filter(
-            (item) => item[searchInfo.tr069 ? 'omcParameterName' : 'parameterName'] === e.name,
+            (item) => item['parameterName'] === e.name, //searchInfo.tr069 ? 'omcParameterName' :
           );
           updateTableDataRecord(e.name, {
             ...record,
@@ -139,10 +139,10 @@
       }
 
       function handleSelect(parameter) {
-        const { fullName, tr069 } = parameter;
+        const { fullName } = parameter; //tr069
         selectParameterName.value = fullName;
         searchInfo.searchName = fullName;
-        searchInfo.tr069 = tr069;
+        // searchInfo.tr069 = tr069;
         reload({
           searchInfo,
         });

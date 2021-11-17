@@ -25,5 +25,5 @@ export interface ParameterValuesResult {
 
 export interface RequestModel {
   searchName: string;
-  tr069: boolean;
+  tr069?: boolean;
 }
