@@ -10,7 +10,8 @@ const device: AppRouteModule = {
   redirect: '/device/parameter',
   meta: {
     orderNo: 7,
-    icon: 'ion:aperture-outline',
+    // icon: 'ion:aperture-outline',
+    icon: 'ion:grid-outline',
     title: t('routes.device.device'),
   },
   children: [
@@ -20,6 +21,14 @@ const device: AppRouteModule = {
       component: () => import('/@/views/device/parameter/index.vue'),
       meta: {
         title: t('routes.device.parameter'),
+      },
+    },
+    {
+      path: 'command',
+      name: 'Command',
+      component: () => import('/@/views/device/parameter/command.vue'),
+      meta: {
+        title: 'routes.device.command',
       },
     },
   ],

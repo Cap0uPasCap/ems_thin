@@ -34,4 +34,12 @@ export default {
       success: 'success',
     },
   },
+  command: {
+    title: 'Command',
+    tab: {
+      factoryReset: 'Factory Reset',
+      reboot: 'Reboot',
+    },
+    loadingTip: 'requested...',
+  },
 };

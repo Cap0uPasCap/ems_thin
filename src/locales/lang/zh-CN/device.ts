@@ -34,4 +34,12 @@ export default {
       success: '成功',
     },
   },
+  command: {
+    title: '指令',
+    tab: {
+      factoryReset: '恢复出厂设置',
+      reboot: '重启',
+    },
+    loadingTip: '请求中...',
+  },
 };
