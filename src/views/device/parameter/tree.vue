@@ -4,9 +4,9 @@
       <Row :gutter="16">
         <Col :span="24">
           <input-search
-            @search="fetch"
-            placeholder="input search parameter"
             v-model.trim:value="searchName"
+            placeholder="input search parameter"
+            @search="fetch"
           />
         </Col>
         <!--        <Col :span="8" class="switch_box">-->
@@ -18,13 +18,13 @@
       </Row>
     </div>
     <BasicTree
+      v-if="treeData.length"
       :beforeRightClick="getRightMenuList"
       :clickRowToExpand="false"
       :replaceFields="{ key: 'identity', title: 'title' }"
       :treeData="treeData"
-      @select="handleSelect"
       defaultExpandLevel="1"
-      v-if="treeData.length"
+      @select="handleSelect"
     />
     <Loading :absolute="absolute" :loading="loading" :tip="tip" />
   </div>

@@ -1,6 +1,6 @@
 <template>
   <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
-    <ParameterTree @select="handleSelect" class="w-1/4 xl:w-1/5" />
+    <ParameterTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
     <div class="w-3/4 xl:w-4/5 bg-white m-4 mr-0 overflow-hidden">
       <BasicTable
         :rowSelection="{ type: 'checkbox' }"
@@ -8,10 +8,10 @@
         @register="registerTable"
       >
         <template #toolbar>
-          <a-button @click="handleSearchParameterValue" type="primary">
+          <a-button type="primary" @click="handleSearchParameterValue">
             {{ t('device.parameter.action.queryParameterBtn') }}
           </a-button>
-          <a-button @click="handleSetParameterValue" type="primary">
+          <a-button type="primary" @click="handleSetParameterValue">
             {{ t('device.parameter.action.batch') }}
           </a-button>
         </template>

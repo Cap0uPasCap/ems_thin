@@ -3,15 +3,15 @@
     <Card
       :active-tab-key="activeKey"
       :tab-list="tabListTitle"
-      @tabChange="onTabChange"
       v-bind="$attrs"
+      @tabChange="onTabChange"
     >
-      <Button @click="factoryResetClick" type="default" v-if="activeKey === 'factoryReset'">
+      <Button v-if="activeKey === 'factoryReset'" type="default" @click="factoryResetClick">
         {{ t('device.command.tab.factoryReset') }}
       </Button>
-      <Button @click="rebootClick" type="default" v-if="activeKey === 'reboot'">{{
-        t('device.command.tab.reboot')
-      }}</Button>
+      <Button v-if="activeKey === 'reboot'" type="default" @click="rebootClick"
+        >{{ t('device.command.tab.reboot') }}
+      </Button>
       <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
     </Card>
   </PageWrapper>
