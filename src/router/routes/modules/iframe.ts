@@ -11,7 +11,7 @@ const iframe: AppRouteModule = {
   redirect: '/frame/doc',
   meta: {
     orderNo: 1000,
-    icon: 'ion:tv-outline',
+    icon: 'majesticons:external-link',
     title: t('routes.demo.iframe.frame'),
     hideMenu: !isDev,
   },

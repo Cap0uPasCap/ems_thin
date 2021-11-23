@@ -1,5 +1,5 @@
 <template>
-  <BasicModal :title="getTitle" @ok="handleSubmit" @register="registerModal" v-bind="$attrs">
+  <BasicModal :title="getTitle" v-bind="$attrs" @ok="handleSubmit" @register="registerModal">
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
@@ -7,7 +7,7 @@
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { accountFormSchema } from './data';
+  import { getAccountFormSchema } from './data';
   import { add, update } from '/@/api/system/user';
   import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -19,10 +19,11 @@
       const { t } = useI18n();
       const isUpdate = ref<boolean>(true);
       const rowId = ref('');
+      const accountFormSchema = computed(() => getAccountFormSchema(isUpdate.value));
 
       const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
-        schemas: accountFormSchema(isUpdate.value),
+        schemas: accountFormSchema,
         showActionButtonGroup: false,
         actionColOptions: {
           span: 23,

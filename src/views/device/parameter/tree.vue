@@ -4,7 +4,7 @@
       <Row :gutter="16">
         <Col :span="24">
           <input-search
-            v-model.trim:value="searchName"
+            v-model:value.trim="searchName"
             placeholder="input search parameter"
             @search="fetch"
           />

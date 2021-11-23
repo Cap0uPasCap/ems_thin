@@ -1,8 +1,13 @@
+<!--
+ * @Description: 系统管理->用户管理
+ * @Author: cap
+ * @Date: 2021/11/23 15:00
+-->
 <template>
   <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
     <BasicTable :searchInfo="searchInfo" @register="registerTable">
       <template #toolbar>
-        <a-button @click="handleCreate" type="primary">{{ t('system.action.addText') }}</a-button>
+        <a-button type="primary" @click="handleCreate">{{ t('system.action.addText') }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="fetchAction(record)" />
@@ -54,11 +59,10 @@
         },
       });
 
-      function changeLoading() {
+      async function changeLoading(fn) {
         setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
+        await fn();
+        setLoading(false);
       }
 
       function fetchAction(record) {
@@ -144,17 +148,13 @@
       }
 
       function handleDelete(record: Recordable) {
-        del(record.id).then(() => {
-          changeLoading();
-          reload();
-        });
+        changeLoading(del(record.id));
+        reload();
       }
 
       function handleReset(record: Recordable) {
-        resetUserPassword(record.id).then(() => {
-          changeLoading();
-          reload();
-        });
+        changeLoading(resetUserPassword(record.id));
+        reload();
       }
 
       function handleSuccess({ isUpdate, values }) {

@@ -11,7 +11,7 @@ const dashboard: AppRouteModule = {
   redirect: '/dashboard/analysis',
   meta: {
     orderNo: 10,
-    icon: 'ion:grid-outline',
+    icon: 'clarity:dashboard-solid',
     title: t('routes.dashboard.dashboard'),
     hideMenu: !isDev,
   },

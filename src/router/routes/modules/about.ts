@@ -10,7 +10,7 @@ const dashboard: AppRouteModule = {
   redirect: '/about/index',
   meta: {
     hideChildrenInMenu: true,
-    icon: 'simple-icons:about-dot-me',
+    icon: 'simple-icons:aboutdotme',
     title: t('routes.dashboard.about'),
     orderNo: 100000,
     hideMenu: !isDev,

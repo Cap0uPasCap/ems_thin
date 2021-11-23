@@ -10,8 +10,7 @@ const device: AppRouteModule = {
   redirect: '/device/parameter',
   meta: {
     orderNo: 7,
-    // icon: 'ion:aperture-outline',
-    icon: 'ion:grid-outline',
+    icon: 'ic:baseline-dashboard-customize',
     title: t('routes.device.device'),
   },
   children: [

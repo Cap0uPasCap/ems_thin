@@ -10,7 +10,7 @@ const system: AppRouteModule = {
   redirect: '/system/user',
   meta: {
     orderNo: 8,
-    icon: 'ion:grid-outline',
+    icon: 'ic:baseline-settings-applications',
     title: t('routes.system.system'),
   },
   children: [

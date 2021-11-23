@@ -7,15 +7,16 @@ const information: AppRouteModule = {
   path: '/information',
   name: 'Information',
   component: LAYOUT,
-  redirect: '/information/device',
+  redirect: '/information/index',
   meta: {
     orderNo: 1,
-    icon: 'ion:grid-outline',
+    hideChildrenInMenu: true,
+    icon: 'bi:info-square-fill',
     title: t('routes.information.information'),
   },
   children: [
     {
-      path: 'device',
+      path: 'index',
       name: 'InformationDevice',
       component: () => import('/@/views/information/index.vue'),
       meta: {

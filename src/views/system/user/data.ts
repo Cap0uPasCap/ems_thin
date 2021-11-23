@@ -37,21 +37,21 @@ export function getSearchFormSchema() {
   return searchFormSchema;
 }
 
-export function accountFormSchema(isUpdate: boolean) {
+export function getAccountFormSchema(isUpdate) {
+  console.log('🚀isUpdate👉👉', isUpdate);
+
   const userFormSchema: FormSchema[] = [
     {
       field: 'loginName',
       label: t('system.column.loginName'),
       component: 'Input',
       required: true,
-      // helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
     },
     {
       field: 'name',
       label: t('system.column.name'),
       component: 'Input',
       required: true,
-      // helpMessage: ['本字段演示异步验证', '不能输入带有admin的用户名'],
     },
     {
       field: 'password',

@@ -1,30 +1,31 @@
 <template>
-  <PageWrapper contentBackground :title="t('information.title.device')">
+  <PageWrapper :title="t('information.title.device')">
     <Description
       :bordered="true"
       :column="1"
       :data="info"
       :schema="hardwareSchema"
-      size="small"
       :title="t('information.title.hardware')"
+      class="enter-y"
+      size="small"
     />
-    <Divider />
     <Description
       :bordered="true"
       :column="1"
       :data="info"
       :schema="softwareSchema"
-      size="small"
       :title="t('information.title.software')"
+      class="my-4 enter-y"
+      size="small"
     />
-    <Divider />
     <Description
       :bordered="true"
       :column="1"
       :data="info"
       :schema="runtimeSchema"
-      size="small"
       :title="t('information.title.runtime')"
+      class="enter-y"
+      size="small"
     />
   </PageWrapper>
 </template>
@@ -33,12 +34,11 @@
   import { Description } from '/@/components/Description';
   import { PageWrapper } from '/@/components/Page';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { Divider } from 'ant-design-vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { hardwareSchema, runtimeSchema, softwareSchema } from './data';
 
   export default defineComponent({
-    components: { Description, PageWrapper, Divider },
+    components: { Description, PageWrapper },
     setup() {
       const { t } = useI18n();
       const info = ref({
