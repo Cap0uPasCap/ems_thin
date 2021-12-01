@@ -46,6 +46,9 @@ export function getAccountFormSchema(isUpdate) {
       label: t('system.column.loginName'),
       component: 'Input',
       required: true,
+      dynamicDisabled: (_column) => {
+        return isUpdate; // 根据业务控制是否显示
+      },
     },
     {
       field: 'name',

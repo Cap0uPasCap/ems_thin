@@ -4,6 +4,7 @@
   </BasicModal>
 </template>
 <script lang="ts">
+  // import {message} from 'ant-design-vue';
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
@@ -46,19 +47,21 @@
       const getTitle = computed(() =>
         !unref(isUpdate) ? t('system.action.addText') : t('system.action.editBtnTip'),
       );
-
       async function handleSubmit() {
         try {
           const values = await validate();
           setModalProps({ confirmLoading: true });
-          // custom api
-          if (!unref(isUpdate)) {
-            await add({ ...values });
-          } else {
-            await update({ ...values, id: rowId.value });
-          }
+          // custom api\
+          // if (!unref(isUpdate)) {
+          //   await add({ ...values });
+          // } else {
+          //   await update({ ...values, id: rowId.value });
+          // }
           closeModal();
-          emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
+          emit('success', {
+            data: !unref(isUpdate) ? { ...values } : { ...values, id: rowId.value },
+            fn: !unref(isUpdate) ? add : update,
+          });
         } finally {
           setModalProps({ confirmLoading: false });
         }

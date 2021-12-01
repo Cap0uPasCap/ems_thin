@@ -159,8 +159,8 @@
         reload();
       }
 
-      function handleSuccess() {
-        //{ isUpdate, values }
+      function handleSuccess({ data, fn }) {
+        changeLoading(fn(data));
         reload();
         // if (isUpdate) {
         //   // 演示不刷新表格直接更新内部数据。

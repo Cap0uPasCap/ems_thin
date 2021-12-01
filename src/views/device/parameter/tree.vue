@@ -70,13 +70,12 @@
           });
         }
       }
-
-      function getRightMenuList(node: any): ContextMenuItem[] {
+      // node: any
+      function getRightMenuList(): ContextMenuItem[] {
         return [
           {
             label: '新增',
             handler: () => {
-              console.log('点击了新增', node);
               alert('新增');
             },
             icon: 'bi:plus',
@@ -84,7 +83,6 @@
           {
             label: '删除',
             handler: () => {
-              console.log('点击了删除', node);
               alert('删除');
             },
             icon: 'bx:bxs-folder-open',
