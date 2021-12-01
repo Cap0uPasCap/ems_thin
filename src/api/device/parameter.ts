@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import {
   ParameterListModel,
   ParameterValuesModel,
-  ParameterValuesResult,
+  ParameterResult,
   SetParameterValuesModel,
   RequestModel,
   ResultModel,
@@ -38,9 +38,10 @@ export const findParametersTree = async function (params: any) {
     url: Api.parametersTree,
     params: params,
   });
-  const info = changeData([data]);
+  const info = changeData([data.data]);
   return info[0];
 };
+
 export const findParameterList = async function (params: RequestModel) {
   if (params?.tr069 ?? true) return;
   const data = await defHttp.post<ParameterListModel[]>({
@@ -50,7 +51,7 @@ export const findParameterList = async function (params: RequestModel) {
       tr069: params.tr069,
     },
   });
-  return data.map((e) => ({
+  return data['data'].map((e) => ({
     ...e,
     parameterValue: null,
     parameterCurrentValue: null,
@@ -60,13 +61,13 @@ export const findParameterList = async function (params: RequestModel) {
 export const add = (data: any) => defHttp.post<ResultModel>({ url: Api.add, params: data });
 
 export const getParameterValues = (data: ParameterValuesModel) =>
-  defHttp.post<ParameterValuesResult[]>({
+  defHttp.post<ParameterResult>({
     url: Api.getParameterValues,
     params: data,
   });
 
 export const setParameterValues = (data: SetParameterValuesModel) =>
-  defHttp.post<ParameterValuesResult[]>({
+  defHttp.post<ParameterResult>({
     url: Api.setParameterValues,
     params: data,
   });

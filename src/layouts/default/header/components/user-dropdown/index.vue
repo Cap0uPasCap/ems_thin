@@ -11,7 +11,7 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
+        <!--        <MenuItem
           key="doc"
           :text="t('layout.header.dropdownItemDoc')"
           icon="ion:document-text-outline"
@@ -23,7 +23,7 @@
           key="lock"
           :text="t('layout.header.tooltipLock')"
           icon="ion:lock-closed-outline"
-        />
+        />-->
         <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
@@ -62,7 +62,7 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
+      // MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
     },
     props: {
@@ -127,8 +127,7 @@
 
   .@{prefix-cls} {
     height: @header-height;
-    padding: 0 0 0 10px;
-    padding-right: 10px;
+    padding: 0 10px;
     overflow: hidden;
     font-size: 12px;
     cursor: pointer;

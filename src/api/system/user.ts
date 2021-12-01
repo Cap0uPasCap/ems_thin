@@ -1,5 +1,5 @@
-import { ResultModel, QuerySchema } from './model/user';
 import { defHttp } from '/@/utils/http/axios';
+import { QuerySchema, ResultModel } from './model/user';
 
 enum Api {
   getList = '/user/findUserList',
@@ -11,7 +11,7 @@ enum Api {
   updateUserPassword = '/user/updateUserPassword',
 }
 
-export const getList = (params: any) => {
+export const getList = async (params: any) => {
   const { pageNo, pageSize, loginName } = params;
   const query: QuerySchema = {
     page: {
@@ -21,10 +21,12 @@ export const getList = (params: any) => {
     loginName,
   };
 
-  return defHttp.post<ResultModel>({
+  const data = await defHttp.post<ResultModel>({
     url: Api.getList,
     params: query,
   });
+
+  return data.data;
 };
 
 export const add = (data: any) => defHttp.post<ResultModel>({ url: Api.add, params: data });
@@ -41,5 +43,6 @@ export const getDetails = (id: string | number) =>
 export const resetUserPassword = (id: string | number) =>
   defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { id } });
 
-export const updateUserPassword = (password: string | number, id: string | number) =>
-  defHttp.post<ResultModel>({ url: Api.updateUserPassword, params: { password, id } });
+export const updateUserPassword = (password: string | number, id: string | number) => {
+  return defHttp.post({ url: Api.updateUserPassword, params: { password, id } });
+};

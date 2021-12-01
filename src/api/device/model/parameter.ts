@@ -23,6 +23,11 @@ export interface ParameterValuesResult {
   value: any;
 }
 
+export interface ParameterResult {
+  data: ParameterValuesResult[];
+  message: string;
+}
+
 export interface RequestModel {
   searchName: string;
   tr069?: boolean;

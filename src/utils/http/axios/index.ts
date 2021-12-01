@@ -54,7 +54,7 @@ const transform: AxiosTransform = {
     const hasSuccess = data && Reflect.has(data, 'status') && status === ResultEnum.SUCCESS;
 
     if (hasSuccess) {
-      return data.data;
+      return data;
     }
 
     // 在此处根据自己项目的实际情况对不同的status执行不同的操作

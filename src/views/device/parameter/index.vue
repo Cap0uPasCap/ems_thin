@@ -74,13 +74,6 @@
         },
       });
 
-      function changeLoading() {
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      }
-
       async function handleSearchParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
         if (!selectedRowKeys?.length)
@@ -91,11 +84,13 @@
             parameterNames.push(selectedRowKeys[i]);
           }
         }
+        setLoading(true);
         const data = await getParameterValues({ parameterNames });
-        changeLoading();
+        setLoading(false);
+        message.success(data.message);
         clearSelectedRowKeys();
-        if (!data?.length) return;
-        data.forEach((e) => {
+        if (!data.data?.length) return;
+        data.data.forEach((e) => {
           let record = listData.value.filter(
             (item) => item['parameterName'] === e.name, //searchInfo.tr069 ? 'omcParameterName' :
           );
@@ -124,8 +119,10 @@
             });
           }
         }
-        await setParameterValues({ parameterList });
-        changeLoading();
+        setLoading(true);
+        const data = await setParameterValues({ parameterList });
+        setLoading(false);
+        message.success(data.message);
         clearSelectedRowKeys();
         parameterList.forEach((e) => {
           let record = listData.value.filter(
@@ -157,7 +154,6 @@
         listData,
         searchInfo,
         handleSelect,
-        changeLoading,
         registerTable,
         selectParameterName,
         handleSetParameterValue,

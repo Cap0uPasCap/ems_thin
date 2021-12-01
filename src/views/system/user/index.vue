@@ -35,7 +35,8 @@
       const { t } = useI18n();
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
-      const [registerTable, { reload, updateTableDataRecord, setLoading }] = useTable({
+      const [registerTable, { reload, setLoading }] = useTable({
+        // updateTableDataRecord
         title: t('system.title'),
         api: getList,
         rowKey: 'id',
@@ -61,7 +62,8 @@
 
       async function changeLoading(fn) {
         setLoading(true);
-        await fn();
+        const data = await fn;
+        message.success(data.message);
         setLoading(false);
       }
 
@@ -137,7 +139,7 @@
           cancelText: t('system.action.cancelText'),
           onOk: () => {
             if (!!password.value) {
-              updateUserPassword(password.value, record.id);
+              changeLoading(updateUserPassword(password.value, record.id));
               password.value = '';
             } else {
               message.error(t('system.action.updatePassWordTip'));
@@ -157,15 +159,16 @@
         reload();
       }
 
-      function handleSuccess({ isUpdate, values }) {
-        if (isUpdate) {
-          // 演示不刷新表格直接更新内部数据。
-          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          updateTableDataRecord(values.id, values);
-        } else {
-          changeLoading();
-          reload();
-        }
+      function handleSuccess() {
+        //{ isUpdate, values }
+        reload();
+        // if (isUpdate) {
+        //   // 演示不刷新表格直接更新内部数据。
+        //   // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+        //   updateTableDataRecord(values.id, values);
+        // } else {
+        //   reload();
+        // }
       }
 
       return {

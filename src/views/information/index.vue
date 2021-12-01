@@ -54,10 +54,10 @@
       });
 
       async function getInfo() {
-        const infoData = await getInformation();
-        for (const infoDataKey in infoData) {
-          if (infoData.hasOwnProperty(infoDataKey)) {
-            info.value[infoDataKey] = infoData[infoDataKey];
+        const { data } = await getInformation();
+        for (const infoDataKey in data) {
+          if (data.hasOwnProperty(infoDataKey)) {
+            info.value[infoDataKey] = data[infoDataKey];
           }
         }
       }
