@@ -41,7 +41,7 @@ export const getDetails = (id: string | number) =>
   defHttp.get<ResultModel>({ url: Api.getDetails, params: { id } });
 
 export const resetUserPassword = (id: string | number) =>
-  defHttp.post<ResultModel>({ url: Api.resetUserPassword, params: { id } });
+  defHttp.post<ResultModel>({ url: `${Api.resetUserPassword}?id=${id}` });
 
 export const updateUserPassword = (password: string | number, id: string | number) => {
   return defHttp.post({ url: Api.updateUserPassword, params: { password, id } });
