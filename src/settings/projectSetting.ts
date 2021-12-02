@@ -134,7 +134,7 @@
 //   // Transition Setting
 //   transitionSetting: {
 //     //  Whether to open the page switching animation
-//     // The disabled state will also disable pageLoadinng
+//     // The disabled state will also disable pageLoading
 //     enable: true,
 //
 //     // Route basic switching animation
@@ -196,11 +196,11 @@ const setting = {
     fixed: true,
     show: true,
     theme: 'light',
-    useLockPage: true,
+    useLockPage: false,
     showFullScreen: true,
-    showDoc: true,
-    showNotice: true,
-    showSearch: true,
+    showDoc: false,
+    showNotice: false,
+    showSearch: false,
   },
   menuSetting: {
     bgColor: '#191b24',
