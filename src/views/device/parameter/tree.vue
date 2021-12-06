@@ -62,10 +62,10 @@
 
       function handleSelect(_, e) {
         if (!e?.selectedNodes[0]?.props) return;
-        const { fullName, treeType } = e?.selectedNodes[0]?.props;
+        const { parameterName, treeType } = e?.selectedNodes[0]?.props;
         if (treeType !== 0) {
           emit('select', {
-            fullName,
+            parameterName,
             // tr069: checked.value,
           });
         }

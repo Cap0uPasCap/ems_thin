@@ -136,9 +136,9 @@
       }
 
       function handleSelect(parameter) {
-        const { fullName } = parameter; //tr069
-        selectParameterName.value = fullName;
-        searchInfo.searchName = fullName;
+        const { parameterName } = parameter; //tr069
+        selectParameterName.value = parameterName;
+        searchInfo.searchName = parameterName;
         // searchInfo.tr069 = tr069;
         reload({
           searchInfo,
