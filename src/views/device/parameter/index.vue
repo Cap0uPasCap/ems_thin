@@ -1,3 +1,8 @@
+<!--
+ * @Description: 设备管理-参数管理
+ * @Author: stay foolish
+ * @Date: 2021/12/6/0006
+-->
 <template>
   <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
     <ParameterTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
@@ -39,6 +44,7 @@
     components: { BasicTable, PageWrapper, ParameterTree },
     setup() {
       const selectParameterName = ref<string>('');
+      // 国际化函数
       const { t } = useI18n();
       const listData = ref<any>([]);
       const searchInfo = reactive<Recordable>({ tr069: false });
@@ -55,25 +61,37 @@
       ] = useTable({
         api: findParameterList,
         rowKey: 'parameterName', //searchInfo.tr069 ? 'omcParameterName' :
+        //是否显示序列号
         showIndexColumn: false,
+        //是否点击行选择
         clickToRowSelect: false,
+        // table列配置
         columns: getColumns(), //searchInfo.tr069
+        // 自定义处理接口返回参数
         afterFetch(data) {
           listData.value = data;
           return data;
         },
+        // table组件表单配置
         formConfig: {
           labelWidth: 120,
           autoSubmitOnEnter: true,
         },
+        //使用搜索表单
         useSearchForm: false,
+        //显示表格配置
         showTableSetting: true,
+        //是否显示边框
         bordered: true,
+        // 查询表格条件前处理
         handleSearchInfoFn(info) {
           return info;
         },
       });
 
+      /**
+       * @desc 查询参数值按钮触发事件
+       */
       async function handleSearchParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
         if (!selectedRowKeys?.length)
@@ -100,7 +118,9 @@
           });
         });
       }
-
+      /**
+       * @desc 批量提交按钮触发事件
+       */
       async function handleSetParameterValue() {
         const selectedRowKeys: any = getRowSelection().selectedRowKeys;
         if (!selectedRowKeys?.length) return message.warning('请至少选择一项操作');
@@ -108,9 +128,8 @@
         for (let i in selectedRowKeys) {
           if (selectedRowKeys.hasOwnProperty(i)) {
             listData.value.forEach((item) => {
-              if (
-                item['parameterName'] === selectedRowKeys[i] //searchInfo.tr069 ? 'omcParameterName' :
-              ) {
+              //searchInfo.tr069 ? 'omcParameterName' :
+              if (item['parameterName'] === selectedRowKeys[i]) {
                 parameterList.push({
                   name: selectedRowKeys[i],
                   value: item.parameterCurrentValue,
@@ -119,33 +138,57 @@
             });
           }
         }
+        /**
+         * @desc BasicTable  组件 设置loading事件函数
+         * @param  {boolean} loading
+         */
         setLoading(true);
         const data = await setParameterValues({ parameterList });
         setLoading(false);
+        /**
+         * @desc message  ant design vue 提示信息组件
+         * @param  {string} message
+         */
         message.success(data.message);
         clearSelectedRowKeys();
         parameterList.forEach((e) => {
           let record = listData.value.filter(
             (item) => item['parameterName'] === e.name, //searchInfo.tr069 ? 'omcParameterName' :
           );
+          /**
+           * @desc   BasicTable 组件 更新行数据函数
+           * @param  rowKey 行索引字段值
+           * @param  record 需要更新的行数据
+           */
           updateTableDataRecord(e.name, {
             ...record,
             parameterValue: e.value,
           });
         });
       }
-
+      /**
+       * @desc 接收来自子组件tree的点击事件和参数 触发当前列表的数据的查询
+       * @param parameter 接收参数
+       */
       function handleSelect(parameter) {
         const { parameterName } = parameter; //tr069
         selectParameterName.value = parameterName;
         searchInfo.searchName = parameterName;
         // searchInfo.tr069 = tr069;
+        /**
+         * @desc   reload TableActionType 列表组件重载接口
+         * @param  {Object} searchInfo 查询条件
+         * @return {Object} 返回查询数据
+         */
         reload({
           searchInfo,
         });
       }
 
       onMounted(() => {
+        /**
+         * @desc 设置 BasicTable 组件中的分页组件显示
+         */
         setShowPagination(false);
       });
 

@@ -49,7 +49,10 @@
         loading: false,
         tip: '加载中...',
       });
-
+      /**
+       * @desc 输入框查询触发事件
+       * @return {Object} findParametersTree 接口返回 查询数据 treeData
+       */
       async function fetch() {
         compState.loading = true;
         const params = {
@@ -59,7 +62,12 @@
         treeData.value = [(await findParametersTree(params)) as unknown as TreeItem[]];
         compState.loading = false;
       }
-
+      /**
+       * @desc tree 节点选择触发事件
+       * @param _
+       * @param e 当前选择节点的信息
+       * @return {String} 根据treeType的值 判断 是否触发父级select事件
+       */
       function handleSelect(_, e) {
         if (!e?.selectedNodes[0]?.props) return;
         const { parameterName, treeType } = e?.selectedNodes[0]?.props;
@@ -71,6 +79,10 @@
         }
       }
       // node: any
+      /**
+       * @desc 定义 右键菜单格式数据
+       * @return {Array} rightMenuList
+       */
       function getRightMenuList(): ContextMenuItem[] {
         return [
           {

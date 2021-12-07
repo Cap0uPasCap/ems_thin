@@ -1,3 +1,8 @@
+<!--
+ * @Description: 设备信息
+ * @Author: stay foolish
+ * @Date: 2021/12/7/0007
+-->
 <template>
   <PageWrapper :title="t('information.title.device')">
     <Description
@@ -53,6 +58,10 @@
         hardwareVersion: '',
       });
 
+      /**
+       * @desc   获取设备信息
+       * @return {Object} 设备信息
+       */
       async function getInfo() {
         const { data } = await getInformation();
         for (const infoDataKey in data) {
@@ -65,6 +74,7 @@
       onMounted(() => {
         getInfo();
       });
+
       return {
         t,
         info,

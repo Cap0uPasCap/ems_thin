@@ -1,3 +1,8 @@
+<!--
+ * @Description: 设备管理-指令
+ * @Author: stay foolish
+ * @Date: 2021/12/7/0007
+-->
 <template>
   <PageWrapper :title="t('device.command.title')" contentBackground>
     <Card
@@ -18,8 +23,8 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref } from 'vue';
-  import { Card, Button } from 'ant-design-vue';
   import { PageWrapper } from '/@/components/Page';
+  import { Card, Button } from 'ant-design-vue';
   import { Loading } from '/@/components/Loading';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { reboot, factoryReset } from '/@/api/device/command';
@@ -47,13 +52,18 @@
   function onTabChange(key) {
     activeKey.value = key;
   }
-
+  /**
+   * @desc   重启按钮触发
+   */
   async function rebootClick() {
     compState.loading = true;
     await reboot();
     compState.loading = false;
   }
 
+  /**
+   * @desc   恢复出厂设置按钮触发
+   */
   async function factoryResetClick() {
     compState.loading = true;
     await factoryReset();
