@@ -24,7 +24,8 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
-  import { Card, Button } from 'ant-design-vue';
+  import { Card } from 'ant-design-vue';
+  import { Button } from '/@/components/Button';
   import { Loading } from '/@/components/Loading';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { reboot, factoryReset } from '/@/api/device/command';

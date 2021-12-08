@@ -7,7 +7,7 @@
   <PageWrapper contentClass="flex" contentFullHeight dense fixedHeight>
     <BasicTable :searchInfo="searchInfo" @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate">{{ t('system.action.addText') }}</a-button>
+        <Button type="primary" @click="handleCreate">{{ t('system.action.addText') }}</Button>
       </template>
       <template #action="{ record }">
         <TableAction :actions="fetchAction(record)" />
@@ -18,6 +18,7 @@
 </template>
 <script lang="ts">
   import { message, Modal } from 'ant-design-vue';
+  import { Button } from '/@/components/Button';
   import { defineComponent, reactive, ref, createVNode } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getList, del, resetUserPassword, updateUserPassword } from '/@/api/system/user';
@@ -29,7 +30,7 @@
 
   export default defineComponent({
     name: 'AccountManagement',
-    components: { BasicTable, PageWrapper, AccountModal, TableAction },
+    components: { BasicTable, PageWrapper, AccountModal, TableAction, Button },
     setup() {
       const password = ref('');
       const { t } = useI18n();

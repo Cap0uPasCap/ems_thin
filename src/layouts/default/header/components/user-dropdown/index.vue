@@ -1,7 +1,7 @@
 <template>
-  <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
+  <Dropdown :overlayClassName="`${prefixCls}-dropdown-overlay`" placement="bottomLeft">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
-      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
+      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" alt="avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
           {{ getUserInfo.loginName }}
@@ -12,10 +12,10 @@
     <template #overlay>
       <Menu @click="handleMenuClick">
         <MenuItem
+          v-if="getShowDoc"
           key="doc"
           :text="t('layout.header.dropdownItemDoc')"
           icon="ion:document-text-outline"
-          v-if="getShowDoc"
         />
         <MenuDivider v-if="getShowDoc" />
         <MenuItem
@@ -62,7 +62,7 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      // MenuDivider: Menu.Divider,
+      MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
     },
     props: {
@@ -126,17 +126,17 @@
   @prefix-cls: ~'@{namespace}-header-user-dropdown';
 
   .@{prefix-cls} {
-    height: @header-height;
-    padding: 0 10px;
-    overflow: hidden;
-    font-size: 12px;
-    cursor: pointer;
     align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    height: @header-height;
+    overflow: hidden;
+    padding: 0 10px;
 
     img {
-      width: 24px;
       height: 24px;
       margin-right: 12px;
+      width: 24px;
     }
 
     &__header {

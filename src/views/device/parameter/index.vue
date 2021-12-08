@@ -13,12 +13,12 @@
         @register="registerTable"
       >
         <template #toolbar>
-          <a-button type="primary" @click="handleSearchParameterValue">
+          <Button type="primary" @click="handleSearchParameterValue">
             {{ t('device.parameter.action.queryParameterBtn') }}
-          </a-button>
-          <a-button type="primary" @click="handleSetParameterValue">
+          </Button>
+          <Button type="primary" @click="handleSetParameterValue">
             {{ t('device.parameter.action.batch') }}
-          </a-button>
+          </Button>
         </template>
       </BasicTable>
     </div>
@@ -28,6 +28,7 @@
   import { message } from 'ant-design-vue';
   import { defineComponent, reactive, ref, onMounted } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
+  import { Button } from '/@/components/Button';
   import { PageWrapper } from '/@/components/Page';
   import ParameterTree from './tree.vue';
   import { getColumns } from './data';
@@ -41,7 +42,7 @@
 
   export default defineComponent({
     name: 'AccountManagement',
-    components: { BasicTable, PageWrapper, ParameterTree },
+    components: { BasicTable, PageWrapper, ParameterTree, Button },
     setup() {
       const selectParameterName = ref<string>('');
       // 国际化函数
