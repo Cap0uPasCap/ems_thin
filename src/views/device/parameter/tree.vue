@@ -70,10 +70,11 @@
        */
       function handleSelect(_, e) {
         if (!e?.selectedNodes[0]?.props) return;
-        const { parameterName, treeType } = e?.selectedNodes[0]?.props;
+        console.log('🚀e👉👉', e);
+        const { fullName, fullViewName, treeType } = e?.selectedNodes[0]?.props;
         if (treeType !== 0) {
           emit('select', {
-            parameterName,
+            parameterName: fullViewName || fullName,
             // tr069: checked.value,
           });
         }

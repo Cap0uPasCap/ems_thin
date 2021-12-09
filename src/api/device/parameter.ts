@@ -27,7 +27,7 @@ function changeData(arr: any[]) {
     return {
       ...e,
       children: e?.children ? changeData(e.children) : [],
-      identity: `[${e?.nextIndex}]: ${e?.parameterName}`,
+      identity: `[${e?.nextIndex}]: ${e?.fullName}`,
       title: e?.nodeArr ? `[${e?.nextIndex}]: ${e?.nodeName}` : e?.nodeName,
     };
   });
