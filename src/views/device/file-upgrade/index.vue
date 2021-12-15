@@ -21,7 +21,7 @@
         :multiple="false"
         :show-upload-list="false"
         :before-upload="beforeUpload"
-        :action="isDev ? '/api/file/upload/deviceConf' : '/file/upload/deviceConf'"
+        :action="isDev ? '/api/file/upload/deviceConf' : '/restful-agent/file/upload/deviceConf'"
         name="file"
         @change="handleChange"
       >
