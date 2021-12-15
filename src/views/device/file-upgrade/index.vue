@@ -21,7 +21,7 @@
         :multiple="false"
         :show-upload-list="false"
         :before-upload="beforeUpload"
-        action="/api/file/upload/deviceConf"
+        :action="isDev ? '/api/file/upload/deviceConf' : '/file/upload/deviceConf'"
         name="file"
         @change="handleChange"
       >
@@ -44,6 +44,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { Button } from '/@/components/Button';
   import { useI18n } from '/@/hooks/web/useI18n';
+  const isDev = process.env.NODE_ENV === 'development';
   const { t } = useI18n();
 
   export default defineComponent({
@@ -139,6 +140,7 @@
         fileTypeList,
         registerModal,
         beforeUpload,
+        isDev,
         headers,
       };
     },
