@@ -42,4 +42,14 @@ export default {
     },
     loadingTip: '请求中...',
   },
+  fileUpgrade: {
+    title: '文件升级',
+    btnText: '点击上传',
+    rebootBtnText: '重启',
+    rebootTip: '是否执行重启指令',
+    leaveRebootTip: '离开页面前是否执行当前页面重启指令',
+    okText: '是',
+    cancelText: '否',
+    uploadFailedTip: '文件名不一致, 请重新上传对应文件名文件',
+  },
 };

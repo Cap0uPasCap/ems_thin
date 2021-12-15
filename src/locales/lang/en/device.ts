@@ -42,4 +42,15 @@ export default {
     },
     loadingTip: 'requested...',
   },
+  fileUpgrade: {
+    title: 'File Upgrade',
+    btnText: 'Click to Upload',
+    rebootBtnText: 'Reboot',
+    rebootTip: 'Whether to execute the reboot instruction',
+    leaveRebootTip:
+      'Whether to execute the current page reboot instruction before leaving the page',
+    okText: 'ok',
+    cancelText: 'cancel',
+    uploadFailedTip: 'The file names are inconsistent, Please re-upload',
+  },
 };

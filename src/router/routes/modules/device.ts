@@ -25,9 +25,17 @@ const device: AppRouteModule = {
     {
       path: 'command',
       name: 'Command',
-      component: () => import('/@/views/device/parameter/command.vue'),
+      component: () => import('/@/views/device/command/index.vue'),
       meta: {
         title: 'routes.device.command',
+      },
+    },
+    {
+      path: 'file',
+      name: 'File',
+      component: () => import('/@/views/device/file-upgrade/index.vue'),
+      meta: {
+        title: 'routes.device.fileUpgrade',
       },
     },
   ],
