@@ -10,25 +10,30 @@
         {{ t('device.fileUpgrade.rebootBtnText') }}
       </Button>
     </template>
-    <CollapseContainer
-      v-for="item in fileTypeList"
-      :key="item.fileName"
-      :title="item.fileName"
-      style="padding: 0 30%"
+    <Row
+      justify="space-around"
+      align="middle"
+      class="bg-white"
+      :gutter="16"
+      style="padding: 50px 100px 150px"
     >
-      <a-upload
-        :headers="headers"
-        :multiple="false"
-        :before-upload="beforeUpload"
-        :action="isDev ? '/api/file/upload/deviceConf' : '/restful-agent/file/upload/deviceConf'"
-        @change="handleChange"
-        :file-list="item.fileList"
-      >
-        <Button :loading="item.loading" size="small" @click="handleClick(item)">
-          {{ t('device.fileUpgrade.btnText') }}</Button
-        >
-      </a-upload>
-    </CollapseContainer>
+      <Col v-for="item in fileTypeList" :key="item.fileName" :span="9">
+        <CollapseContainer :title="item.fileName">
+          <Upload
+            :headers="headers"
+            :multiple="false"
+            :before-upload="beforeUpload"
+            :action="
+              isDev ? '/api/file/upload/deviceConf' : '/restful-agent/file/upload/deviceConf'
+            "
+            @change="handleChange"
+            :file-list="item.fileList"
+          >
+            <Button @click="handleClick(item)"> {{ t('device.fileUpgrade.btnText') }}</Button>
+          </Upload>
+        </CollapseContainer>
+      </Col>
+    </Row>
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -38,7 +43,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { CollapseContainer } from '/@/components/Container';
   import { PageWrapper } from '/@/components/Page';
-  import { Upload, Modal } from 'ant-design-vue';
+  import { Upload, Modal, Col, Row } from 'ant-design-vue';
   import { useUserStore } from '/@/store/modules/user';
   import { Button } from '/@/components/Button';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -49,7 +54,9 @@
   export default defineComponent({
     components: {
       PageWrapper,
-      [Upload.name]: Upload,
+      Upload,
+      Col,
+      Row,
       Button,
       CollapseContainer,
     },
