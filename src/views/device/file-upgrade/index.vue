@@ -150,6 +150,7 @@
           fileListData = fileListData.map((file) => {
             if (file.response) {
               file.name = file.response.data;
+              createMessage.success(file.response.message);
             }
             return file;
           });
