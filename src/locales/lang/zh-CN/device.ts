@@ -44,7 +44,8 @@ export default {
   },
   fileUpgrade: {
     title: '文件升级',
-    btnText: '点击上传',
+    uploadBtnText: '点击上传',
+    downloadBtnText: '点击下载',
     rebootBtnText: '重启',
     rebootTip: '是否执行重启指令',
     leaveRebootTip: '离开页面前是否执行当前页面重启指令',

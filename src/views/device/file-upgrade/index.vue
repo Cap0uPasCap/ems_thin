@@ -19,6 +19,9 @@
     >
       <Col v-for="item in fileTypeList" :key="item.fileName" :span="9">
         <CollapseContainer :title="item.fileName">
+          <Button @click="handleDownloadClick(item.fileName)">
+            {{ t('device.fileUpgrade.downloadBtnText') }}
+          </Button>
           <Upload
             :headers="headers"
             :multiple="false"
@@ -29,7 +32,7 @@
             @change="handleChange"
             :file-list="item.fileList"
           >
-            <Button @click="handleClick(item)"> {{ t('device.fileUpgrade.btnText') }}</Button>
+            <Button @click="handleClick(item)"> {{ t('device.fileUpgrade.uploadBtnText') }}</Button>
           </Upload>
         </CollapseContainer>
       </Col>
@@ -46,6 +49,7 @@
   import { Upload, Modal, Col, Row } from 'ant-design-vue';
   import { useUserStore } from '/@/store/modules/user';
   import { Button } from '/@/components/Button';
+  import { download } from '/@/api/device/file-upgrade';
   import { useI18n } from '/@/hooks/web/useI18n';
   const isDev = process.env.NODE_ENV === 'development';
   let isUploaded = false;
@@ -150,6 +154,19 @@
       function handleClick(file) {
         currentSelectFileName.value = file.fileName;
       }
+      async function handleDownloadClick(fileName) {
+        let URL = window.URL || window.webkitURL;
+        const data = await download(fileName);
+        console.log('🚀data👉👉', data);
+        let objectUrl = URL.createObjectURL(data);
+        let a = document.createElement('a');
+        a.href = objectUrl; // 文件流生成的url
+        a.download = fileName; // 文件名
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // window.open(objectUrl, '_blank');
+      }
       function handleChange({ file, fileList }) {
         if (file.name === currentSelectFileName.value) {
           let fileListData = [...fileList];
@@ -185,6 +202,7 @@
         handleChange,
         handleClick,
         rebootClick,
+        handleDownloadClick,
         currentSelectFileName,
         fileTypeList,
         registerModal,

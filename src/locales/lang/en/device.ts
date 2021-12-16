@@ -44,7 +44,8 @@ export default {
   },
   fileUpgrade: {
     title: 'File Upgrade',
-    btnText: 'Click to Upload',
+    uploadBtnText: 'Click to Upload',
+    downloadBtnText: 'Click to Download',
     rebootBtnText: 'Reboot',
     rebootTip: 'Whether to execute the reboot instruction',
     leaveRebootTip:
