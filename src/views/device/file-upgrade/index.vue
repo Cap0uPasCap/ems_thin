@@ -45,6 +45,7 @@
   import { Button } from '/@/components/Button';
   import { useI18n } from '/@/hooks/web/useI18n';
   const isDev = process.env.NODE_ENV === 'development';
+  let isUploaded = false;
   const { t } = useI18n();
 
   export default defineComponent({
@@ -59,18 +60,28 @@
      * */
     beforeRouteLeave(to, _, next) {
       if (to.params.status) {
+        isUploaded = false;
         next();
       } else {
-        Modal.confirm({
-          title: t('device.fileUpgrade.leaveRebootTip'),
-          okText: t('device.fileUpgrade.okText'),
-          cancelText: t('device.fileUpgrade.cancelText'),
-          onOk: async () => {
-            await reboot();
-            next();
-          },
-          onCancel: () => next(),
-        });
+        if (isUploaded) {
+          Modal.confirm({
+            title: t('device.fileUpgrade.leaveRebootTip'),
+            okText: t('device.fileUpgrade.okText'),
+            cancelText: t('device.fileUpgrade.cancelText'),
+            onOk: async () => {
+              await reboot();
+              isUploaded = false;
+              next();
+            },
+            onCancel: () => {
+              isUploaded = false;
+              next();
+            },
+          });
+        } else {
+          isUploaded = false;
+          next();
+        }
       }
     },
     setup() {
@@ -111,6 +122,7 @@
             console.log('🚀info.file👉👉', info);
 
             if (info.file.response.status === 0) {
+              isUploaded = true;
               createMessage.success(info.file.response.message);
             } else {
               createMessage.error(info.file.response.message);
@@ -141,6 +153,7 @@
         registerModal,
         beforeUpload,
         isDev,
+        isUploaded,
         headers,
       };
     },
