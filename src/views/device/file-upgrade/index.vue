@@ -11,26 +11,24 @@
       </Button>
     </template>
     <CollapseContainer
-      v-for="fileType in fileTypeList"
-      :key="fileType"
-      :title="fileType"
-      style="padding: 0 35%"
+      v-for="item in fileTypeList"
+      :key="item.fileName"
+      :title="item.fileName"
+      style="padding: 0 30%"
     >
       <a-upload
         :headers="headers"
         :multiple="false"
-        :show-upload-list="false"
         :before-upload="beforeUpload"
         :action="isDev ? '/api/file/upload/deviceConf' : '/restful-agent/file/upload/deviceConf'"
-        name="file"
         @change="handleChange"
+        :file-list="item.fileList"
       >
-        <Button size="small" @click="handleClick(fileType)">
+        <Button :loading="item.loading" size="small" @click="handleClick(item)">
           {{ t('device.fileUpgrade.btnText') }}</Button
         >
       </a-upload>
     </CollapseContainer>
-    <AccountModal @register="registerModal" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -46,8 +44,8 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   const isDev = process.env.NODE_ENV === 'development';
   let isUploaded = false;
-  const { t } = useI18n();
 
+  const { t } = useI18n();
   export default defineComponent({
     components: {
       PageWrapper,
@@ -87,49 +85,80 @@
     setup() {
       const [registerModal] = useModal();
       const { createMessage } = useMessage();
-      const currentSelectFileName = ref<string>('');
+      let currentSelectFileName = ref<string>('');
       const headers = {
         ['X-ZX-TOKEN']: useUserStore().getToken,
       };
-      const fileTypeList: String[] = [
-        'TR196_gNodeB_DU_Data_Model.xml',
-        'Proprietary_gNodeB_DU_Data_Model.xml',
-        'TR196_gNodeB_CU_Data_Model.xml',
-        'Proprietary_gNodeB_CU_Data_Model.xml',
-        'start_gnb.sh',
-        'l1_run.sh',
-        'phycfg_radio_sub6_4ant.xml',
-        'phycfg_radio_sub6_2ant.xml',
-        'Monitor_gNodeB_Data.xml',
-        'common.xml',
-      ];
+      let fileTypeList = ref<any>([
+        {
+          fileName: 'TR196_gNodeB_DU_Data_Model.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'Proprietary_gNodeB_DU_Data_Model.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'TR196_gNodeB_CU_Data_Model.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'Proprietary_gNodeB_CU_Data_Model.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'start_gnb.sh',
+          fileList: [],
+        },
+        {
+          fileName: 'l1_run.sh',
+          fileList: [],
+        },
+        {
+          fileName: 'phycfg_radio_sub6_4ant.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'phycfg_radio_sub6_2ant.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'Monitor_gNodeB_Data.xml',
+          fileList: [],
+        },
+        {
+          fileName: 'common.xml',
+          fileList: [],
+        },
+      ]);
       function beforeUpload(file) {
         if (file.name !== currentSelectFileName.value) {
+          file = null;
           createMessage.error(t('device.fileUpgrade.uploadFailedTip'));
+          return false;
+        } else {
+          return true;
         }
-        return file.name === currentSelectFileName.value;
       }
-      function handleClick(fileName) {
-        currentSelectFileName.value = fileName;
+      function handleClick(file) {
+        currentSelectFileName.value = file.fileName;
       }
-      function handleChange(info) {
-        if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
-          delete info.fileList;
-        }
-        if (info.file.status === 'done') {
-          if (info.file.response) {
-            console.log('🚀info.file👉👉', info);
-
-            if (info.file.response.status === 0) {
-              isUploaded = true;
-              createMessage.success(info.file.response.message);
-            } else {
-              createMessage.error(info.file.response.message);
+      function handleChange({ file, fileList }) {
+        if (file.name === currentSelectFileName.value) {
+          let fileListData = [...fileList];
+          fileListData = fileListData.slice(-1);
+          fileListData = fileListData.map((file) => {
+            if (file.response) {
+              file.name = file.response.data;
             }
-          }
-        } else if (info.file.status === 'error') {
-          createMessage.error(`${info.file.name} file upload failed.`);
+            return file;
+          });
+          fileTypeList.value.forEach((e) => {
+            if (e.fileName === currentSelectFileName.value) {
+              e.fileList = fileListData;
+            }
+          });
+          isUploaded = true;
         }
       }
       function rebootClick() {
