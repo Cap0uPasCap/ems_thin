@@ -36,8 +36,8 @@ const transform: AxiosTransform = {
       const whiteList = [
         '/api/command/factoryReset',
         '/api/command/reboot',
-        '/restful-agent/command/factoryReset',
-        '/restful-agent/command/reboot',
+        'restful-agent/command/factoryReset',
+        'restful-agent/command/reboot',
       ];
       if (whiteList.includes(<string>res.config.url)) {
         return res;
