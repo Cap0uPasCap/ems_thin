@@ -51,7 +51,7 @@
   import { Button } from '/@/components/Button';
   import { download } from '/@/api/device/file-upgrade';
   import { useI18n } from '/@/hooks/web/useI18n';
-
+  const { createMessage } = useMessage();
   const isDev = process.env.NODE_ENV === 'development';
   let isUploaded = false;
 
@@ -79,7 +79,13 @@
             okText: t('device.fileUpgrade.okText'),
             cancelText: t('device.fileUpgrade.cancelText'),
             onOk: async () => {
-              await reboot();
+              const data = await reboot();
+              const { status, message } = data;
+              if (status === 1) {
+                createMessage.success(message);
+              } else {
+                createMessage.error(message);
+              }
               isUploaded = false;
               next();
             },
@@ -158,17 +164,43 @@
         currentSelectFileName.value = file.fileName;
       }
 
+      function downloadFn(data, fileName) {
+        const b = new Blob([data]);
+        const url = URL.createObjectURL(b);
+        const isFirefox = navigator.userAgent.toUpperCase().indexOf('FIREFOX') !== -1;
+        if (isFirefox) {
+          window.open(url, '_blank');
+          return null;
+        }
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+      }
+
+      function downloadSwitch(data, fileName) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            //对于二进制文件json化会报错，这里我用try catch简单捕获异常，不影响正常流程
+            const msg = JSON.parse(e.target.result);
+            if (msg?.status === 100) {
+              useUserStore().setToken(undefined);
+              useUserStore().logout(true);
+            }
+            createMessage.error(msg.message);
+          } catch (error) {
+            return downloadFn(data, fileName);
+          }
+        };
+        reader.readAsText(data);
+      }
+
       async function handleDownloadClick(fileName) {
-        let URL = window.URL || window.webkitURL;
         const data = await download(fileName);
-        let objectUrl = URL.createObjectURL(data);
-        let a = document.createElement('a');
-        a.href = objectUrl; // 文件流生成的url
-        a.download = fileName; // 文件名
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        // window.open(objectUrl, '_blank');
+        downloadSwitch(data, fileName);
       }
 
       function handleChange({ file, fileList }) {
@@ -190,6 +222,20 @@
           isUploaded = true;
         }
       }
+      function responseJudgment(status, message) {
+        switch (status) {
+          case 1:
+            createMessage.success(message);
+            break;
+          case 100:
+            createMessage.error(message);
+            useUserStore().setToken(undefined);
+            useUserStore().logout(true);
+            break;
+          default:
+            createMessage.error(message);
+        }
+      }
 
       function rebootClick() {
         Modal.confirm({
@@ -197,7 +243,9 @@
           okText: t('device.fileUpgrade.okText'),
           cancelText: t('device.fileUpgrade.cancelText'),
           onOk: async () => {
-            await reboot();
+            const data = await reboot();
+            const { status, message } = data;
+            await responseJudgment(status, message);
           },
           onCancel: () => {},
         });

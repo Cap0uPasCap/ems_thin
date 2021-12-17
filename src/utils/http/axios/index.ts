@@ -29,79 +29,65 @@ const transform: AxiosTransform = {
    * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    if (res.data?.type === 'application/binary') {
-      return res.data;
-    } else {
-      console.log('🚀res👉👉', res);
-      const whiteList = [
-        '/api/command/factoryReset',
-        '/api/command/reboot',
-        'restful-agent/command/factoryReset',
-        'restful-agent/command/reboot',
-      ];
-      if (whiteList.includes(<string>res.config.url)) {
-        return res;
-      }
-      const { t } = useI18n();
-      const { isTransformResponse, isReturnNativeResponse } = options;
-      // 是否返回原生响应头 比如：需要获取响应头时使用该属性
-      if (isReturnNativeResponse) {
-        return res;
-      }
-      // 不进行任何处理，直接返回
-      // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-      if (!isTransformResponse) {
-        return res.data;
-      }
-      // 错误的时候返回
-
-      const { data } = res;
-      if (!data) {
-        // return '[HTTP] Request has no return value';
-        throw new Error(t('sys.api.apiRequestFailed'));
-      }
-      //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-      const { status, message } = data;
-
-      // 这里逻辑可以根据项目进行修改
-      const hasSuccess = data && Reflect.has(data, 'status') && status === ResultEnum.SUCCESS;
-
-      if (hasSuccess) {
-        return data;
-      }
-
-      // 在此处根据自己项目的实际情况对不同的status执行不同的操作
-      // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-      let timeoutMsg = '';
-      const userStore = useUserStoreWithOut();
-
-      switch (status) {
-        case ResultEnum.TIMEOUT:
-          timeoutMsg = t('sys.api.timeoutMessage');
-          userStore.setToken(undefined);
-          userStore.logout(true);
-          break;
-        case ResultEnum.ROLE:
-          timeoutMsg = message;
-          userStore.setToken(undefined);
-          userStore.logout(true);
-          break;
-        default:
-          if (message) {
-            timeoutMsg = message;
-          }
-      }
-
-      // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
-      // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-      if (options.errorMessageMode === 'modal') {
-        createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-      } else if (options.errorMessageMode === 'message') {
-        createMessage.error(timeoutMsg);
-      }
-
-      throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    const { t } = useI18n();
+    const { isTransformResponse, isReturnNativeResponse } = options;
+    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+    if (isReturnNativeResponse) {
+      return res;
     }
+
+    // 错误的时候返回
+
+    const { data } = res;
+    if (!data) {
+      // return '[HTTP] Request has no return value';
+      throw new Error(t('sys.api.apiRequestFailed'));
+    }
+    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    const { status, message } = data;
+
+    // 这里逻辑可以根据项目进行修改
+    const hasSuccess = data && Reflect.has(data, 'status') && status === ResultEnum.SUCCESS;
+
+    if (hasSuccess) {
+      return data;
+    }
+
+    // 在此处根据自己项目的实际情况对不同的status执行不同的操作
+    // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
+    let timeoutMsg = '';
+    const userStore = useUserStoreWithOut();
+    switch (status) {
+      case ResultEnum.TIMEOUT:
+        timeoutMsg = t('sys.api.timeoutMessage');
+        userStore.setToken(undefined);
+        userStore.logout(true);
+        break;
+      case ResultEnum.ROLE:
+        timeoutMsg = message;
+        userStore.setToken(undefined);
+        userStore.logout(true);
+        break;
+      default:
+        if (message) {
+          timeoutMsg = message;
+        }
+    }
+
+    // 不进行任何处理，直接返回
+    // 用于页面代码可能需要直接获取code，data，message这些信息时开启
+    if (!isTransformResponse) {
+      return res.data;
+    }
+    // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
+    // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
+    if (options.errorMessageMode === 'modal') {
+      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
+    } else if (options.errorMessageMode === 'message') {
+      createMessage.error(timeoutMsg);
+    }
+
+    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
   },
 
   // 请求之前处理config

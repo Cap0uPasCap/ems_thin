@@ -23,6 +23,7 @@
 </template>
 <script lang="ts" setup>
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStore } from '/@/store/modules/user';
   import { reactive, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { Card } from 'ant-design-vue';
@@ -55,18 +56,29 @@
   function onTabChange(key) {
     activeKey.value = key;
   }
+
+  function responseJudgment(status, message) {
+    switch (status) {
+      case 1:
+        createMessage.success(message);
+        break;
+      case 100:
+        createMessage.error(message);
+        useUserStore().setToken(undefined);
+        useUserStore().logout(true);
+        break;
+      default:
+        createMessage.error(message);
+    }
+  }
   /**
    * @desc   重启按钮触发
    */
   async function rebootClick() {
     compState.loading = true;
     const data = await reboot();
-    const { status, message } = data.data;
-    if (status === 1) {
-      createMessage.success(message);
-    } else {
-      createMessage.error(message);
-    }
+    const { status, message } = data;
+    await responseJudgment(status, message);
     compState.loading = false;
   }
 
@@ -76,12 +88,8 @@
   async function factoryResetClick() {
     compState.loading = true;
     const data = await factoryReset();
-    const { status, message } = data.data;
-    if (status === 1) {
-      createMessage.success(message);
-    } else {
-      createMessage.error(message);
-    }
+    const { status, message } = data;
+    await responseJudgment(status, message);
     compState.loading = false;
   }
 </script>

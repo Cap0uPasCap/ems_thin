@@ -6,4 +6,11 @@ enum Api {
 }
 
 export const download = (fileName: string) =>
-  defHttp.get<ResultModel>({ url: Api.download, params: { fileName }, responseType: 'blob' });
+  defHttp.get<ResultModel>(
+    {
+      url: Api.download,
+      params: { fileName },
+      responseType: 'blob',
+    },
+    { isTransformResponse: false },
+  );

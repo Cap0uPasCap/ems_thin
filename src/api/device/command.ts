@@ -5,6 +5,7 @@ enum Api {
   reboot = '/command/reboot',
 }
 
-export const factoryReset = () => defHttp.post({ url: Api.factoryReset });
+export const factoryReset = () =>
+  defHttp.post({ url: Api.factoryReset }, { isTransformResponse: false });
 
-export const reboot = () => defHttp.post({ url: Api.reboot });
+export const reboot = () => defHttp.post({ url: Api.reboot }, { isTransformResponse: false });
