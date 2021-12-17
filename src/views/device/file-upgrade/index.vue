@@ -11,10 +11,10 @@
       </Button>
     </template>
     <Row
-      justify="space-around"
+      :gutter="16"
       align="middle"
       class="bg-white"
-      :gutter="16"
+      justify="space-around"
       style="padding: 50px 100px 150px"
     >
       <Col v-for="item in fileTypeList" :key="item.fileName" :span="9">
@@ -23,14 +23,14 @@
             {{ t('device.fileUpgrade.downloadBtnText') }}
           </Button>
           <Upload
-            :headers="headers"
-            :multiple="false"
-            :before-upload="beforeUpload"
             :action="
               isDev ? '/api/file/upload/deviceConf' : '/restful-agent/file/upload/deviceConf'
             "
-            @change="handleChange"
+            :before-upload="beforeUpload"
             :file-list="item.fileList"
+            :headers="headers"
+            :multiple="false"
+            @change="handleChange"
           >
             <Button @click="handleClick(item)"> {{ t('device.fileUpgrade.uploadBtnText') }}</Button>
           </Upload>
@@ -51,6 +51,7 @@
   import { Button } from '/@/components/Button';
   import { download } from '/@/api/device/file-upgrade';
   import { useI18n } from '/@/hooks/web/useI18n';
+
   const isDev = process.env.NODE_ENV === 'development';
   let isUploaded = false;
 
@@ -142,6 +143,7 @@
           fileList: [],
         },
       ]);
+
       function beforeUpload(file) {
         if (file.name !== currentSelectFileName.value) {
           file = null;
@@ -151,13 +153,14 @@
           return true;
         }
       }
+
       function handleClick(file) {
         currentSelectFileName.value = file.fileName;
       }
+
       async function handleDownloadClick(fileName) {
         let URL = window.URL || window.webkitURL;
         const data = await download(fileName);
-        console.log('🚀data👉👉', data);
         let objectUrl = URL.createObjectURL(data);
         let a = document.createElement('a');
         a.href = objectUrl; // 文件流生成的url
@@ -167,6 +170,7 @@
         a.remove();
         // window.open(objectUrl, '_blank');
       }
+
       function handleChange({ file, fileList }) {
         if (file.name === currentSelectFileName.value) {
           let fileListData = [...fileList];
@@ -186,6 +190,7 @@
           isUploaded = true;
         }
       }
+
       function rebootClick() {
         Modal.confirm({
           title: t('device.fileUpgrade.rebootTip'),
@@ -197,6 +202,7 @@
           onCancel: () => {},
         });
       }
+
       return {
         t,
         handleChange,

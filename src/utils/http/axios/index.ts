@@ -32,6 +32,15 @@ const transform: AxiosTransform = {
     if (res.data?.type === 'application/binary') {
       return res.data;
     } else {
+      const whiteList = [
+        '/api/command/factoryReset',
+        '/api/command/reboot',
+        '/restful-agent/command/factoryReset',
+        '/restful-agent/command/reboot',
+      ];
+      if (whiteList.includes(<string>res.config.url)) {
+        return res;
+      }
       const { t } = useI18n();
       const { isTransformResponse, isReturnNativeResponse } = options;
       // 是否返回原生响应头 比如：需要获取响应头时使用该属性

@@ -22,6 +22,7 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { reactive, ref } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { Card } from 'ant-design-vue';
@@ -29,6 +30,7 @@
   import { Loading } from '/@/components/Loading';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { reboot, factoryReset } from '/@/api/device/command';
+  const { createMessage } = useMessage();
 
   const { t } = useI18n();
   const activeKey = ref('factoryReset');
@@ -58,7 +60,13 @@
    */
   async function rebootClick() {
     compState.loading = true;
-    await reboot();
+    const data = await reboot();
+    const { status, message } = data.data;
+    if (status === 1) {
+      createMessage.success(message);
+    } else {
+      createMessage.error(message);
+    }
     compState.loading = false;
   }
 
@@ -67,7 +75,13 @@
    */
   async function factoryResetClick() {
     compState.loading = true;
-    await factoryReset();
+    const data = await factoryReset();
+    const { status, message } = data.data;
+    if (status === 1) {
+      createMessage.success(message);
+    } else {
+      createMessage.error(message);
+    }
     compState.loading = false;
   }
 </script>
