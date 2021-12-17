@@ -32,6 +32,7 @@ const transform: AxiosTransform = {
     if (res.data?.type === 'application/binary') {
       return res.data;
     } else {
+      console.log('🚀res👉👉', res);
       const whiteList = [
         '/api/command/factoryReset',
         '/api/command/reboot',
