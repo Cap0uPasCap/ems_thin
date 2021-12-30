@@ -86,8 +86,8 @@ const transform: AxiosTransform = {
     } else if (options.errorMessageMode === 'message') {
       createMessage.error(timeoutMsg);
     }
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    return res.data;
+    // throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
   },
 
   // 请求之前处理config
@@ -188,6 +188,7 @@ const transform: AxiosTransform = {
         } else if (errorMessageMode === 'message') {
           createMessage.error(errMessage);
         }
+        console.log('🚀error👉👉', error);
         return Promise.reject(error);
       }
     } catch (error) {

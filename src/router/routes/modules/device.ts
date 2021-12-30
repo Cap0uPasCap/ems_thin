@@ -27,7 +27,7 @@ const device: AppRouteModule = {
       name: 'Command',
       component: () => import('/@/views/device/command/index.vue'),
       meta: {
-        title: 'routes.device.command',
+        title: t('routes.device.command'),
       },
     },
     {
@@ -35,7 +35,7 @@ const device: AppRouteModule = {
       name: 'File',
       component: () => import('/@/views/device/file-upgrade/index.vue'),
       meta: {
-        title: 'routes.device.fileUpgrade',
+        title: t('routes.device.fileUpgrade'),
       },
     },
   ],

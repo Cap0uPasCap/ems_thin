@@ -180,9 +180,14 @@
         link.click();
       }
 
+      /**
+       * @desc 根据 FileReader 函数 判断当前data是否为二进制文件流 是直接下载文件 不是则返回提示
+       * @param data 二进制文件流
+       * @param fileName 文件名
+       */
       function downloadSwitch(data, fileName) {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (e: any) => {
           try {
             //对于二进制文件json化会报错，这里我用try catch简单捕获异常，不影响正常流程
             const msg = JSON.parse(e.target.result);
@@ -203,6 +208,12 @@
         downloadSwitch(data, fileName);
       }
 
+      /**
+       * @desc  上传组件文件状态改变的回调函数
+       * @param  file 当前操作的文件对象
+       * @param  fileList  当前的文件列表
+       * @param  event  上传中的服务端响应内容，包含了上传进度等信息，高级浏览器支持
+       */
       function handleChange({ file, fileList }) {
         if (file.name === currentSelectFileName.value) {
           let fileListData = [...fileList];
@@ -222,6 +233,11 @@
           isUploaded = true;
         }
       }
+      /**
+       * @desc  对于不经过处理直接返回的接口信息进行处理
+       * @param  status 1 代表成功 100 token 失效 其他 错误信息
+       * @param  message
+       */
       function responseJudgment(status, message) {
         switch (status) {
           case 1:
