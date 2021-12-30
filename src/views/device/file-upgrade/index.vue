@@ -28,6 +28,7 @@
             "
             :before-upload="beforeUpload"
             :file-list="item.fileList"
+            :show-upload-list="showUploadList"
             :headers="headers"
             :multiple="false"
             @change="handleChange"
@@ -54,7 +55,7 @@
   const { createMessage } = useMessage();
   const isDev = process.env.NODE_ENV === 'development';
   let isUploaded = false;
-
+  const showUploadList = { showRemoveIcon: false };
   const { t } = useI18n();
   export default defineComponent({
     components: {
@@ -279,6 +280,7 @@
         beforeUpload,
         isDev,
         isUploaded,
+        showUploadList,
         headers,
       };
     },
