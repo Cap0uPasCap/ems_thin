@@ -1,5 +1,5 @@
 <template>
-  <BasicTable @register="registerTable" @edit-change="onEditChange">
+  <BasicTable @register="registerTable">
     <template #action="{ record, column }">
       <TableAction :actions="createActions(record, column)" />
     </template>
@@ -52,31 +52,26 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        // 校验
         msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
-        // const valid = await record.onValid?.();
-        // if (valid) {
         try {
           const data = cloneDeep(getDataSource());
 
           let dataList: any = [];
           data.forEach((e) => {
             dataList.push({
-              maxRank: e.editValueRefs.maxRank,
-              nrofSRSPorts: e.editValueRefs.nrofSRSPorts,
-              puschMaxMimoLayers: e.editValueRefs.puschMaxMimoLayers,
-              ulMimo: e.editValueRefs.ulMimo,
-              dlMimo: e.editValueRefs.dlMimo,
-              numOfRxAntenna: e.editValueRefs.numOfRxAntenna,
-              numOfTxAntenna: e.editValueRefs.numOfTxAntenna,
+              tddUlDlPattern2Configured: e.editValueRefs.tddUlDlPattern2Configured,
+              dlUlTransmissionPeriodicity: e.editValueRefs.dlUlTransmissionPeriodicity,
+              numDlSlots: e.editValueRefs.numDlSlots,
+              numDlSymbols: e.editValueRefs.numDlSymbols,
+              numUlSlots: e.editValueRefs.numUlSlots,
+              numUlSymbols: e.editValueRefs.numUlSymbols,
               cellIndex: e.cellIndex,
             });
           });
 
           await setCellTimeslotConfig({
-            cellAdvancedConfigList: dataList,
+            cellTimeslot1ConfigList: dataList,
           });
-          //TODO 此处将数据提交给服务器保存
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {
@@ -116,29 +111,10 @@
         ];
       }
 
-      function onEditChange({ column, value, record }) {
-        // 本例
-        if (column.dataIndex === 'ulMimo') {
-          switch (value) {
-            case 1:
-              record.editValueRefs.maxRank = 2;
-              record.editValueRefs.nrofSRSPorts = 1;
-              record.editValueRefs.puschMaxMimoLayers = 2;
-              break;
-            case 2:
-              record.editValueRefs.maxRank = 1;
-              record.editValueRefs.nrofSRSPorts = 0;
-              record.editValueRefs.puschMaxMimoLayers = 1;
-              break;
-          }
-        }
-      }
-
       return {
         registerTable,
         handleEdit,
         createActions,
-        onEditChange,
       };
     },
   });
