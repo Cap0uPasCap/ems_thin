@@ -74,11 +74,11 @@
               cellIndex: e.cellIndex,
             });
           });
-
+          //TODO 此处将数据提交给服务器保存
           await setCellAdvancedConfig({
             cellAdvancedConfigList: dataList,
           });
-          //TODO 此处将数据提交给服务器保存
+          await getCellAdvancedConfig();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {

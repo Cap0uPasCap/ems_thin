@@ -46,21 +46,25 @@ export function getColumns() {
     {
       title: '下行时隙数',
       dataIndex: 'numDlSlots',
+      editComponent: 'InputNumber',
       editRow: true,
     },
     {
       title: '特殊子帧下行符号数',
       dataIndex: 'numDlSymbols',
+      editComponent: 'InputNumber',
       editRow: true,
     },
     {
       title: '上行时隙数',
       dataIndex: 'numUlSlots',
+      editComponent: 'InputNumber',
       editRow: true,
     },
     {
       title: '特殊子帧上行符号数',
       dataIndex: 'numUlSymbols',
+      editComponent: 'InputNumber',
       editRow: true,
     },
   ];

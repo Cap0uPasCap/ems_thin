@@ -72,6 +72,7 @@
           await setCellTimeslotConfig({
             cellTimeslot1ConfigList: dataList,
           });
+          await getCellTimeslotConfig();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {

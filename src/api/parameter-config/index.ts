@@ -1,4 +1,3 @@
-import { ColumnsModelList } from './model';
 import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
@@ -29,7 +28,7 @@ export const getCellTimeslotConfig = async () => {
 export const setCellGlobalConfig = (params) =>
   defHttp.post({ url: Api.setCellGlobalConfig, params: params });
 
-export const setCellBaseConfig = (params: ColumnsModelList) =>
+export const setCellBaseConfig = (params) =>
   defHttp.post({ url: Api.setCellBaseConfig, params: params });
 
 export const setCellAdvancedConfig = (params) =>

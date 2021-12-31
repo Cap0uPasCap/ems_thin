@@ -1,7 +1,7 @@
 <template>
-  <Cell :configData="configData" />
-  <link-adaptation :configData="configData" />
-  <function-control :configData="configData" />
+  <Cell :configData="configData" @reload="getConfigData" />
+  <link-adaptation :configData="configData" @reload="getConfigData" />
+  <function-control :configData="configData" @reload="getConfigData" />
 </template>
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';

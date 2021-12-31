@@ -1,190 +1,204 @@
 import { BasicColumn } from '/@/components/Table';
 
-export function getColumns() {
+export function getColumns(type) {
   const columns: BasicColumn[] = [
     {
       title: '小区索引',
       dataIndex: 'cellIndex',
-      editRow: true,
-      editRule: true,
-      editComponent: 'InputNumber',
-      width: 150,
+      width: 50,
     },
     {
       title: '小区状态',
-      dataIndex: 'initDlMcs',
-      editRow: true,
-      editComponent: 'Select',
-      editComponentProps: {
-        options: [
-          {
-            label: 'Option1',
-            value: '1',
-          },
-          {
-            label: 'Option2',
-            value: '2',
-          },
-          {
-            label: 'Option3',
-            value: '3',
-          },
-        ],
+      dataIndex: 'cellStatus',
+      format: (v) => {
+        return v == '0' ? '不可用' : '可用';
       },
-      width: 200,
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      width: 80,
     },
     {
       title: 'CELL ID',
       dataIndex: 'cellId',
-      editRow: true,
-      editComponent: 'ApiSelect',
-      // editComponentProps: {
-      //   api: optionsListApi,
-      //   resultField: 'list',
-      //   labelField: 'name',
-      //   valueField: 'id',
-      // },
-      width: 200,
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      width: 80,
     },
     {
       title: '物理标识',
       dataIndex: 'hoppingId',
       editRow: true,
-      editComponent: 'ApiTreeSelect',
-      editRule: false,
-      // editComponentProps: {
-      //   api: treeOptionsListApi,
-      //   resultField: 'list',
-      // },
-      width: 200,
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      width: 80,
     },
     {
       title: 'SSB',
       dataIndex: 'ssb',
       editRow: true,
-      editComponent: 'InputNumber',
-      width: 150,
-    },
-    {
-      title: 'pointA',
-      dataIndex: 'time',
-      editRow: true,
-      editComponent: 'InputNumber',
-      width: 100,
-    },
-    {
-      title: '工作带宽',
-      dataIndex: 'name5',
-      editRow: true,
-      editComponent: 'Checkbox',
-      editValueMap: (value) => {
-        return value ? '是' : '否';
+      width: 80,
+      ifShow: () => {
+        return type === 'Basic';
       },
-      width: 100,
     },
+    {
+      title: 'PointA',
+      dataIndex: 'pointA',
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      slots: { customRender: 'pointA' },
+      width: 150,
+      // editRow: true,
+    },
+    // {
+    //   title: '工作带宽',
+    //   dataIndex: 'WorkingBandwidth',
+    //   editRow: true,
+    //   ifShow: () => {
+    //   return type === 'Basic';
+    // },
+    // },
     {
       title: '小区支持最大用户数',
       dataIndex: 'maxUe',
+      editComponent: 'InputNumber',
       editRow: true,
-      editComponent: 'Switch',
-      editValueMap: (value) => {
-        return value ? '开' : '关';
+      width: 80,
+      ifShow: () => {
+        return type === 'Basic';
       },
-      width: 100,
     },
     {
       title: 'RLC传输方式',
       dataIndex: 'rlcMode',
       editRow: true,
-      editComponent: 'Switch',
-      editValueMap: (value) => {
-        return value ? '开' : '关';
+      width: 80,
+      ifShow: () => {
+        return type === 'Basic';
       },
-      width: 100,
-    },
-  ];
-  return columns;
-}
-
-export function getLinkAdaptationColumns() {
-  const columns: BasicColumn[] = [
-    {
-      title: '小区索引',
-      dataIndex: 'cellId',
-      editRow: true,
-      editComponent: 'InputNumber',
-      width: 150,
+      editComponent: 'Select',
+      editComponentProps: {
+        options: [
+          {
+            label: 'AM',
+            value: 1,
+          },
+          {
+            label: 'UM',
+            value: 2,
+          },
+        ],
+      },
     },
     {
       title: '下行LA开关',
-      dataIndex: 'ulLaEnabled',
+      dataIndex: 'dlLaEnabled',
       editRow: true,
-      editRule: true,
-      editComponent: 'Input',
-      width: 150,
+      width: 80,
+      editComponent: 'Select',
+      ifShow: () => {
+        return type === 'LinkAdaptation';
+      },
+      editComponentProps: {
+        options: [
+          {
+            label: '开启',
+            value: 1,
+          },
+          {
+            label: '关闭',
+            value: 0,
+          },
+        ],
+      },
     },
     {
       title: '下行初始MCS',
       dataIndex: 'initDlMcs',
+      editComponent: 'InputNumber',
       editRow: true,
-      width: 200,
+      width: 80,
+      ifShow: () => {
+        return type === 'LinkAdaptation';
+      },
     },
     {
       title: '上行LA开关',
       dataIndex: 'ulLaEnabled',
-      editRow: true,
-      width: 200,
-    },
-    {
-      title: '上行初始MCS',
-      dataIndex: 'initDlMcs',
-      editRow: true,
-      width: 200,
-    },
-  ];
-  return columns;
-}
-
-export function getFunctionControlColumns() {
-  const columns: BasicColumn[] = [
-    {
-      title: '小区索引',
-      dataIndex: 'cellIndex',
-      editRow: true,
-      editComponent: 'InputNumber',
-      width: 150,
-    },
-    {
-      title: 'PUCCH期望接收功率RSRP',
-      dataIndex: 'p0NominalWithGrant',
-      editRow: true,
-      width: 200,
-    },
-    {
-      title: 'PRACH期望接收功率RSRP',
-      dataIndex: 'preambleReceivedTargetPower',
-      editRow: true,
-      editComponent: 'ApiSelect',
-      width: 200,
-    },
-    {
-      title: '开关',
-      dataIndex: 'puschEnable',
+      width: 80,
+      ifShow: () => {
+        return type === 'LinkAdaptation';
+      },
       editRow: true,
       editComponent: 'Select',
       editComponentProps: {
         options: [
           {
             label: '开启',
-            value: '1',
+            value: 1,
           },
           {
             label: '关闭',
-            value: '0',
+            value: 0,
           },
         ],
       },
-      width: 200,
+    },
+    {
+      title: '上行初始MCS',
+      width: 80,
+      ifShow: () => {
+        return type === 'LinkAdaptation';
+      },
+      dataIndex: 'initUlMcs',
+      editComponent: 'InputNumber',
+      editRow: true,
+    },
+    {
+      title: 'PUCCH期望接收功率RSRP',
+      dataIndex: 'p0NominalWithGrant',
+      editComponent: 'InputNumber',
+      editRow: true,
+      width: 80,
+      ifShow: () => {
+        return type === 'FunctionControl';
+      },
+    },
+    {
+      title: 'PRACH期望接收功率RSRP',
+      dataIndex: 'preambleReceivedTargetPower',
+      editComponent: 'InputNumber',
+      editRow: true,
+      width: 80,
+      ifShow: () => {
+        return type === 'FunctionControl';
+      },
+    },
+    {
+      title: '开关',
+      dataIndex: 'puschEnable',
+      editRow: true,
+      width: 80,
+      editComponent: 'Select',
+      editComponentProps: {
+        options: [
+          {
+            label: '开启',
+            value: 1,
+          },
+          {
+            label: '关闭',
+            value: 0,
+          },
+        ],
+      },
+      ifShow: () => {
+        return type === 'FunctionControl';
+      },
     },
   ];
   return columns;

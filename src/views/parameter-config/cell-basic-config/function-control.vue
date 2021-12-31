@@ -8,6 +8,7 @@
   </div>
 </template>
 <script lang="ts">
+  import { setCellBaseConfig } from '/@/api/parameter-config';
   import { defineComponent, ref } from 'vue';
   import {
     BasicTable,
@@ -17,10 +18,10 @@
     ActionItem,
     EditRecordRow,
   } from '/@/components/Table';
-  import { getFunctionControlColumns } from './data';
+
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getCellBaseConfig } from '/@/api/parameter-config';
+  import { getColumns } from './data';
   export default defineComponent({
     components: { BasicTable, TableAction },
     props: {
@@ -31,22 +32,19 @@
         },
       },
     },
-    setup() {
+    setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
       const currentEditKeyRef = ref('');
-      const [registerTable] = useTable({
+      const [registerTable, { getDataSource }] = useTable({
         title: '功控配置',
-        api: getCellBaseConfig,
-        columns: getFunctionControlColumns(),
-        afterFetch(data) {
-          console.log('🚀data👉👉', data);
-          return data?.data?.CellBaseConfigList;
-        },
+        columns: getColumns('FunctionControl'),
         showIndexColumn: false,
         showTableSetting: true,
+        canResize: false,
+        pagination: false,
         tableSetting: { fullScreen: true },
         actionColumn: {
-          width: 160,
+          width: 40,
           title: 'Action',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -69,18 +67,50 @@
         const valid = await record.onValid?.();
         if (valid) {
           try {
-            const data = cloneDeep(record.editValueRefs);
-            console.log(data);
-            //TODO 此处将数据提交给服务器保存
-            // ...
-            // 保存之后提交编辑状态
+            const data = cloneDeep(getDataSource());
+            let dataList: any = [];
+            data.forEach((e) => {
+              if (
+                (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
+                e.nrArfcnDL > 653333 ||
+                e.nrArfcnDL < 499200
+              ) {
+                throw new Error('请填写正确的数据');
+              } else {
+                dataList.push({
+                  hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
+                  ssb: e.editValueRefs.ssb || e.ssb,
+                  maxUe: e.editValueRefs.maxUe || e.maxUe,
+                  rlcMode: e.editValueRefs.rlcMode || e.rlcMode,
+                  dlLaEnabled: e.editValueRefs.dlLaEnabled || e.dlLaEnabled,
+                  initDlMcs: e.editValueRefs.initDlMcs || e.initDlMcs,
+                  ulLaEnabled: e.editValueRefs.ulLaEnabled || e.ulLaEnabled,
+                  initUlMcs: e.editValueRefs.initUlMcs || e.initUlMcs,
+                  p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
+                  preambleReceivedTargetPower:
+                    e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
+                  puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
+                  nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                  nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                  nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                  nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                  cellIndex: e.cellIndex,
+                  cellStatus: e.cellStatus,
+                  cellId: e.cellId,
+                });
+              }
+            });
+            await setCellBaseConfig({
+              cellBaseConfigList: dataList,
+            });
+            emit('reload');
             const pass = await record.onEdit?.(false, true);
             if (pass) {
               currentEditKeyRef.value = '';
             }
             msg.success({ content: '数据已保存', key: 'saving' });
           } catch (error) {
-            msg.error({ content: '保存失败', key: 'saving' });
+            msg.error({ content: '请填写正确的数据', key: 'saving' });
           }
         } else {
           msg.error({ content: '请填写正确的数据', key: 'saving' });

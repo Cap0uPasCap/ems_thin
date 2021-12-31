@@ -51,6 +51,7 @@
         const data = await getFieldsValue();
         compState.loading = true;
         await setCellGlobalConfig(data);
+        await getCellGlobalConfig();
         compState.loading = false;
       }
 
