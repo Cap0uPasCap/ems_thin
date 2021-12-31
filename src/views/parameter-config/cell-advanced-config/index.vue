@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <BasicTable @register="registerTable" @edit-change="onEditChange">
+    <BasicTable @register="registerTable">
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
@@ -64,9 +64,6 @@
           let dataList: any = [];
           data.forEach((e) => {
             dataList.push({
-              maxRank: e.editValueRefs.maxRank,
-              nrofSRSPorts: e.editValueRefs.nrofSRSPorts,
-              puschMaxMimoLayers: e.editValueRefs.puschMaxMimoLayers,
               ulMimo: e.editValueRefs.ulMimo,
               dlMimo: e.editValueRefs.dlMimo,
               numOfRxAntenna: e.editValueRefs.numOfRxAntenna,
@@ -118,29 +115,10 @@
         ];
       }
 
-      function onEditChange({ column, value, record }) {
-        // 本例
-        if (column.dataIndex === 'ulMimo') {
-          switch (value) {
-            case 1:
-              record.editValueRefs.maxRank = 2;
-              record.editValueRefs.nrofSRSPorts = 1;
-              record.editValueRefs.puschMaxMimoLayers = 2;
-              break;
-            case 2:
-              record.editValueRefs.maxRank = 1;
-              record.editValueRefs.nrofSRSPorts = 0;
-              record.editValueRefs.puschMaxMimoLayers = 1;
-              break;
-          }
-        }
-      }
-
       return {
         registerTable,
         handleEdit,
         createActions,
-        onEditChange,
       };
     },
   });

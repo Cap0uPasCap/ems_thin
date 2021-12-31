@@ -91,33 +91,18 @@ export function getColumns() {
         ],
       },
     },
-    {
-      dataIndex: 'maxRank',
-      ifShow: false,
-    },
-    {
-      dataIndex: 'nrofSRSPorts',
-      ifShow: false,
-    },
-    {
-      dataIndex: 'puschMaxMimoLayers',
-      ifShow: false,
-    },
+    // {
+    //   dataIndex: 'maxRank',
+    //   ifShow: false,
+    // },
+    // {
+    //   dataIndex: 'nrofSRSPorts',
+    //   ifShow: false,
+    // },
+    // {
+    //   dataIndex: 'puschMaxMimoLayers',
+    //   ifShow: false,
+    // },
   ];
   return columns;
-}
-
-interface ColumnsModel {
-  maxRank: string | number;
-  nrofSRSPorts: string | number;
-  puschMaxMimoLayers: string | number;
-  ulMimo: string | number;
-  dlMimo: string | number;
-  numOfRxAntenna: string | number;
-  numOfTxAntenna: string | number;
-  cellIndex: string | number;
-}
-
-export interface ColumnsModelList {
-  cellAdvancedConfigList: ColumnsModel[];
 }
