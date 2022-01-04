@@ -20,9 +20,13 @@ export const getCellAdvancedConfig = async () => {
   return data?.data?.cellAdvancedConfigList || [];
 };
 
-export const getCellTimeslotConfig = async () => {
+export const getCellTimeslot1Config = async () => {
   const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
   return data?.data?.cellTimeslot1ConfigList || [];
+};
+export const getCellTimeslot2Config = async () => {
+  const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
+  return data?.data?.cellTimeslot2ConfigList || [];
 };
 
 export const setCellGlobalConfig = (params) =>

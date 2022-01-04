@@ -1,5 +1,5 @@
 <template>
-  <BasicTable @register="registerTable" @edit-change="onEditChange">
+  <BasicTable @register="registerTable">
     <template #action="{ record, column }">
       <TableAction :actions="createActions(record, column)" />
     </template>
@@ -18,15 +18,18 @@
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
-  import { getCellTimeslotConfig, setCellAdvancedConfig } from '/@/api/parameter-config';
+  import { getCellTimeslot2Config, setCellTimeslotConfig } from '/@/api/parameter-config';
+  import { useI18n } from '/@/hooks/web/useI18n';
+
   export default defineComponent({
     components: { BasicTable, TableAction },
     setup() {
       const { createMessage: msg } = useMessage();
+      const { t } = useI18n();
       const currentEditKeyRef = ref('');
       const [registerTable, { getDataSource }] = useTable({
         title: 'Pattern2',
-        api: getCellTimeslotConfig,
+        api: getCellTimeslot2Config,
         columns: getColumns(),
         showIndexColumn: false,
         showTableSetting: true,
@@ -41,6 +44,11 @@
         },
       });
 
+      function t1(context) {
+        const prefix = 'parameter-config.page.timeSlot.';
+        return t(prefix + context);
+      }
+
       function handleEdit(record: EditRecordRow) {
         currentEditKeyRef.value = record.key;
         record.onEdit?.(true);
@@ -52,39 +60,35 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        // 校验
-        msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
-        // const valid = await record.onValid?.();
-        // if (valid) {
+        msg.loading({ content: t1('btn.saveTip'), duration: 0, key: 'saving' });
         try {
           const data = cloneDeep(getDataSource());
 
           let dataList: any = [];
           data.forEach((e) => {
             dataList.push({
-              maxRank: e.editValueRefs.maxRank,
-              nrofSRSPorts: e.editValueRefs.nrofSRSPorts,
-              puschMaxMimoLayers: e.editValueRefs.puschMaxMimoLayers,
-              ulMimo: e.editValueRefs.ulMimo,
-              dlMimo: e.editValueRefs.dlMimo,
-              numOfRxAntenna: e.editValueRefs.numOfRxAntenna,
-              numOfTxAntenna: e.editValueRefs.numOfTxAntenna,
+              tddUlDlPattern2Configured: e.editValueRefs.tddUlDlPattern2Configured,
+              dlUlTransmissionPeriodicity: e.editValueRefs.dlUlTransmissionPeriodicity,
+              numDlSlots: e.editValueRefs.numDlSlots,
+              numDlSymbols: e.editValueRefs.numDlSymbols,
+              numUlSlots: e.editValueRefs.numUlSlots,
+              numUlSymbols: e.editValueRefs.numUlSymbols,
               cellIndex: e.cellIndex,
             });
           });
 
-          await setCellAdvancedConfig({
-            cellAdvancedConfigList: dataList,
+          await setCellTimeslotConfig({
+            cellTimeslot2ConfigList: dataList,
           });
-          //TODO 此处将数据提交给服务器保存
+          await getCellTimeslot2Config();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {
             currentEditKeyRef.value = '';
           }
-          msg.success({ content: '数据已保存', key: 'saving' });
+          msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
         } catch (error) {
-          msg.error({ content: '保存失败', key: 'saving' });
+          msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
         }
         // } else {
         //   msg.error({ content: '请填写正确的数据', key: 'saving' });
@@ -95,7 +99,7 @@
         if (!record.editable) {
           return [
             {
-              label: '编辑',
+              label: t1('btn.editText'),
               disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
               onClick: handleEdit.bind(null, record),
             },
@@ -103,42 +107,24 @@
         }
         return [
           {
-            label: '保存',
+            label: t1('btn.saveText'),
             onClick: handleSave.bind(null, record, column),
           },
           {
-            label: '取消',
+            label: t1('btn.cancelText'),
             popConfirm: {
-              title: '是否取消编辑',
+              title: t1('btn.cancelTip'),
               confirm: handleCancel.bind(null, record, column),
             },
           },
         ];
       }
 
-      function onEditChange({ column, value, record }) {
-        // 本例
-        if (column.dataIndex === 'ulMimo') {
-          switch (value) {
-            case 1:
-              record.editValueRefs.maxRank = 2;
-              record.editValueRefs.nrofSRSPorts = 1;
-              record.editValueRefs.puschMaxMimoLayers = 2;
-              break;
-            case 2:
-              record.editValueRefs.maxRank = 1;
-              record.editValueRefs.nrofSRSPorts = 0;
-              record.editValueRefs.puschMaxMimoLayers = 1;
-              break;
-          }
-        }
-      }
-
       return {
+        t1,
         registerTable,
         handleEdit,
         createActions,
-        onEditChange,
       };
     },
   });

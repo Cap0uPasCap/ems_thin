@@ -18,7 +18,7 @@
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
-  import { getCellTimeslotConfig, setCellTimeslotConfig } from '/@/api/parameter-config';
+  import { getCellTimeslot1Config, setCellTimeslotConfig } from '/@/api/parameter-config';
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
@@ -29,7 +29,7 @@
       const currentEditKeyRef = ref('');
       const [registerTable, { getDataSource }] = useTable({
         title: 'Pattern1',
-        api: getCellTimeslotConfig,
+        api: getCellTimeslot1Config,
         columns: getColumns(),
         showIndexColumn: false,
         showTableSetting: true,
@@ -80,7 +80,7 @@
           await setCellTimeslotConfig({
             cellTimeslot1ConfigList: dataList,
           });
-          await getCellTimeslotConfig();
+          await getCellTimeslot1Config();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {
