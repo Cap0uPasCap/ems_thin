@@ -27,7 +27,7 @@ export default {
       },
     },
     basic: {
-      titleList: ['小区基本信息', '链路自适应配置', '功控配置'],
+      title: ['小区基本信息', '链路自适应配置', '功控配置'],
       btn: {
         editText: '编辑',
         saveText: '保持',
