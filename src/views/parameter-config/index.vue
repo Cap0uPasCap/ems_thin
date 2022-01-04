@@ -11,7 +11,10 @@
           key="cell-advanced-config"
           :tab="t('parameter-config.tab.tabName.cellAdvancedConfig')"
         />
-        <a-tab-pane key="cell-time-slot-config" tab="时隙配置" />
+        <a-tab-pane
+          key="cell-time-slot-config"
+          :tab="t('parameter-config.tab.tabName.timeSlotConfig')"
+        />
       </a-tabs>
     </template>
     <General v-if="currentTabKey === 'general'" />

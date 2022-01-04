@@ -1,14 +1,19 @@
 import { BasicColumn } from '/@/components/Table';
-
+import { useI18n } from '/@/hooks/web/useI18n';
+const { t } = useI18n();
+function t1(context) {
+  const prefix = 'parameter-config.page.timeSlot.column.';
+  return t(prefix + context);
+}
 export function getColumns() {
   const columns: BasicColumn[] = [
     {
-      title: '小区索引',
+      title: t1('cellIndex'),
       dataIndex: 'cellIndex',
       editRow: false,
     },
     {
-      title: '周期类型',
+      title: t1('tddUlDlPattern2Configured'),
       dataIndex: 'tddUlDlPattern2Configured',
       editRow: true,
       editComponent: 'Select',
@@ -26,7 +31,7 @@ export function getColumns() {
       },
     },
     {
-      title: '传输周期',
+      title: t1('dlUlTransmissionPeriodicity'),
       dataIndex: 'dlUlTransmissionPeriodicity',
       editRow: true,
       editComponent: 'Select',
@@ -44,25 +49,25 @@ export function getColumns() {
       },
     },
     {
-      title: '下行时隙数',
+      title: t1('numDlSlots'),
       dataIndex: 'numDlSlots',
       editComponent: 'InputNumber',
       editRow: true,
     },
     {
-      title: '特殊子帧下行符号数',
+      title: t1('numDlSymbols'),
       dataIndex: 'numDlSymbols',
       editComponent: 'InputNumber',
       editRow: true,
     },
     {
-      title: '上行时隙数',
+      title: t1('numUlSlots'),
       dataIndex: 'numUlSlots',
       editComponent: 'InputNumber',
       editRow: true,
     },
     {
-      title: '特殊子帧上行符号数',
+      title: t1('numUlSymbols'),
       dataIndex: 'numUlSymbols',
       editComponent: 'InputNumber',
       editRow: true,

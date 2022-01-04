@@ -1,17 +1,22 @@
 import { BasicColumn } from '/@/components/Table';
-
+import { useI18n } from '/@/hooks/web/useI18n';
+const { t } = useI18n();
+function t1(context) {
+  const prefix = 'parameter-config.page.basic.column.';
+  return t(prefix + context);
+}
 export function getColumns(type) {
   const columns: BasicColumn[] = [
     {
-      title: '小区索引',
+      title: t1('cellIndex'),
       dataIndex: 'cellIndex',
       width: 50,
     },
     {
-      title: '小区状态',
+      title: t1('cellIndex'),
       dataIndex: 'cellStatus',
       format: (v) => {
-        return v == '0' ? '不可用' : '可用';
+        return v == '0' ? t1('selectOption.notAvailable') : t1('selectOption.available');
       },
       ifShow: () => {
         return type === 'Basic';
@@ -19,7 +24,7 @@ export function getColumns(type) {
       width: 80,
     },
     {
-      title: 'CELL ID',
+      title: t1('cellIndex'),
       dataIndex: 'cellId',
       ifShow: () => {
         return type === 'Basic';
@@ -27,7 +32,7 @@ export function getColumns(type) {
       width: 80,
     },
     {
-      title: '物理标识',
+      title: t1('hoppingId'),
       dataIndex: 'hoppingId',
       editRow: true,
       ifShow: () => {
@@ -36,7 +41,7 @@ export function getColumns(type) {
       width: 80,
     },
     {
-      title: 'SSB',
+      title: t1('ssb'),
       dataIndex: 'ssb',
       editRow: true,
       width: 80,
@@ -45,7 +50,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: 'PointA',
+      title: t1('pointA'),
       dataIndex: 'pointA',
       ifShow: () => {
         return type === 'Basic';
@@ -63,7 +68,7 @@ export function getColumns(type) {
     // },
     // },
     {
-      title: '小区支持最大用户数',
+      title: t1('maxUe'),
       dataIndex: 'maxUe',
       editComponent: 'InputNumber',
       editRow: true,
@@ -73,7 +78,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: 'RLC传输方式',
+      title: t1('rlcMode'),
       dataIndex: 'rlcMode',
       editRow: true,
       width: 80,
@@ -95,7 +100,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: '下行LA开关',
+      title: t1('dlLaEnabled'),
       dataIndex: 'dlLaEnabled',
       editRow: true,
       width: 80,
@@ -106,18 +111,18 @@ export function getColumns(type) {
       editComponentProps: {
         options: [
           {
-            label: '开启',
+            label: t1('selectOption.open'),
             value: 1,
           },
           {
-            label: '关闭',
+            label: t1('selectOption.close'),
             value: 0,
           },
         ],
       },
     },
     {
-      title: '下行初始MCS',
+      title: t1('initDlMcs'),
       dataIndex: 'initDlMcs',
       editComponent: 'InputNumber',
       editRow: true,
@@ -127,7 +132,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: '上行LA开关',
+      title: t1('ulLaEnabled'),
       dataIndex: 'ulLaEnabled',
       width: 80,
       ifShow: () => {
@@ -138,18 +143,18 @@ export function getColumns(type) {
       editComponentProps: {
         options: [
           {
-            label: '开启',
+            label: t1('selectOption.open'),
             value: 1,
           },
           {
-            label: '关闭',
+            label: t1('selectOption.close'),
             value: 0,
           },
         ],
       },
     },
     {
-      title: '上行初始MCS',
+      title: t1('initUlMcs'),
       width: 80,
       ifShow: () => {
         return type === 'LinkAdaptation';
@@ -159,7 +164,7 @@ export function getColumns(type) {
       editRow: true,
     },
     {
-      title: 'PUCCH期望接收功率RSRP',
+      title: t1('p0NominalWithGrant'),
       dataIndex: 'p0NominalWithGrant',
       editComponent: 'InputNumber',
       editRow: true,
@@ -169,7 +174,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: 'PRACH期望接收功率RSRP',
+      title: t1('preambleReceivedTargetPower'),
       dataIndex: 'preambleReceivedTargetPower',
       editComponent: 'InputNumber',
       editRow: true,
@@ -179,7 +184,7 @@ export function getColumns(type) {
       },
     },
     {
-      title: '开关',
+      title: t1('puschEnable'),
       dataIndex: 'puschEnable',
       editRow: true,
       width: 80,
@@ -187,11 +192,11 @@ export function getColumns(type) {
       editComponentProps: {
         options: [
           {
-            label: '开启',
+            label: t1('selectOption.open'),
             value: 1,
           },
           {
-            label: '关闭',
+            label: t1('selectOption.close'),
             value: 0,
           },
         ],

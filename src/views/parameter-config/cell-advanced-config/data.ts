@@ -1,14 +1,19 @@
 import { BasicColumn } from '/@/components/Table';
-
+import { useI18n } from '/@/hooks/web/useI18n';
+const { t } = useI18n();
+function t1(context) {
+  const prefix = 'parameter-config.page.advanced.column.';
+  return t(prefix + context);
+}
 export function getColumns() {
   const columns: BasicColumn[] = [
     {
-      title: '小区索引',
+      title: t1('cellIndex'),
       dataIndex: 'cellIndex',
       editRow: false,
     },
     {
-      title: '下行天线数',
+      title: t1('numOfTxAntenna'),
       dataIndex: 'numOfTxAntenna',
       editRow: true,
       editComponent: 'Select',
@@ -30,7 +35,7 @@ export function getColumns() {
       },
     },
     {
-      title: '上行天线数',
+      title: t1('numOfRxAntenna'),
       dataIndex: 'numOfRxAntenna',
       editRow: true,
       editComponent: 'Select',
@@ -52,7 +57,7 @@ export function getColumns() {
       },
     },
     {
-      title: '下行mimo',
+      title: t1('dlMimo'),
       dataIndex: 'dlMimo',
       editRow: true,
       editComponent: 'Select',
@@ -74,7 +79,7 @@ export function getColumns() {
       },
     },
     {
-      title: '上行mimo',
+      title: t1('ulMimo'),
       dataIndex: 'ulMimo',
       editRow: true,
       editComponent: 'Select',
@@ -91,18 +96,6 @@ export function getColumns() {
         ],
       },
     },
-    // {
-    //   dataIndex: 'maxRank',
-    //   ifShow: false,
-    // },
-    // {
-    //   dataIndex: 'nrofSRSPorts',
-    //   ifShow: false,
-    // },
-    // {
-    //   dataIndex: 'puschMaxMimoLayers',
-    //   ifShow: false,
-    // },
   ];
   return columns;
 }

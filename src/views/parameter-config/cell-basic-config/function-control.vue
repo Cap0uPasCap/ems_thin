@@ -22,6 +22,7 @@
   import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
+  import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     components: { BasicTable, TableAction },
     props: {
@@ -34,9 +35,10 @@
     },
     setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
+      const { t } = useI18n();
       const currentEditKeyRef = ref('');
       const [registerTable, { getDataSource }] = useTable({
-        title: '功控配置',
+        title: t1('title[2]'),
         columns: getColumns('FunctionControl'),
         showIndexColumn: false,
         showTableSetting: true,
@@ -51,6 +53,11 @@
         },
       });
 
+      function t1(context) {
+        const prefix = 'parameter-config.page.basic.';
+        return t(prefix + context);
+      }
+
       function handleEdit(record: EditRecordRow) {
         currentEditKeyRef.value = record.key;
         record.onEdit?.(true);
@@ -63,7 +70,7 @@
 
       async function handleSave(record: EditRecordRow) {
         // 校验
-        msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
+        msg.loading({ content: t1('btn.saveTip'), duration: 0, key: 'saving' });
         const valid = await record.onValid?.();
         if (valid) {
           try {
@@ -108,12 +115,12 @@
             if (pass) {
               currentEditKeyRef.value = '';
             }
-            msg.success({ content: '数据已保存', key: 'saving' });
+            msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
           } catch (error) {
-            msg.error({ content: '请填写正确的数据', key: 'saving' });
+            msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
           }
         } else {
-          msg.error({ content: '请填写正确的数据', key: 'saving' });
+          msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
         }
       }
 
@@ -121,7 +128,7 @@
         if (!record.editable) {
           return [
             {
-              label: '编辑',
+              label: t1('btn.editText'),
               disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
               onClick: handleEdit.bind(null, record),
             },
@@ -129,13 +136,13 @@
         }
         return [
           {
-            label: '保存',
+            label: t1('btn.saveText'),
             onClick: handleSave.bind(null, record, column),
           },
           {
-            label: '取消',
+            label: t1('btn.cancelText'),
             popConfirm: {
-              title: '是否取消编辑',
+              title: t1('btn.cancelTip'),
               confirm: handleCancel.bind(null, record, column),
             },
           },

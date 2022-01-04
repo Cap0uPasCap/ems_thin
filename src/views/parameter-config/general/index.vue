@@ -42,7 +42,6 @@
       async function getConfigData() {
         compState.loading = true;
         const data = await getCellGlobalConfig();
-        console.log('🚀data👉👉', data);
         await setFieldsValue(data?.data);
         compState.loading = false;
       }
