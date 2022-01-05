@@ -27,7 +27,6 @@
       </template>
       <template #nrFreqBand="{ record }">
         <div v-if="record.editable">
-          NRFreqBand:
           <a-input
             size="small"
             disabled="true"
@@ -36,7 +35,6 @@
           />
         </div>
         <div v-else>
-          NRFreqBand:
           <span>{{ record.nrArfcnDL >= 600000 ? 78 : 41 }}</span>
         </div>
       </template>
