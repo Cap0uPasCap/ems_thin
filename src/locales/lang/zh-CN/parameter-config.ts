@@ -99,6 +99,10 @@ export default {
         numDlSymbols: '特殊子帧下行符号数',
         numUlSlots: '上行时隙数',
         numUlSymbols: '特殊子帧上行符号数',
+        selectOption: {
+          single: '单周期',
+          double: '双周期',
+        },
       },
     },
   },

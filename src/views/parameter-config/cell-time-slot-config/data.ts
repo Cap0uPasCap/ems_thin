@@ -20,11 +20,11 @@ export function getColumns() {
       editComponentProps: {
         options: [
           {
-            label: '单周期',
+            label: t1('selectOption.single'),
             value: 0,
           },
           {
-            label: '双周期',
+            label: t1('selectOption.double'),
             value: 1,
           },
         ],

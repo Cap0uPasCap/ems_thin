@@ -99,6 +99,10 @@ export default {
         numDlSymbols: 'Num DlSymbols',
         numUlSlots: 'NumUl Slots',
         numUlSymbols: 'NumUl Symbols',
+        selectOption: {
+          single: 'Single',
+          double: 'Double',
+        },
       },
     },
   },
