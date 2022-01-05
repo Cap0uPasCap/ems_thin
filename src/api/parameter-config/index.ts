@@ -47,7 +47,11 @@ function changeCellTypeToString(arr) {
     arr.forEach((e) => {
       const obj = {};
       for (const i in e) {
-        obj[i] = e[i] + '';
+        if (e[i] === 0) {
+          obj[i] = e[i] + '';
+        } else {
+          obj[i] = e[i];
+        }
       }
       list.push(obj);
     });
