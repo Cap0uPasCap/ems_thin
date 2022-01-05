@@ -125,6 +125,22 @@ export const schemas: FormSchema[] = [
     colProps: {
       span: 8,
     },
+    rules: [
+      {
+        required: true,
+        // @ts-ignore
+        validator: async (_, value) => {
+          if (!value) {
+            return Promise.reject('值不能为空');
+          }
+          if (value.length !== 2) {
+            return Promise.reject('Slice_SST: maxLength: 2, minLength: 2');
+          }
+          return Promise.resolve();
+        },
+        trigger: 'change',
+      },
+    ],
   },
   {
     field: 'sliceSd',
@@ -133,5 +149,21 @@ export const schemas: FormSchema[] = [
     colProps: {
       span: 8,
     },
+    rules: [
+      {
+        required: true,
+        // @ts-ignore
+        validator: async (_, value) => {
+          if (!value) {
+            return Promise.reject('值不能为空');
+          }
+          if (value.length !== 6) {
+            return Promise.reject('Slice_SD: maxLength: 6, minLength: 6');
+          }
+          return Promise.resolve();
+        },
+        trigger: 'change',
+      },
+    ],
   },
 ];
