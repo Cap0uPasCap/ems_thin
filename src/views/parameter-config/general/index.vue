@@ -31,7 +31,7 @@
     components: { BasicForm, Card, Button, Loading },
     setup() {
       const { t } = useI18n();
-      const [register, { getFieldsValue, setFieldsValue }] = useForm();
+      const [register, { getFieldsValue, setFieldsValue, validateFields }] = useForm();
       const compState = reactive({
         absolute: true,
         loading: false,
@@ -47,11 +47,17 @@
       }
 
       async function submitClick() {
-        const data = await getFieldsValue();
-        compState.loading = true;
-        await setCellGlobalConfig(data);
-        await getCellGlobalConfig();
-        compState.loading = false;
+        try {
+          const res = await validateFields();
+          console.log('passing', res);
+          const data = await getFieldsValue();
+          compState.loading = true;
+          await setCellGlobalConfig(data);
+          await getCellGlobalConfig();
+          compState.loading = false;
+        } catch (error) {
+          console.log('not passing', error);
+        }
       }
 
       onMounted(() => {

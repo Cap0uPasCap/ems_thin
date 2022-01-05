@@ -41,6 +41,22 @@ export const schemas: FormSchema[] = [
     colProps: {
       span: 8,
     },
+    rules: [
+      {
+        required: true,
+        // @ts-ignore
+        validator: async (_, value) => {
+          if (!value) {
+            return Promise.reject('值不能为空');
+          }
+          if (value.length > 6) {
+            return Promise.reject('PLMNID: maxLength:6');
+          }
+          return Promise.resolve();
+        },
+        trigger: 'change',
+      },
+    ],
   },
   {
     field: 'divider-selects',
@@ -54,6 +70,22 @@ export const schemas: FormSchema[] = [
     colProps: {
       span: 8,
     },
+    rules: [
+      {
+        required: true,
+        // @ts-ignore
+        validator: async (_, value) => {
+          if (!value) {
+            return Promise.reject('值不能为空');
+          }
+          if (value.length > 256 || value.length < 1) {
+            return Promise.reject('NGSigLinkServerList: maxLength: 256, minLength: 1');
+          }
+          return Promise.resolve();
+        },
+        trigger: 'change',
+      },
+    ],
   },
   {
     field: 'amfIp2',

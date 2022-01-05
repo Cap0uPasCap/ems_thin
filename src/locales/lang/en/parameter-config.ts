@@ -50,8 +50,9 @@ export default {
         initDlMcs: 'Init DlMcs',
         ulLaEnabled: 'Ul LaEnabled',
         initUlMcs: 'Init UlMcs',
-        p0NominalWithGrant: 'P0Nominal WithGrant',
+        p0NominalWithGrant: 'P0NominalWithGrant',
         preambleReceivedTargetPower: 'PreambleReceivedTargetPower',
+        puschTargetPower: 'PuschTargetPower',
         puschEnable: 'Pusch Enable',
         selectOption: {
           open: 'Open',

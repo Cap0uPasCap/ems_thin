@@ -4,12 +4,40 @@
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
+      <template #puschEnable="{ record }">
+        <Select v-if="record.editable" v-model:value="record.puschEnable" style="width: 120px">
+          <select-item :value="1">开启</select-item>
+          <select-item :value="0">关闭</select-item>
+        </Select>
+        <span v-else>{{ record.puschEnable == 1 ? '开启' : '关闭' }}</span>
+      </template>
+      <template #p0NominalWithGrant="{ record }">
+        <Input
+          v-if="record.editable"
+          :disabled="record.puschEnable == 1"
+          size="small"
+          style="width: 110px"
+          v-model:value="record.p0NominalWithGrant"
+        />
+        <span v-else>{{ record.p0NominalWithGrant }}</span>
+      </template>
+      <template #puschTargetPower="{ record }">
+        <Input
+          v-if="record.editable"
+          :disabled="record.puschEnable == 0"
+          size="small"
+          style="width: 110px"
+          v-model:value="record.puschTargetPower"
+        />
+        <span v-else>{{ record.puschTargetPower }}</span>
+      </template>
     </BasicTable>
     <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
   </div>
 </template>
 <script lang="ts">
   import { setCellBaseConfig } from '/@/api/parameter-config';
+  import SelectItem from '/@/layouts/default/setting/components/SelectItem.vue';
   import { defineComponent, reactive, ref } from 'vue';
   import {
     BasicTable,
@@ -25,8 +53,10 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { Input, Select } from 'ant-design-vue';
+
   export default defineComponent({
-    components: { BasicTable, TableAction, Loading },
+    components: { SelectItem, BasicTable, TableAction, Loading, Input, Select },
     props: {
       configData: {
         type: Array,

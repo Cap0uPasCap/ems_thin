@@ -46,7 +46,7 @@
       });
       const [registerTable, { getDataSource }] = useTable({
         title: t1('title[1]'),
-        columns: getColumns('FunctionControl'),
+        columns: getColumns('LinkAdaptation'),
         showIndexColumn: false,
         showTableSetting: true,
         canResize: false,

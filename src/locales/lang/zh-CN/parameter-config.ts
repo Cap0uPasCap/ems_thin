@@ -50,8 +50,9 @@ export default {
         initDlMcs: '下行初始MCS',
         ulLaEnabled: '上行LA开关',
         initUlMcs: '上行初始MCS',
-        p0NominalWithGrant: 'PUCCH期望接收功率RSRP',
         preambleReceivedTargetPower: 'PRACH期望接收功率RSRP',
+        p0NominalWithGrant: 'PUCCH期望接收功率RSRP',
+        puschTargetPower: 'PUSCH期望接收功率RSRP',
         puschEnable: '开关',
         selectOption: {
           open: '开启',

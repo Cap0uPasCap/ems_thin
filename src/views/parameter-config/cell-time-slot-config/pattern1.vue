@@ -82,6 +82,7 @@
           });
           compState.loading = false;
           if (responseInfo.status === 1) throw new Error(responseInfo.message);
+          await getCellTimeslot1Config();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {

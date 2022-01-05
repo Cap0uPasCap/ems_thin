@@ -164,16 +164,6 @@ export function getColumns(type) {
       editRow: true,
     },
     {
-      title: t1('p0NominalWithGrant'),
-      dataIndex: 'p0NominalWithGrant',
-      editComponent: 'InputNumber',
-      editRow: true,
-      width: 80,
-      ifShow: () => {
-        return type === 'FunctionControl';
-      },
-    },
-    {
       title: t1('preambleReceivedTargetPower'),
       dataIndex: 'preambleReceivedTargetPower',
       editComponent: 'InputNumber',
@@ -184,11 +174,34 @@ export function getColumns(type) {
       },
     },
     {
+      title: t1('p0NominalWithGrant'),
+      dataIndex: 'p0NominalWithGrant',
+      slots: { customRender: 'p0NominalWithGrant' },
+      editComponent: 'InputNumber',
+      width: 80,
+      ifShow: () => {
+        return type === 'FunctionControl';
+      },
+    },
+    {
+      title: t1('puschTargetPower'),
+      dataIndex: 'puschTargetPower',
+      slots: { customRender: 'puschTargetPower' },
+      editComponent: 'InputNumber',
+      // editRow: true,
+      width: 80,
+      ifShow: () => {
+        return type === 'FunctionControl';
+      },
+    },
+
+    {
       title: t1('puschEnable'),
       dataIndex: 'puschEnable',
-      editRow: true,
+      // editRow: true,
       width: 80,
       editComponent: 'Select',
+      slots: { customRender: 'puschEnable' },
       editComponentProps: {
         options: [
           {
