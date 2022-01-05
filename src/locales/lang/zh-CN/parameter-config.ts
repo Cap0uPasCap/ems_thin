@@ -30,7 +30,7 @@ export default {
       title: ['小区基本信息', '链路自适应配置', '功控配置'],
       btn: {
         editText: '编辑',
-        saveText: '保持',
+        saveText: '保存',
         cancelText: '取消',
         cancelTip: '是否取消编辑?',
         saveTip: '正在保存...',
@@ -65,7 +65,7 @@ export default {
       title: '物理资源配置',
       btn: {
         editText: '编辑',
-        saveText: '保持',
+        saveText: '保存',
         cancelText: '取消',
         cancelTip: '是否取消编辑?',
         saveTip: '正在保存...',
@@ -83,7 +83,7 @@ export default {
     timeSlot: {
       btn: {
         editText: '编辑',
-        saveText: '保持',
+        saveText: '保存',
         cancelText: '取消',
         cancelTip: '是否取消编辑?',
         saveTip: '正在保存...',

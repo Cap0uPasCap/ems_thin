@@ -17,16 +17,16 @@ export const getCellBaseConfig = () => defHttp.get({ url: Api.getCellBaseConfig 
 
 export const getCellAdvancedConfig = async () => {
   const data = await defHttp.get({ url: Api.getCellAdvancedConfig });
-  return data?.data?.cellAdvancedConfigList || [];
+  return changeCellTypeToString(data?.data?.cellAdvancedConfigList);
 };
 
 export const getCellTimeslot1Config = async () => {
   const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
-  return data?.data?.cellTimeslot1ConfigList || [];
+  return changeCellTypeToString(data?.data?.cellTimeslot1ConfigList);
 };
 export const getCellTimeslot2Config = async () => {
   const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
-  return data?.data?.cellTimeslot2ConfigList || [];
+  return changeCellTypeToString(data?.data?.cellTimeslot2ConfigList);
 };
 
 export const setCellGlobalConfig = (params) =>
@@ -40,3 +40,17 @@ export const setCellAdvancedConfig = (params) =>
 
 export const setCellTimeslotConfig = (params) =>
   defHttp.post({ url: Api.setCellTimeslotConfig, params: params });
+
+function changeCellTypeToString(arr) {
+  const list = [];
+  if (!!arr) {
+    arr.forEach((e) => {
+      const obj = {};
+      for (const i in e) {
+        obj[i] = e[i] + '';
+      }
+      list.push(obj);
+    });
+  }
+  return list;
+}

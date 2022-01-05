@@ -4,9 +4,10 @@
       <TableAction :actions="createActions(record, column)" />
     </template>
   </BasicTable>
+  <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, reactive, ref } from 'vue';
   import {
     BasicTable,
     useTable,
@@ -15,19 +16,24 @@
     ActionItem,
     EditRecordRow,
   } from '/@/components/Table';
-  import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getColumns } from './data';
+  import { getColumns, TimeSlotConfigModel } from './data';
   import { getCellTimeslot1Config, setCellTimeslotConfig } from '/@/api/parameter-config';
+  import { Loading } from '/@/components/Loading';
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
-    components: { BasicTable, TableAction },
+    components: { BasicTable, TableAction, Loading },
     setup() {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
+      const compState = reactive({
+        absolute: true,
+        loading: false,
+        tip: t('parameter-config.loadingTip'),
+      });
       const currentEditKeyRef = ref('');
-      const [registerTable, { getDataSource }] = useTable({
+      const [registerTable] = useTable({
         title: 'Pattern1',
         api: getCellTimeslot1Config,
         columns: getColumns(),
@@ -60,27 +66,22 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        msg.loading({ content: t1('btn.saveTip'), duration: 0, key: 'saving' });
         try {
-          const data = cloneDeep(getDataSource());
-
-          let dataList: any = [];
-          data.forEach((e) => {
-            dataList.push({
-              tddUlDlPattern2Configured: e.editValueRefs.tddUlDlPattern2Configured,
-              dlUlTransmissionPeriodicity: e.editValueRefs.dlUlTransmissionPeriodicity,
-              numDlSlots: e.editValueRefs.numDlSlots,
-              numDlSymbols: e.editValueRefs.numDlSymbols,
-              numUlSlots: e.editValueRefs.numUlSlots,
-              numUlSymbols: e.editValueRefs.numUlSymbols,
-              cellIndex: e.cellIndex,
-            });
+          let timeSlotConfig: TimeSlotConfigModel = {
+            tddUlDlPattern2Configured: record?.editValueRefs?.tddUlDlPattern2Configured,
+            dlUlTransmissionPeriodicity: record?.editValueRefs?.dlUlTransmissionPeriodicity,
+            numDlSlots: record?.editValueRefs?.numDlSlots,
+            numDlSymbols: record?.editValueRefs?.numDlSymbols,
+            numUlSlots: record?.editValueRefs?.numUlSlots,
+            numUlSymbols: record?.editValueRefs?.numUlSymbols,
+            cellIndex: record.cellIndex,
+          };
+          compState.loading = true;
+          const responseInfo = await setCellTimeslotConfig({
+            cellTimeslot1ConfigList: [timeSlotConfig],
           });
-
-          await setCellTimeslotConfig({
-            cellTimeslot1ConfigList: dataList,
-          });
-          await getCellTimeslot1Config();
+          compState.loading = false;
+          if (responseInfo.status === 1) throw new Error(responseInfo.message);
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
           if (pass) {
@@ -88,11 +89,8 @@
           }
           msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
         } catch (error) {
-          msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
+          console.log('🚀error👉👉', error);
         }
-        // } else {
-        //   msg.error({ content: '请填写正确的数据', key: 'saving' });
-        // }
       }
 
       function createActions(record: EditRecordRow, column: BasicColumn): ActionItem[] {
@@ -122,6 +120,7 @@
 
       return {
         t1,
+        compState,
         registerTable,
         handleEdit,
         createActions,

@@ -75,3 +75,13 @@ export function getColumns() {
   ];
   return columns;
 }
+
+export interface TimeSlotConfigModel {
+  tddUlDlPattern2Configured: string | number | any;
+  dlUlTransmissionPeriodicity: string | number | any;
+  numDlSlots: string | number | any;
+  numDlSymbols: string | number | any;
+  numUlSlots: string | number | any;
+  numUlSymbols: string | number | any;
+  cellIndex: string | number | any;
+}

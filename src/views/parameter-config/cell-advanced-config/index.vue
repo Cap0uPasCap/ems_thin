@@ -5,10 +5,11 @@
         <TableAction :actions="createActions(record, column)" />
       </template>
     </BasicTable>
+    <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, reactive, ref } from 'vue';
   import {
     BasicTable,
     useTable,
@@ -17,19 +18,24 @@
     ActionItem,
     EditRecordRow,
   } from '/@/components/Table';
-  import { cloneDeep } from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getColumns } from './data';
+  import { getColumns, AdvancedConfigModel } from './data';
   import { getCellAdvancedConfig, setCellAdvancedConfig } from '/@/api/parameter-config';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { Loading } from '/@/components/Loading';
 
   export default defineComponent({
-    components: { BasicTable, TableAction },
+    components: { BasicTable, TableAction, Loading },
     setup() {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
+      const compState = reactive({
+        absolute: true,
+        loading: false,
+        tip: t('parameter-config.loadingTip'),
+      });
       const currentEditKeyRef = ref('');
-      const [registerTable, { getDataSource }] = useTable({
+      const [registerTable] = useTable({
         title: t1('title'),
         api: getCellAdvancedConfig,
         columns: getColumns(),
@@ -62,27 +68,21 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        // 校验
-        msg.loading({ content: t1('btn.saveTip'), duration: 0, key: 'saving' });
-        // const valid = await record.onValid?.();
-        // if (valid) {
         try {
-          const data = cloneDeep(getDataSource());
-
-          let dataList: any = [];
-          data.forEach((e) => {
-            dataList.push({
-              ulMimo: e.editValueRefs.ulMimo,
-              dlMimo: e.editValueRefs.dlMimo,
-              numOfRxAntenna: e.editValueRefs.numOfRxAntenna,
-              numOfTxAntenna: e.editValueRefs.numOfTxAntenna,
-              cellIndex: e.cellIndex,
-            });
-          });
+          let advancedConfigData: AdvancedConfigModel = {
+            ulMimo: record?.editValueRefs?.ulMimo || '',
+            dlMimo: record?.editValueRefs?.dlMimo || '',
+            numOfRxAntenna: record?.editValueRefs?.numOfRxAntenna || '',
+            numOfTxAntenna: record?.editValueRefs?.numOfTxAntenna || '',
+            cellIndex: record.cellIndex,
+          };
           //TODO 此处将数据提交给服务器保存
-          await setCellAdvancedConfig({
-            cellAdvancedConfigList: dataList,
+          compState.loading = true;
+          const responseInfo = await setCellAdvancedConfig({
+            cellAdvancedConfigList: [advancedConfigData],
           });
+          compState.loading = false;
+          if (responseInfo.status === 1) throw new Error(responseInfo.message);
           await getCellAdvancedConfig();
           // 保存之后提交编辑状态
           const pass = await record.onEdit?.(false, true);
@@ -91,11 +91,8 @@
           }
           msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
         } catch (error) {
-          msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
+          console.log('🚀error👉👉', error);
         }
-        // } else {
-        //   msg.error({ content: '请填写正确的数据', key: 'saving' });
-        // }
       }
 
       function createActions(record: EditRecordRow, column: BasicColumn): ActionItem[] {
@@ -125,6 +122,7 @@
 
       return {
         t1,
+        compState,
         registerTable,
         handleEdit,
         createActions,

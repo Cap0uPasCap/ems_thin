@@ -1,34 +1,20 @@
 <template>
   <div class="p-4">
-    <BasicTable @register="registerTable" @edit-change="onEditChange" :dataSource="configData">
+    <BasicTable @register="registerTable" :dataSource="configData">
       <template #pointA="{ record }">
         <div v-if="record.editable">
           NRArfcn:
           <InputNumber size="small" style="width: 110px" v-model:value="record.nrArfcnDL" />
-          <!--                      :max="653333"
-            :min="499200"
--->
-          <br />
-          NRFreqBand:
-          <a-input
-            size="small"
-            disabled="true"
-            style="width: 110px"
-            :value="record.nrArfcnDL >= 600000 ? 78 : 41"
-          />
           <br />
         </div>
         <div v-else>
           NRArfcn:
           <span>{{ record.nrArfcnDL }}</span>
-          <br />
-          NRFreqBand:
-          <span>{{ record.nrArfcnDL >= 600000 ? 78 : 41 }}</span>
         </div>
         <div>
           <div
             v-if="
-              (record.nrArfcnDL >= 538000 && record.nrArfcnDL < 600000) ||
+              (record.nrArfcnDL > 538000 && record.nrArfcnDL < 600000) ||
               record.nrArfcnDL > 653333 ||
               record.nrArfcnDL < 499200
             "
@@ -39,16 +25,33 @@
           <span title="取值范围" style="color: #ea7877">(499200~538000, 600000~653333)</span>
         </div>
       </template>
+      <template #nrFreqBand="{ record }">
+        <div v-if="record.editable">
+          NRFreqBand:
+          <a-input
+            size="small"
+            disabled="true"
+            style="width: 110px"
+            :value="record.nrArfcnDL >= 600000 ? 78 : 41"
+          />
+        </div>
+        <div v-else>
+          NRFreqBand:
+          <span>{{ record.nrArfcnDL >= 600000 ? 78 : 41 }}</span>
+        </div>
+      </template>
 
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
     </BasicTable>
+    <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
   </div>
 </template>
 <script lang="ts">
   import { setCellBaseConfig } from '/@/api/parameter-config';
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, reactive, ref } from 'vue';
+  import { Loading } from '/@/components/Loading';
   import {
     BasicTable,
     useTable,
@@ -64,7 +67,7 @@
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
-    components: { BasicTable, TableAction, InputNumber },
+    components: { BasicTable, TableAction, InputNumber, Loading },
     props: {
       configData: {
         type: Array,
@@ -77,6 +80,11 @@
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
       const currentEditKeyRef = ref('');
+      const compState = reactive({
+        absolute: true,
+        loading: false,
+        tip: t('parameter-config.loadingTip'),
+      });
       const [registerTable, { getDataSource }] = useTable({
         title: t1('title[0]'),
         columns: getColumns('Basic'),
@@ -109,16 +117,13 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        // 校验
-        msg.loading({ content: t1('btn.saveTip'), duration: 0, key: 'saving' });
-        const valid = await record.onValid?.();
-        if (valid) {
-          try {
-            const data = cloneDeep(getDataSource());
-            let dataList: any = [];
-            data.forEach((e) => {
+        try {
+          const data = cloneDeep(getDataSource());
+          let dataList: any = [];
+          data.forEach((e) => {
+            if (e.cellIndex == record.cellIndex) {
               if (
-                (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
+                (e.nrArfcnDL > 538000 && e.nrArfcnDL < 600000) ||
                 e.nrArfcnDL > 653333 ||
                 e.nrArfcnDL < 499200
               ) {
@@ -146,21 +151,22 @@
                   cellId: e.cellId,
                 });
               }
-            });
-            await setCellBaseConfig({
-              cellBaseConfigList: dataList,
-            });
-            emit('reload');
-            const pass = await record.onEdit?.(false, true);
-            if (pass) {
-              currentEditKeyRef.value = '';
             }
-            msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
-          } catch (error) {
-            msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
+          });
+          compState.loading = true;
+          const responseInfo = await setCellBaseConfig({
+            cellBaseConfigList: dataList,
+          });
+          compState.loading = false;
+          if (responseInfo.status === 1) throw new Error(responseInfo.message);
+          emit('reload');
+          const pass = await record.onEdit?.(false, true);
+          if (pass) {
+            currentEditKeyRef.value = '';
           }
-        } else {
-          msg.error({ content: t1('btn.saveFailedTip'), key: 'saving' });
+          msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
+        } catch (error) {
+          console.log('🚀error👉👉', error);
         }
       }
 
@@ -189,20 +195,12 @@
         ];
       }
 
-      function onEditChange({ column, value, record }) {
-        // 本例
-        if (column.dataIndex === 'id') {
-          record.editValueRefs.name4.value = `${value}`;
-        }
-        console.log(column, value, record);
-      }
-
       return {
         t1,
+        compState,
         registerTable,
         handleEdit,
         createActions,
-        onEditChange,
       };
     },
   });

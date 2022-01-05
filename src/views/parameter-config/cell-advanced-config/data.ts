@@ -99,3 +99,11 @@ export function getColumns() {
   ];
   return columns;
 }
+
+export interface AdvancedConfigModel {
+  ulMimo: number | string | any;
+  dlMimo: number | string | any;
+  numOfRxAntenna: number | string | any;
+  numOfTxAntenna: number | string | any;
+  cellIndex: number | string;
+}

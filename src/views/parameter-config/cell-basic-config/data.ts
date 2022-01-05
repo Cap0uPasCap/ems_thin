@@ -13,7 +13,7 @@ export function getColumns(type) {
       width: 50,
     },
     {
-      title: t1('cellIndex'),
+      title: t1('cellStatus'),
       dataIndex: 'cellStatus',
       format: (v) => {
         return v == '0' ? t1('selectOption.notAvailable') : t1('selectOption.available');
@@ -24,7 +24,7 @@ export function getColumns(type) {
       width: 80,
     },
     {
-      title: t1('cellIndex'),
+      title: t1('cellId'),
       dataIndex: 'cellId',
       ifShow: () => {
         return type === 'Basic';
@@ -57,16 +57,16 @@ export function getColumns(type) {
       },
       slots: { customRender: 'pointA' },
       width: 150,
-      // editRow: true,
     },
-    // {
-    //   title: '工作带宽',
-    //   dataIndex: 'WorkingBandwidth',
-    //   editRow: true,
-    //   ifShow: () => {
-    //   return type === 'Basic';
-    // },
-    // },
+    {
+      title: 'nrFreqBand',
+      dataIndex: 'nrFreqBandUL',
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      slots: { customRender: 'nrFreqBand' },
+      width: 150,
+    },
     {
       title: t1('maxUe'),
       dataIndex: 'maxUe',
