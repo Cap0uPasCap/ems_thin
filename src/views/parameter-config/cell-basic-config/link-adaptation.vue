@@ -51,7 +51,10 @@
         showTableSetting: true,
         canResize: false,
         pagination: false,
-        tableSetting: { fullScreen: true },
+        tableSetting: {
+          size: false,
+          setting: false,
+        },
         actionColumn: {
           width: 40,
           title: 'Action',
@@ -76,57 +79,75 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        try {
-          const data = cloneDeep(getDataSource());
-          let dataList: any = [];
-          data.forEach((e) => {
-            if (e.cellIndex == record.cellIndex) {
-              if (
-                (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
-                e.nrArfcnDL > 653333 ||
-                e.nrArfcnDL < 499200
-              ) {
-                throw new Error('请填写正确的数据');
-              } else {
-                dataList.push({
-                  hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
-                  ssb: e.editValueRefs.ssb || e.ssb,
-                  maxUe: e.editValueRefs.maxUe || e.maxUe,
-                  rlcMode: e.editValueRefs.rlcMode || e.rlcMode,
-                  dlLaEnabled: e.editValueRefs.dlLaEnabled || e.dlLaEnabled,
-                  initDlMcs: e.editValueRefs.initDlMcs || e.initDlMcs,
-                  ulLaEnabled: e.editValueRefs.ulLaEnabled || e.ulLaEnabled,
-                  initUlMcs: e.editValueRefs.initUlMcs || e.initUlMcs,
-                  p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
-                  preambleReceivedTargetPower:
-                    e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
-                  puschTargetPower: e.editValueRefs.puschTargetPower || e.puschTargetPower,
-                  puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
-                  nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
-                  nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
-                  nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
-                  nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
-                  cellIndex: e.cellIndex,
-                  cellStatus: e.cellStatus,
-                  cellId: e.cellId,
-                });
+        const valid = await record.onValid?.();
+        if (valid) {
+          try {
+            const data = cloneDeep(getDataSource());
+            let dataList: any = [];
+            data.forEach((e) => {
+              if (e.cellIndex == record.cellIndex) {
+                if (
+                  (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
+                  e.nrArfcnDL > 653333 ||
+                  e.nrArfcnDL < 499200
+                ) {
+                  msg.error({
+                    content: 'PointA 请输入有效值',
+                    key: 'saving',
+                  });
+                  throw Error('PointA 请输入有效值');
+                } else if (
+                  e.puschEnable === '0' &&
+                  (e.p0NominalWithGrant > 24 || e.p0NominalWithGrant < -202)
+                ) {
+                  msg.error({
+                    content: 'P0NominalWithGrant: minInclusive: -202, maxInclusive: 24',
+                    key: 'saving',
+                  });
+                  throw Error('P0NominalWithGrant: minInclusive: -202, maxInclusive: 24');
+                } else {
+                  dataList.push({
+                    hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
+                    ssb: e.editValueRefs.ssb || e.ssb,
+                    maxUe: e.editValueRefs.maxUe || e.maxUe,
+                    rlcMode: e.editValueRefs.rlcMode || e.rlcMode,
+                    dlLaEnabled: e.editValueRefs.dlLaEnabled || e.dlLaEnabled,
+                    initDlMcs: e.editValueRefs.initDlMcs || e.initDlMcs,
+                    ulLaEnabled: e.editValueRefs.ulLaEnabled || e.ulLaEnabled,
+                    initUlMcs: e.editValueRefs.initUlMcs || e.initUlMcs,
+                    p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
+                    preambleReceivedTargetPower:
+                      e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
+                    puschTargetPower: e.editValueRefs.puschTargetPower || e.puschTargetPower,
+                    puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
+                    nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                    nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                    nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                    nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                    cellIndex: e.cellIndex,
+                    cellStatus: e.cellStatus,
+                    cellId: e.cellId,
+                  });
+                }
               }
+            });
+            compState.loading = true;
+            const responseInfo = await setCellBaseConfig({
+              cellBaseConfigList: dataList,
+            });
+            compState.loading = false;
+            if (responseInfo.status === 1) throw new Error(responseInfo.message);
+            emit('reload');
+            const pass = await record.onEdit?.(false, true);
+            if (pass) {
+              currentEditKeyRef.value = '';
             }
-          });
-          compState.loading = true;
-          const responseInfo = await setCellBaseConfig({
-            cellBaseConfigList: dataList,
-          });
-          compState.loading = false;
-          if (responseInfo.status === 1) throw new Error(responseInfo.message);
-          emit('reload');
-          const pass = await record.onEdit?.(false, true);
-          if (pass) {
-            currentEditKeyRef.value = '';
+            msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
+          } catch (error) {
+            console.log('🚀error👉👉', error);
           }
-          msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
-        } catch (error) {
-          console.log('🚀error👉👉', error);
+        } else {
+          msg.error({ content: t1('btn.saveValidFailedTip'), key: 'saving' });
         }
       }
 

@@ -6,25 +6,36 @@
       </template>
       <template #puschEnable="{ record }">
         <Select v-if="record.editable" v-model:value="record.puschEnable" style="width: 120px">
-          <select-item :value="1">开启</select-item>
-          <select-item :value="0">关闭</select-item>
+          <select-item value="1">开启</select-item>
+          <select-item value="0">关闭</select-item>
         </Select>
-        <span v-else>{{ record.puschEnable == 1 ? '开启' : '关闭' }}</span>
+        <span v-else>{{ record.puschEnable === '1' ? '开启' : '关闭' }}</span>
       </template>
       <template #p0NominalWithGrant="{ record }">
-        <Input
-          v-if="record.editable"
-          :disabled="record.puschEnable == 1"
-          size="small"
-          style="width: 110px"
-          v-model:value="record.p0NominalWithGrant"
-        />
+        <div v-if="record.editable">
+          <Tooltip
+            color="#fff"
+            :visible="record.p0NominalWithGrant > 24 || record.p0NominalWithGrant < -202"
+          >
+            <template #title>
+              <span style="color: #ed6f6f"
+                >P0NominalWithGrant: minInclusive: -202, maxInclusive: 24</span
+              >
+            </template>
+            <Input
+              :disabled="record.puschEnable === '1'"
+              size="small"
+              style="width: 110px"
+              v-model:value="record.p0NominalWithGrant"
+            />
+          </Tooltip>
+        </div>
         <span v-else>{{ record.p0NominalWithGrant }}</span>
       </template>
       <template #puschTargetPower="{ record }">
         <Input
           v-if="record.editable"
-          :disabled="record.puschEnable == 0"
+          :disabled="record.puschEnable === '0'"
           size="small"
           style="width: 110px"
           v-model:value="record.puschTargetPower"
@@ -53,10 +64,10 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { Input, Select } from 'ant-design-vue';
+  import { Input, Select, Tooltip } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { SelectItem, BasicTable, TableAction, Loading, Input, Select },
+    components: { SelectItem, BasicTable, TableAction, Loading, Input, Select, Tooltip },
     props: {
       configData: {
         type: Array,
@@ -106,57 +117,75 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        try {
-          const data = cloneDeep(getDataSource());
-          let dataList: any = [];
-          data.forEach((e) => {
-            if (e.cellIndex == record.cellIndex) {
-              if (
-                (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
-                e.nrArfcnDL > 653333 ||
-                e.nrArfcnDL < 499200
-              ) {
-                throw new Error('请填写正确的数据');
-              } else {
-                dataList.push({
-                  hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
-                  ssb: e.editValueRefs.ssb || e.ssb,
-                  maxUe: e.editValueRefs.maxUe || e.maxUe,
-                  rlcMode: e.editValueRefs.rlcMode || e.rlcMode,
-                  dlLaEnabled: e.editValueRefs.dlLaEnabled || e.dlLaEnabled,
-                  initDlMcs: e.editValueRefs.initDlMcs || e.initDlMcs,
-                  ulLaEnabled: e.editValueRefs.ulLaEnabled || e.ulLaEnabled,
-                  initUlMcs: e.editValueRefs.initUlMcs || e.initUlMcs,
-                  p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
-                  preambleReceivedTargetPower:
-                    e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
-                  puschTargetPower: e.editValueRefs.puschTargetPower || e.puschTargetPower,
-                  puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
-                  nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
-                  nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
-                  nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
-                  nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
-                  cellIndex: e.cellIndex,
-                  cellStatus: e.cellStatus,
-                  cellId: e.cellId,
-                });
+        const valid = await record.onValid?.();
+        if (valid) {
+          try {
+            const data = cloneDeep(getDataSource());
+            let dataList: any = [];
+            data.forEach((e) => {
+              if (e.cellIndex == record.cellIndex) {
+                if (
+                  (e.nrArfcnDL >= 538000 && e.nrArfcnDL < 600000) ||
+                  e.nrArfcnDL > 653333 ||
+                  e.nrArfcnDL < 499200
+                ) {
+                  msg.error({
+                    content: 'PointA 请输入有效值',
+                    key: 'saving',
+                  });
+                  throw Error('PointA 请输入有效值');
+                } else if (
+                  e.puschEnable === '0' &&
+                  (e.p0NominalWithGrant > 24 || e.p0NominalWithGrant < -202)
+                ) {
+                  msg.error({
+                    content: 'P0NominalWithGrant: minInclusive: -202, maxInclusive: 24',
+                    key: 'saving',
+                  });
+                  throw Error('P0NominalWithGrant: minInclusive: -202, maxInclusive: 24');
+                } else {
+                  dataList.push({
+                    hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
+                    ssb: e.editValueRefs.ssb || e.ssb,
+                    maxUe: e.editValueRefs.maxUe || e.maxUe,
+                    rlcMode: e.editValueRefs.rlcMode || e.rlcMode,
+                    dlLaEnabled: e.editValueRefs.dlLaEnabled || e.dlLaEnabled,
+                    initDlMcs: e.editValueRefs.initDlMcs || e.initDlMcs,
+                    ulLaEnabled: e.editValueRefs.ulLaEnabled || e.ulLaEnabled,
+                    initUlMcs: e.editValueRefs.initUlMcs || e.initUlMcs,
+                    p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
+                    preambleReceivedTargetPower:
+                      e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
+                    puschTargetPower: e.editValueRefs.puschTargetPower || e.puschTargetPower,
+                    puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
+                    nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                    nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                    nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                    nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
+                    cellIndex: e.cellIndex,
+                    cellStatus: e.cellStatus,
+                    cellId: e.cellId,
+                  });
+                }
               }
+            });
+            compState.loading = true;
+            const responseInfo = await setCellBaseConfig({
+              cellBaseConfigList: dataList,
+            });
+            compState.loading = false;
+            if (responseInfo.status === 1) throw new Error(responseInfo.message);
+            emit('reload');
+            const pass = await record.onEdit?.(false, true);
+            if (pass) {
+              currentEditKeyRef.value = '';
             }
-          });
-          compState.loading = true;
-          const responseInfo = await setCellBaseConfig({
-            cellBaseConfigList: dataList,
-          });
-          compState.loading = false;
-          if (responseInfo.status === 1) throw new Error(responseInfo.message);
-          emit('reload');
-          const pass = await record.onEdit?.(false, true);
-          if (pass) {
-            currentEditKeyRef.value = '';
+            msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
+          } catch (error) {
+            console.log('🚀error👉👉', error);
           }
-          msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
-        } catch (error) {
-          console.log('🚀error👉👉', error);
+        } else {
+          msg.error({ content: t1('btn.saveValidFailedTip'), key: 'saving' });
         }
       }
 

@@ -36,6 +36,7 @@ export default {
         saveTip: 'saving...',
         saveSuccessTip: 'The data is saved',
         saveFailedTip: 'Data save failed',
+        saveValidFailedTip: 'Please fill in the correct data',
       },
       column: {
         cellIndex: 'Cell Index',
@@ -72,6 +73,7 @@ export default {
         saveTip: 'saving...',
         saveSuccessTip: 'The data is saved',
         saveFailedTip: 'Data save failed',
+        saveValidFailedTip: 'Please fill in the correct data',
       },
       column: {
         cellIndex: 'Cell Index',

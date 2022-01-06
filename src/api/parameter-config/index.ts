@@ -13,7 +13,10 @@ enum Api {
 
 export const getCellGlobalConfig = () => defHttp.get({ url: Api.getCellGlobalConfig });
 
-export const getCellBaseConfig = () => defHttp.get({ url: Api.getCellBaseConfig });
+export const getCellBaseConfig = async () => {
+  const data = await defHttp.get({ url: Api.getCellBaseConfig });
+  return changeCellTypeToString(data?.data?.cellBaseConfigList);
+};
 
 export const getCellAdvancedConfig = async () => {
   const data = await defHttp.get({ url: Api.getCellAdvancedConfig });

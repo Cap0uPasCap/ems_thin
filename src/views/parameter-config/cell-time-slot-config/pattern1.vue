@@ -39,7 +39,10 @@
         columns: getColumns(),
         showIndexColumn: false,
         showTableSetting: true,
-        tableSetting: { fullScreen: true },
+        tableSetting: {
+          size: false,
+          setting: false,
+        },
         canResize: false,
         pagination: false,
         actionColumn: {

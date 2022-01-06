@@ -39,6 +39,13 @@ export function getColumns(type) {
         return type === 'Basic';
       },
       width: 80,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 1023) {
+          return 'HoppingId: minInclusive: 0, maxInclusive: 1023';
+        }
+        return '';
+      },
     },
     {
       title: t1('ssb'),
@@ -75,6 +82,13 @@ export function getColumns(type) {
       width: 80,
       ifShow: () => {
         return type === 'Basic';
+      },
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 1 || numValue > 1600) {
+          return 'MaxUe: minInclusive: 1, maxInclusive: 1600';
+        }
+        return '';
       },
     },
     {
@@ -130,6 +144,13 @@ export function getColumns(type) {
       ifShow: () => {
         return type === 'LinkAdaptation';
       },
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 28) {
+          return 'InitDlMcs: minInclusive: 0, maxInclusive: 28';
+        }
+        return '';
+      },
     },
     {
       title: t1('ulLaEnabled'),
@@ -162,6 +183,13 @@ export function getColumns(type) {
       dataIndex: 'initUlMcs',
       editComponent: 'Input',
       editRow: true,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 28) {
+          return 'InitUlMcs: minInclusive: 0, maxInclusive: 28';
+        }
+        return '';
+      },
     },
     {
       title: t1('preambleReceivedTargetPower'),
@@ -172,6 +200,13 @@ export function getColumns(type) {
       ifShow: () => {
         return type === 'FunctionControl';
       },
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < -200 || numValue > -60) {
+          return 'preambleReceivedTargetPower: minInclusive: -200, maxInclusive: -60';
+        }
+        return '';
+      },
     },
     {
       title: t1('p0NominalWithGrant'),
@@ -179,6 +214,13 @@ export function getColumns(type) {
       slots: { customRender: 'p0NominalWithGrant' },
       editComponent: 'Input',
       width: 80,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < -202 || numValue > 24) {
+          return 'P0NominalWithGrant: minInclusive: -202, maxInclusive: 24';
+        }
+        return '';
+      },
       ifShow: () => {
         return type === 'FunctionControl';
       },
