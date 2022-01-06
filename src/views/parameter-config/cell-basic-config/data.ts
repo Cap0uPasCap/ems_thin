@@ -10,7 +10,7 @@ export function getColumns(type) {
     {
       title: t1('cellIndex'),
       dataIndex: 'cellIndex',
-      width: 50,
+      width: 40,
     },
     {
       title: t1('cellStatus'),
@@ -26,10 +26,18 @@ export function getColumns(type) {
     {
       title: t1('cellId'),
       dataIndex: 'cellId',
+      editRow: true,
       ifShow: () => {
         return type === 'Basic';
       },
       width: 80,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 68719476735) {
+          return 'NRCellIdentity: minInclusive: 0, maxInclusive: 68719476735';
+        }
+        return '';
+      },
     },
     {
       title: t1('hoppingId'),
@@ -63,7 +71,7 @@ export function getColumns(type) {
         return type === 'Basic';
       },
       slots: { customRender: 'pointA' },
-      width: 150,
+      width: 80,
     },
     {
       title: 'nrFreqBand',
@@ -72,7 +80,7 @@ export function getColumns(type) {
         return type === 'Basic';
       },
       slots: { customRender: 'nrFreqBand' },
-      width: 150,
+      width: 80,
     },
     {
       title: t1('maxUe'),

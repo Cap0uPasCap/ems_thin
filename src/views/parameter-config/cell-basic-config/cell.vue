@@ -3,7 +3,6 @@
     <BasicTable @register="registerTable" :dataSource="configData">
       <template #pointA="{ record }">
         <div v-if="record.editable">
-          NRArfcn:
           <Tooltip
             color="#fff"
             :visible="
@@ -20,7 +19,6 @@
           <br />
         </div>
         <div v-else>
-          NRArfcn:
           <span>{{ record.nrArfcnDL }}</span>
         </div>
       </template>
@@ -94,7 +92,7 @@
           setting: false,
         },
         actionColumn: {
-          width: 90,
+          width: 70,
           title: 'Action',
           dataIndex: 'action',
           slots: { customRender: 'action' },
