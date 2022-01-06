@@ -53,24 +53,52 @@ export function getColumns() {
       dataIndex: 'numDlSlots',
       editComponent: 'Input',
       editRow: true,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 320) {
+          return 'NumDlSlots: minInclusive:0, maxInclusive: 320';
+        }
+        return '';
+      },
     },
     {
       title: t1('numDlSymbols'),
       dataIndex: 'numDlSymbols',
       editComponent: 'Input',
       editRow: true,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 13) {
+          return 'NumDlSymbols: minInclusive:0, maxInclusive: 13';
+        }
+        return '';
+      },
     },
     {
       title: t1('numUlSlots'),
       dataIndex: 'numUlSlots',
       editComponent: 'Input',
       editRow: true,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 320) {
+          return 'NumUlSlots: minInclusive:0, maxInclusive: 320';
+        }
+        return '';
+      },
     },
     {
       title: t1('numUlSymbols'),
       dataIndex: 'numUlSymbols',
       editComponent: 'Input',
       editRow: true,
+      editRule: async (text) => {
+        const numValue = Number(text);
+        if (numValue < 0 || numValue > 13) {
+          return 'NumUlSymbols: minInclusive:0, maxInclusive: 13';
+        }
+        return '';
+      },
     },
   ];
   return columns;

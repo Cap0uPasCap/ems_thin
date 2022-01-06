@@ -90,6 +90,7 @@ export default {
         saveTip: '正在保存...',
         saveSuccessTip: '数据已保存',
         saveFailedTip: '数据保存失败',
+        saveValidFailedTip: '请填写正确的数据',
       },
       title: 'Pattern1',
       column: {

@@ -66,31 +66,36 @@
       }
 
       async function handleSave(record: EditRecordRow) {
-        try {
-          let timeSlotConfig: TimeSlotConfigModel = {
-            tddUlDlPattern2Configured: record?.editValueRefs?.tddUlDlPattern2Configured,
-            dlUlTransmissionPeriodicity: record?.editValueRefs?.dlUlTransmissionPeriodicity,
-            numDlSlots: record?.editValueRefs?.numDlSlots,
-            numDlSymbols: record?.editValueRefs?.numDlSymbols,
-            numUlSlots: record?.editValueRefs?.numUlSlots,
-            numUlSymbols: record?.editValueRefs?.numUlSymbols,
-            cellIndex: record.cellIndex,
-          };
-          compState.loading = true;
-          const responseInfo = await setCellTimeslotConfig({
-            cellTimeslot2ConfigList: [timeSlotConfig],
-          });
-          compState.loading = false;
-          if (responseInfo.status === 1) throw new Error(responseInfo.message);
-          await getCellTimeslot2Config();
-          // 保存之后提交编辑状态
-          const pass = await record.onEdit?.(false, true);
-          if (pass) {
-            currentEditKeyRef.value = '';
+        const valid = await record.onValid?.();
+        if (valid) {
+          try {
+            let timeSlotConfig: TimeSlotConfigModel = {
+              tddUlDlPattern2Configured: record?.editValueRefs?.tddUlDlPattern2Configured,
+              dlUlTransmissionPeriodicity: record?.editValueRefs?.dlUlTransmissionPeriodicity,
+              numDlSlots: record?.editValueRefs?.numDlSlots,
+              numDlSymbols: record?.editValueRefs?.numDlSymbols,
+              numUlSlots: record?.editValueRefs?.numUlSlots,
+              numUlSymbols: record?.editValueRefs?.numUlSymbols,
+              cellIndex: record.cellIndex,
+            };
+            compState.loading = true;
+            const responseInfo = await setCellTimeslotConfig({
+              cellTimeslot2ConfigList: [timeSlotConfig],
+            });
+            compState.loading = false;
+            if (responseInfo.status === 1) throw new Error(responseInfo.message);
+            await getCellTimeslot2Config();
+            // 保存之后提交编辑状态
+            const pass = await record.onEdit?.(false, true);
+            if (pass) {
+              currentEditKeyRef.value = '';
+            }
+            msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
+          } catch (error) {
+            console.log('🚀error👉👉', error);
           }
-          msg.success({ content: t1('btn.saveSuccessTip'), key: 'saving' });
-        } catch (error) {
-          console.log('🚀error👉👉', error);
+        } else {
+          msg.error({ content: t1('btn.saveValidFailedTip'), key: 'saving' });
         }
       }
 
