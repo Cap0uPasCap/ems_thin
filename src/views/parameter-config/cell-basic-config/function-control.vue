@@ -92,7 +92,10 @@
         showTableSetting: true,
         canResize: false,
         pagination: false,
-        tableSetting: { fullScreen: true },
+        tableSetting: {
+          size: false,
+          setting: false,
+        },
         actionColumn: {
           width: 40,
           title: 'Action',
