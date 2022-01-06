@@ -130,6 +130,7 @@
                   p0NominalWithGrant: e.editValueRefs.p0NominalWithGrant || e.p0NominalWithGrant,
                   preambleReceivedTargetPower:
                     e.editValueRefs.preambleReceivedTargetPower || e.preambleReceivedTargetPower,
+                  puschTargetPower: e.editValueRefs.puschTargetPower || e.puschTargetPower,
                   puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
                   nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
                   nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,

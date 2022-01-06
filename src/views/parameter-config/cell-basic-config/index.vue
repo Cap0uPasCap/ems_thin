@@ -19,7 +19,6 @@
       async function getConfigData() {
         const data = await getCellBaseConfig();
         configData.value = data.data.cellBaseConfigList;
-        console.log('🚀data👉👉', data.data.cellBaseConfigList);
       }
       return {
         getConfigData,

@@ -70,7 +70,7 @@ export function getColumns(type) {
     {
       title: t1('maxUe'),
       dataIndex: 'maxUe',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
       width: 80,
       ifShow: () => {
@@ -90,11 +90,11 @@ export function getColumns(type) {
         options: [
           {
             label: 'AM',
-            value: 1,
+            value: '1',
           },
           {
             label: 'UM',
-            value: 2,
+            value: '2',
           },
         ],
       },
@@ -112,11 +112,11 @@ export function getColumns(type) {
         options: [
           {
             label: t1('selectOption.open'),
-            value: 1,
+            value: '1',
           },
           {
             label: t1('selectOption.close'),
-            value: 0,
+            value: '0',
           },
         ],
       },
@@ -124,7 +124,7 @@ export function getColumns(type) {
     {
       title: t1('initDlMcs'),
       dataIndex: 'initDlMcs',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
       width: 80,
       ifShow: () => {
@@ -144,11 +144,11 @@ export function getColumns(type) {
         options: [
           {
             label: t1('selectOption.open'),
-            value: 1,
+            value: '1',
           },
           {
             label: t1('selectOption.close'),
-            value: 0,
+            value: '0',
           },
         ],
       },
@@ -160,13 +160,13 @@ export function getColumns(type) {
         return type === 'LinkAdaptation';
       },
       dataIndex: 'initUlMcs',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
     },
     {
       title: t1('preambleReceivedTargetPower'),
       dataIndex: 'preambleReceivedTargetPower',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
       width: 80,
       ifShow: () => {
@@ -177,7 +177,7 @@ export function getColumns(type) {
       title: t1('p0NominalWithGrant'),
       dataIndex: 'p0NominalWithGrant',
       slots: { customRender: 'p0NominalWithGrant' },
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       width: 80,
       ifShow: () => {
         return type === 'FunctionControl';
@@ -187,7 +187,7 @@ export function getColumns(type) {
       title: t1('puschTargetPower'),
       dataIndex: 'puschTargetPower',
       slots: { customRender: 'puschTargetPower' },
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       // editRow: true,
       width: 80,
       ifShow: () => {
@@ -206,11 +206,11 @@ export function getColumns(type) {
         options: [
           {
             label: t1('selectOption.open'),
-            value: 1,
+            value: '1',
           },
           {
             label: t1('selectOption.close'),
-            value: 0,
+            value: '0',
           },
         ],
       },

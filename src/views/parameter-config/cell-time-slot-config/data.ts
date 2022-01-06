@@ -21,11 +21,11 @@ export function getColumns() {
         options: [
           {
             label: t1('selectOption.single'),
-            value: 0,
+            value: '0',
           },
           {
             label: t1('selectOption.double'),
-            value: 1,
+            value: '1',
           },
         ],
       },
@@ -39,11 +39,11 @@ export function getColumns() {
         options: [
           {
             label: '2.5ms',
-            value: 5,
+            value: '5',
           },
           {
             label: '5ms',
-            value: 6,
+            value: '6',
           },
         ],
       },
@@ -51,25 +51,25 @@ export function getColumns() {
     {
       title: t1('numDlSlots'),
       dataIndex: 'numDlSlots',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
     },
     {
       title: t1('numDlSymbols'),
       dataIndex: 'numDlSymbols',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
     },
     {
       title: t1('numUlSlots'),
       dataIndex: 'numUlSlots',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
     },
     {
       title: t1('numUlSymbols'),
       dataIndex: 'numUlSymbols',
-      editComponent: 'InputNumber',
+      editComponent: 'Input',
       editRow: true,
     },
   ];
