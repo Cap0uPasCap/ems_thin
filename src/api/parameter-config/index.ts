@@ -1,4 +1,10 @@
 import { defHttp } from '/@/utils/http/axios';
+import {
+  CellAdvancedConfigResultModel,
+  CellBasicConfigResultModel,
+  CellGlobalConfigResultModel,
+  CellTimeSlotConfigResultModel,
+} from './model';
 
 enum Api {
   getCellGlobalConfig = '/cell/getCellGlobalConfig',
@@ -11,24 +17,25 @@ enum Api {
   setCellTimeslotConfig = '/cell/setCellTimeslotConfig',
 }
 
-export const getCellGlobalConfig = () => defHttp.get({ url: Api.getCellGlobalConfig });
+export const getCellGlobalConfig = () =>
+  defHttp.get<CellGlobalConfigResultModel>({ url: Api.getCellGlobalConfig });
 
 export const getCellBaseConfig = async () => {
-  const data = await defHttp.get({ url: Api.getCellBaseConfig });
+  const data = await defHttp.get<CellBasicConfigResultModel>({ url: Api.getCellBaseConfig });
   return changeCellTypeToString(data?.data?.cellBaseConfigList);
 };
 
 export const getCellAdvancedConfig = async () => {
-  const data = await defHttp.get({ url: Api.getCellAdvancedConfig });
+  const data = await defHttp.get<CellAdvancedConfigResultModel>({ url: Api.getCellAdvancedConfig });
   return changeCellTypeToString(data?.data?.cellAdvancedConfigList);
 };
 
 export const getCellTimeslot1Config = async () => {
-  const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
+  const data = await defHttp.get<CellTimeSlotConfigResultModel>({ url: Api.getCellTimeslotConfig });
   return changeCellTypeToString(data?.data?.cellTimeslot1ConfigList);
 };
 export const getCellTimeslot2Config = async () => {
-  const data = await defHttp.get({ url: Api.getCellTimeslotConfig });
+  const data = await defHttp.get<CellTimeSlotConfigResultModel>({ url: Api.getCellTimeslotConfig });
   return changeCellTypeToString(data?.data?.cellTimeslot2ConfigList);
 };
 
@@ -46,9 +53,9 @@ export const setCellTimeslotConfig = (params) =>
 
 function changeCellTypeToString(arr) {
   const list = [];
-  if (!!arr) {
+  if (!!arr && arr instanceof Array && arr?.length > 0) {
     arr.forEach((e) => {
-      const obj = {};
+      const obj: any = {};
       for (const i in e) {
         obj[i] = e[i] + '';
       }
