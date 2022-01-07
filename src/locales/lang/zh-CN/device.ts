@@ -18,17 +18,6 @@ export default {
       selectTip: '请至少选择一项操作',
       queryParameterBtn: '查询参数值',
       batch: '批量提交',
-      // addText: '新增',
-      // editBtnTip: '编辑用户资料',
-      // delBtnTip: '删除此账号',
-      // delBtnConfirm: '是否确认删除?',
-      // editUserBtnTip: '修改密码',
-      // resetBtnTip: '重置密码',
-      // resetBtnConfirm: '是否重置密码',
-      // updatePassWordTip: '不能为空',
-      // updatePassWordTitle: '修改密码',
-      // okText: '确认',
-      // cancelText: '取消',
     },
     msg: {
       success: '成功',
@@ -36,6 +25,7 @@ export default {
   },
   command: {
     title: '指令',
+    tip: '指令已下发',
     tab: {
       factoryReset: '恢复出厂设置',
       reboot: '重启',

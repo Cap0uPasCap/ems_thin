@@ -76,7 +76,12 @@
    */
   async function rebootClick() {
     compState.loading = true;
+    const timer = setTimeout(() => {
+      compState.loading = false;
+      throw Error('timeout');
+    }, 10000);
     const data = await reboot();
+    clearTimeout(timer);
     const { status, message } = data;
     await responseJudgment(status, message);
     compState.loading = false;
@@ -87,7 +92,12 @@
    */
   async function factoryResetClick() {
     compState.loading = true;
+    const timer = setTimeout(() => {
+      compState.loading = false;
+      throw Error('timeout');
+    }, 10000);
     const data = await factoryReset();
+    clearTimeout(timer);
     const { status, message } = data;
     await responseJudgment(status, message);
     compState.loading = false;

@@ -36,6 +36,7 @@ export default {
   },
   command: {
     title: 'Command',
+    tip: 'Command has been issued',
     tab: {
       factoryReset: 'Factory Reset',
       reboot: 'Reboot',
