@@ -1,6 +1,7 @@
 export default {
   title: 'Parameter Config',
   loadingTip: 'requesting..',
+  redo: 'redo',
   tab: {
     tabName: {
       general: 'General Config',
@@ -94,7 +95,7 @@ export default {
         saveFailedTip: 'Data save failed',
         saveValidFailedTip: 'Please fill in the correct data',
       },
-      title: 'Pattern1',
+      title: 'Time Slot Config',
       column: {
         cellIndex: 'Cell Index',
         tddUlDlPattern2Configured: 'TddUlDl Pattern2 Configured',

@@ -30,13 +30,9 @@ export const getCellAdvancedConfig = async () => {
   return changeCellTypeToString(data?.data?.cellAdvancedConfigList);
 };
 
-export const getCellTimeslot1Config = async () => {
+export const getCellTimeslotConfig = async () => {
   const data = await defHttp.get<CellTimeSlotConfigResultModel>({ url: Api.getCellTimeslotConfig });
-  return changeCellTypeToString(data?.data?.cellTimeslot1ConfigList);
-};
-export const getCellTimeslot2Config = async () => {
-  const data = await defHttp.get<CellTimeSlotConfigResultModel>({ url: Api.getCellTimeslotConfig });
-  return changeCellTypeToString(data?.data?.cellTimeslot2ConfigList);
+  return data?.data;
 };
 
 export const setCellGlobalConfig = (params) =>

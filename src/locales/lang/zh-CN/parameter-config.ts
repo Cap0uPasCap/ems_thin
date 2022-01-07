@@ -1,6 +1,7 @@
 export default {
   title: '参数配置',
   loadingTip: '请求中..',
+  redo: '刷新',
   tab: {
     tabName: {
       general: '通用配置',
@@ -94,7 +95,7 @@ export default {
         saveFailedTip: '数据保存失败',
         saveValidFailedTip: '请填写正确的数据',
       },
-      title: 'Pattern1',
+      title: '时隙配置',
       column: {
         cellIndex: '小区索引',
         tddUlDlPattern2Configured: '周期类型',

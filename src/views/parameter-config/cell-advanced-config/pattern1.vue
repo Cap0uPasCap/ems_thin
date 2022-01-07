@@ -1,7 +1,13 @@
 <template>
-  <BasicTable @register="registerTable">
+  <BasicTable @register="registerTable" :dataSource="configData">
     <template #action="{ record, column }">
       <TableAction :actions="createActions(record, column)" />
+    </template>
+    <template #toolbar>
+      <Tooltip>
+        <template #title> {{ t('parameter-config.redo') }} </template>
+        <RedoOutlined @click="reload" />
+      </Tooltip>
     </template>
   </BasicTable>
   <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
@@ -17,14 +23,24 @@
     EditRecordRow,
   } from '/@/components/Table';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { getColumns, TimeSlotConfigModel } from './data';
-  import { getCellTimeslot1Config, setCellTimeslotConfig } from '/@/api/parameter-config';
+  import { getTimeSlotColumns, TimeSlotConfigModel } from './data';
+  import { setCellTimeslotConfig } from '/@/api/parameter-config';
   import { Loading } from '/@/components/Loading';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { RedoOutlined } from '@ant-design/icons-vue';
+  import { Tooltip } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { BasicTable, TableAction, Loading },
-    setup() {
+    components: { BasicTable, TableAction, Loading, Tooltip, RedoOutlined },
+    props: {
+      configData: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+    },
+    setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
       const compState = reactive({
@@ -34,14 +50,15 @@
       });
       const currentEditKeyRef = ref('');
       const [registerTable] = useTable({
-        title: 'Pattern1',
-        api: getCellTimeslot1Config,
-        columns: getColumns(),
+        title: t('parameter-config.page.timeSlot.title') + ' Pattern1',
+        // api: getCellTimeslot1Config,
+        columns: getTimeSlotColumns(),
         showIndexColumn: false,
         showTableSetting: true,
         tableSetting: {
           size: false,
           setting: false,
+          redo: false,
         },
         canResize: false,
         pagination: false,
@@ -61,6 +78,10 @@
       function handleEdit(record: EditRecordRow) {
         currentEditKeyRef.value = record.key;
         record.onEdit?.(true);
+      }
+
+      function reload() {
+        emit('reload');
       }
 
       function handleCancel(record: EditRecordRow) {
@@ -87,7 +108,7 @@
             });
             compState.loading = false;
             if (responseInfo.status === 1) throw new Error(responseInfo.message);
-            await getCellTimeslot1Config();
+            emit('reload');
             // 保存之后提交编辑状态
             const pass = await record.onEdit?.(false, true);
             if (pass) {
@@ -128,7 +149,9 @@
       }
 
       return {
+        t,
         t1,
+        reload,
         compState,
         registerTable,
         handleEdit,

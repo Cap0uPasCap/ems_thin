@@ -4,6 +4,12 @@
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
+      <template #toolbar>
+        <Tooltip>
+          <template #title> {{ t('parameter-config.redo') }} </template>
+          <RedoOutlined @click="reload" />
+        </Tooltip>
+      </template>
     </BasicTable>
     <Loading :absolute="compState.absolute" :loading="compState.loading" :tip="compState.tip" />
   </div>
@@ -25,8 +31,9 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { RedoOutlined } from '@ant-design/icons-vue';
   export default defineComponent({
-    components: { BasicTable, TableAction, Loading },
+    components: { BasicTable, TableAction, Loading, RedoOutlined },
     props: {
       configData: {
         type: Array,
@@ -54,6 +61,7 @@
         tableSetting: {
           size: false,
           setting: false,
+          redo: false,
         },
         actionColumn: {
           width: 40,
@@ -66,6 +74,10 @@
       function t1(context) {
         const prefix = 'parameter-config.page.basic.';
         return t(prefix + context);
+      }
+
+      function reload() {
+        emit('reload');
       }
 
       function handleEdit(record: EditRecordRow) {
@@ -177,7 +189,9 @@
       }
 
       return {
+        t,
         compState,
+        reload,
         registerTable,
         handleEdit,
         createActions,

@@ -35,7 +35,12 @@
           <span>{{ record.nrArfcnDL >= 600000 ? 78 : 41 }}</span>
         </div>
       </template>
-
+      <template #toolbar>
+        <Tooltip>
+          <template #title> {{ t('parameter-config.redo') }} </template>
+          <RedoOutlined @click="reload" />
+        </Tooltip>
+      </template>
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
@@ -47,6 +52,7 @@
   import { setCellBaseConfig } from '/@/api/parameter-config';
   import { defineComponent, reactive, ref } from 'vue';
   import { Loading } from '/@/components/Loading';
+  import { RedoOutlined } from '@ant-design/icons-vue';
   import {
     BasicTable,
     useTable,
@@ -62,7 +68,7 @@
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
-    components: { BasicTable, TableAction, InputNumber, Loading, Input, Tooltip },
+    components: { BasicTable, TableAction, InputNumber, Loading, Input, Tooltip, RedoOutlined },
     props: {
       configData: {
         type: Array,
@@ -90,6 +96,7 @@
         tableSetting: {
           size: false,
           setting: false,
+          redo: false,
         },
         actionColumn: {
           width: 70,
@@ -112,6 +119,10 @@
       function handleCancel(record: EditRecordRow) {
         currentEditKeyRef.value = '';
         record.onEdit?.(false, false);
+      }
+
+      function reload() {
+        emit('reload');
       }
 
       async function handleSave(record: EditRecordRow) {
@@ -214,6 +225,8 @@
 
       return {
         t1,
+        t,
+        reload,
         compState,
         registerTable,
         handleEdit,
