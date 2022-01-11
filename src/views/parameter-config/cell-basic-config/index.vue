@@ -1,7 +1,7 @@
 <template>
-  <Cell :configData="configData" @reload="getConfigData" />
-  <link-adaptation :configData="configData" @reload="getConfigData" />
-  <function-control :configData="configData" @reload="getConfigData" />
+  <Cell :configData="configData" @reloadData="getConfigData" />
+  <link-adaptation :configData="configData" @reloadData="getConfigData" />
+  <function-control :configData="configData" @reloadData="getConfigData" />
 </template>
 <script lang="ts">
   import { getCellBaseConfig } from '/@/api/parameter-config';

@@ -77,6 +77,7 @@
         },
       },
     },
+    emits: ['reloadData'],
     setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
@@ -122,7 +123,7 @@
       }
 
       function reload() {
-        emit('reload');
+        emit('reloadData');
       }
 
       async function handleSave(record: EditRecordRow) {
@@ -169,11 +170,11 @@
                     puschEnable: e.editValueRefs.puschEnable || e.puschEnable,
                     nrArfcnDL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
                     nrArfcnUL: e.editValueRefs.nrArfcnDL || e.nrArfcnDL,
+                    cellId: e.editValueRefs.cellId || e.cellId,
                     nrFreqBandDL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
                     nrFreqBandUL: (e.editValueRefs.nrArfcnDL || e.nrArfcnDL) >= 600000 ? 78 : 41,
                     cellIndex: e.cellIndex,
                     cellStatus: e.cellStatus,
-                    cellId: e.cellId,
                   });
                 }
               }
@@ -184,7 +185,7 @@
             });
             compState.loading = false;
             if (responseInfo.status === 1) throw new Error(responseInfo.message);
-            emit('reload');
+            emit('reloadData');
             const pass = await record.onEdit?.(false, true);
             if (pass) {
               currentEditKeyRef.value = '';

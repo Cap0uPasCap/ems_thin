@@ -32,8 +32,9 @@
   import { getColumns } from './data';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { RedoOutlined } from '@ant-design/icons-vue';
+  import { Tooltip } from 'ant-design-vue';
   export default defineComponent({
-    components: { BasicTable, TableAction, Loading, RedoOutlined },
+    components: { BasicTable, TableAction, Loading, RedoOutlined, Tooltip },
     props: {
       configData: {
         type: Array,
@@ -42,6 +43,7 @@
         },
       },
     },
+    emits: ['reloadData'],
     setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
@@ -77,7 +79,7 @@
       }
 
       function reload() {
-        emit('reload');
+        emit('reloadData');
       }
 
       function handleEdit(record: EditRecordRow) {
@@ -149,7 +151,7 @@
             });
             compState.loading = false;
             if (responseInfo.status === 1) throw new Error(responseInfo.message);
-            emit('reload');
+            emit('reloadData');
             const pass = await record.onEdit?.(false, true);
             if (pass) {
               currentEditKeyRef.value = '';

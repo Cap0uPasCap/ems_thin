@@ -40,6 +40,7 @@
         },
       },
     },
+    emits: ['reloadData'],
     setup(_, { emit }) {
       const { createMessage: msg } = useMessage();
       const { t } = useI18n();
@@ -81,7 +82,7 @@
       }
 
       function reload() {
-        emit('reload');
+        emit('reloadData');
       }
 
       function handleCancel(record: EditRecordRow) {
@@ -108,7 +109,7 @@
             });
             compState.loading = false;
             if (responseInfo.status === 1) throw new Error(responseInfo.message);
-            emit('reload');
+            emit('reloadData');
             // 保存之后提交编辑状态
             const pass = await record.onEdit?.(false, true);
             if (pass) {

@@ -3,10 +3,10 @@
     <Advanced />
   </div>
   <div class="p-4">
-    <Pattern1 :configData="cellTimeslot1ConfigList" @reload="getConfigData" />
+    <Pattern1 :configData="cellTimeslot1ConfigList" @reloadData="getConfigData" />
   </div>
   <div class="p-4">
-    <Pattern2 :configData="cellTimeslot2ConfigList" @reload="getConfigData" />
+    <Pattern2 :configData="cellTimeslot2ConfigList" @reloadData="getConfigData" />
   </div>
 </template>
 <script lang="ts">
