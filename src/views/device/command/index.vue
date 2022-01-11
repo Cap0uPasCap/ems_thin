@@ -59,7 +59,7 @@
 
   function responseJudgment(status, message) {
     switch (status) {
-      case 1:
+      case 0:
         createMessage.success(message);
         break;
       case 100:
