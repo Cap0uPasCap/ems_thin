@@ -25,22 +25,26 @@
             <Input
               :disabled="record.puschEnable === '1'"
               size="small"
-              style="width: 110px"
+              class="width_110"
               v-model:value="record.p0NominalWithGrant"
             />
           </Tooltip>
         </div>
-        <span v-else>{{ record.p0NominalWithGrant }}</span>
+        <span :class="record.puschEnable === '1' ? 'disabled' : ''" v-else>{{
+          record.p0NominalWithGrant
+        }}</span>
       </template>
       <template #puschTargetPower="{ record }">
         <Input
           v-if="record.editable"
           :disabled="record.puschEnable === '0'"
           size="small"
-          style="width: 110px"
+          class="width_110"
           v-model:value="record.puschTargetPower"
         />
-        <span v-else>{{ record.puschTargetPower }}</span>
+        <span :class="record.puschEnable === '0' ? 'disabled' : ''" v-else>{{
+          record.puschTargetPower
+        }}</span>
       </template>
       <template #toolbar>
         <Tooltip>
@@ -251,3 +255,12 @@
     },
   });
 </script>
+<style scoped>
+  .disabled {
+    color: #d1d1d1 !important;
+  }
+
+  .width_110 {
+    width: 110px;
+  }
+</style>
