@@ -43,6 +43,7 @@ export default {
         cellIndex: 'Cell Index',
         cellStatus: 'Cell Status',
         cellId: 'Cell ID',
+        phyCellID: 'PhyCellID',
         hoppingId: 'HoppingId',
         ssb: 'SSB',
         pointA: 'PointA',

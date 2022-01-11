@@ -100,7 +100,7 @@
           redo: false,
         },
         actionColumn: {
-          width: 70,
+          width: 80,
           title: 'Action',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -156,6 +156,7 @@
                 } else {
                   dataList.push({
                     hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
+                    phyCellID: e.editValueRefs.phyCellID || e.phyCellID,
                     ssb: e.editValueRefs.ssb || e.ssb,
                     maxUe: e.editValueRefs.maxUe || e.maxUe,
                     rlcMode: e.editValueRefs.rlcMode || e.rlcMode,

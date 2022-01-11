@@ -122,6 +122,7 @@
                 } else {
                   dataList.push({
                     hoppingId: e.editValueRefs.hoppingId || e.hoppingId,
+                    phyCellID: e.editValueRefs.phyCellID || e.phyCellID,
                     ssb: e.editValueRefs.ssb || e.ssb,
                     maxUe: e.editValueRefs.maxUe || e.maxUe,
                     rlcMode: e.editValueRefs.rlcMode || e.rlcMode,

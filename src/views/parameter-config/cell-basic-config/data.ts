@@ -40,6 +40,15 @@ export function getColumns(type) {
       },
     },
     {
+      title: t1('phyCellID'),
+      dataIndex: 'phyCellID',
+      editRow: true,
+      ifShow: () => {
+        return type === 'Basic';
+      },
+      width: 80,
+    },
+    {
       title: t1('hoppingId'),
       dataIndex: 'hoppingId',
       editRow: true,
