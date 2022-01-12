@@ -21,35 +21,40 @@
             "
           >
             <div class="ant-descriptions-view">
-              <table
-                ><tbody
-                  ><tr class="ant-descriptions-row"
-                    ><th class="ant-descriptions-item-label" colspan="1"
-                      ><div class="min_width_100">{{ t('information.modelName') }}</div></th
-                    ><td class="ant-descriptions-item-content" colspan="1"
-                      ><div class="min_width_100">{{ info.modelName }}</div></td
-                    ></tr
-                  ><tr class="ant-descriptions-row"
-                    ><th class="ant-descriptions-item-label" colspan="1"
-                      ><div class="min_width_100">{{ t('information.manufacturer') }}</div></th
-                    ><td class="ant-descriptions-item-content" colspan="1"
-                      ><div class="min_width_200">{{ info.manufacturer }}</div></td
-                    ></tr
-                  ><tr class="ant-descriptions-row"
-                    ><th class="ant-descriptions-item-label" colspan="1"
-                      ><div class="min_width_100">{{ t('information.manufacturerOui') }}</div></th
-                    ><td class="ant-descriptions-item-content" colspan="1">
+              <table>
+                <tbody>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label" colspan="1">
+                      <div class="min_width_100">{{ t('information.modelName') }}</div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
+                      <div class="min_width_100">{{ info.modelName }}</div>
+                    </td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label" colspan="1">
+                      <div class="min_width_100">{{ t('information.manufacturer') }}</div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
+                      <div class="min_width_200">{{ info.manufacturer }}</div>
+                    </td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label" colspan="1">
+                      <div class="min_width_100">{{ t('information.manufacturerOui') }}</div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
                       <span v-if="!ouiShow">
-                        <span style="margin-right: 5px; float: left; min-width: 70px">{{
-                          info.manufacturerOui
-                        }}</span>
+                        <span style="margin-right: 5px; float: left; min-width: 70px">
+                          {{ info.manufacturerOui }}
+                        </span>
                         <EditOutlined style="cursor: pointer" @click="ouiShow = true" />
                       </span>
                       <span v-else>
                         <Input
                           v-model:value="info.manufacturerOui"
-                          style="width: 120px; margin-right: 10px"
                           size="small"
+                          style="width: 120px; margin-right: 10px"
                         />
                         <CheckCircleOutlined
                           style="cursor: pointer; transform: scale(1.2); margin-right: 10px"
@@ -58,14 +63,16 @@
                         <CloseCircleOutlined
                           style="cursor: pointer; transform: scale(1.2)"
                           @click="ouiShow = false"
-                        />
-                      </span> </td></tr
-                  ><tr class="ant-descriptions-row">
+                        /> </span
+                    ></td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
                     <th class="ant-descriptions-item-label" colspan="1">
                       <div class="min_width_100">
                         {{ t('information.serialNumber') }}
-                      </div> </th
-                    ><td class="ant-descriptions-item-content" colspan="1">
+                      </div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
                       <span v-if="!serialShow">
                         <span style="margin-right: 5px; float: left; min-width: 70px">{{
                           info.serialNumber
@@ -75,8 +82,8 @@
                       <span v-else>
                         <Input
                           v-model:value="info.serialNumber"
-                          style="width: 120px; margin-right: 10px"
                           size="small"
+                          style="width: 120px; margin-right: 10px"
                         />
                         <CheckCircleOutlined
                           style="cursor: pointer; transform: scale(1.2); margin-right: 10px"
@@ -85,28 +92,34 @@
                         <CloseCircleOutlined
                           style="cursor: pointer; transform: scale(1.2)"
                           @click="serialShow = false"
-                        />
-                      </span> </td></tr
-                  ><tr class="ant-descriptions-row"
-                    ><th class="ant-descriptions-item-label" colspan="1"
-                      ><div class="min_width_100">{{ t('information.productClass') }}</div></th
-                    ><td class="ant-descriptions-item-content" colspan="1"
-                      ><div class="min_width_200">{{ info.productClass }}</div></td
-                    ></tr
-                  ><tr class="ant-descriptions-row"
-                    ><th class="ant-descriptions-item-label" colspan="1"
-                      ><div class="min_width_100">{{ t('information.hardwareVersion') }}</div></th
-                    ><td class="ant-descriptions-item-content" colspan="1"
-                      ><div class="min_width_200"
-                        ><span class="ant-tag ant-tag-blue">{{ info.hardwareVersion }}</span></div
-                      ></td
-                    ></tr
-                  ></tbody
-                ></table
-              ></div
-            ></div
-          ></div
-        >
+                        /> </span
+                    ></td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label" colspan="1">
+                      <div class="min_width_100">{{ t('information.productClass') }}</div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
+                      <div class="min_width_200">{{ info.productClass }}</div>
+                    </td>
+                  </tr>
+                  <tr class="ant-descriptions-row">
+                    <th class="ant-descriptions-item-label" colspan="1">
+                      <div class="min_width_100">{{ t('information.hardwareVersion') }}</div>
+                    </th>
+                    <td class="ant-descriptions-item-content" colspan="1">
+                      <div class="min_width_200">
+                        <span class="ant-tag ant-tag-blue">
+                          {{ info.hardwareVersion }}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <Description
@@ -240,7 +253,7 @@
     },
   });
 </script>
-<style scoped lang="less">
+<style lang="less" scoped>
   .min_width_100 {
     min-width: 100px;
   }

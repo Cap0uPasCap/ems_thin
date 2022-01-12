@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <BasicTable @register="registerTable" :dataSource="configData">
+    <BasicTable :dataSource="configData" @register="registerTable">
       <template #action="{ record, column }">
         <TableAction :actions="createActions(record, column)" />
       </template>
@@ -14,41 +14,41 @@
       <template #p0NominalWithGrant="{ record }">
         <div v-if="record.editable">
           <Tooltip
-            color="#fff"
             :visible="record.p0NominalWithGrant > 24 || record.p0NominalWithGrant < -202"
+            color="#fff"
           >
             <template #title>
-              <span style="color: #ed6f6f"
-                >P0NominalWithGrant: minInclusive: -202, maxInclusive: 24</span
-              >
+              <span style="color: #ed6f6f">
+                P0NominalWithGrant: minInclusive: -202, maxInclusive: 24
+              </span>
             </template>
             <Input
-              :disabled="record.puschEnable === '1'"
-              size="small"
-              class="width_110"
               v-model:value="record.p0NominalWithGrant"
+              :disabled="record.puschEnable === '1'"
+              class="width_110"
+              size="small"
             />
           </Tooltip>
         </div>
-        <span :class="record.puschEnable === '1' ? 'disabled' : ''" v-else>{{
-          record.p0NominalWithGrant
-        }}</span>
+        <span v-else :class="record.puschEnable === '1' ? 'disabled' : ''">
+          {{ record.p0NominalWithGrant }}
+        </span>
       </template>
       <template #puschTargetPower="{ record }">
         <Input
           v-if="record.editable"
-          :disabled="record.puschEnable === '0'"
-          size="small"
-          class="width_110"
           v-model:value="record.puschTargetPower"
+          :disabled="record.puschEnable === '0'"
+          class="width_110"
+          size="small"
         />
-        <span :class="record.puschEnable === '0' ? 'disabled' : ''" v-else>{{
-          record.puschTargetPower
-        }}</span>
+        <span v-else :class="record.puschEnable === '0' ? 'disabled' : ''">
+          {{ record.puschTargetPower }}
+        </span>
       </template>
       <template #toolbar>
         <Tooltip>
-          <template #title> {{ t('parameter-config.redo') }} </template>
+          <template #title> {{ t('parameter-config.redo') }}</template>
           <RedoOutlined @click="reload" />
         </Tooltip>
       </template>
