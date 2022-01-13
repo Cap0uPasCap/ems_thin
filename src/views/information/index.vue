@@ -48,7 +48,10 @@
                         <span style="margin-right: 5px; float: left; min-width: 70px">
                           {{ info.manufacturerOui }}
                         </span>
-                        <EditOutlined style="cursor: pointer" @click="ouiShow = true" />
+                        <EditOutlined
+                          style="cursor: pointer"
+                          @click="editClick('manufacturerOui', info.manufacturerOui)"
+                        />
                       </span>
                       <span v-else>
                         <Input
@@ -62,7 +65,7 @@
                         />
                         <CloseCircleOutlined
                           style="cursor: pointer; transform: scale(1.2)"
-                          @click="ouiShow = false"
+                          @click="cancelClick('manufacturerOui')"
                         /> </span
                     ></td>
                   </tr>
@@ -77,7 +80,10 @@
                         <span style="margin-right: 5px; float: left; min-width: 70px">{{
                           info.serialNumber
                         }}</span>
-                        <EditOutlined style="cursor: pointer" @click="serialShow = true" />
+                        <EditOutlined
+                          style="cursor: pointer"
+                          @click="editClick('serialNumber', info.serialNumber)"
+                        />
                       </span>
                       <span v-else>
                         <Input
@@ -91,7 +97,7 @@
                         />
                         <CloseCircleOutlined
                           style="cursor: pointer; transform: scale(1.2)"
-                          @click="serialShow = false"
+                          @click="cancelClick('serialNumber')"
                         /> </span
                     ></td>
                   </tr>
@@ -166,8 +172,7 @@
     setup() {
       const { t } = useI18n();
       const { createMessage } = useMessage();
-      let serialShow = ref<boolean>(false);
-      let ouiShow = ref<boolean>(false);
+
       const info = ref({
         firstUseDate: '',
         platform: '',
@@ -192,27 +197,38 @@
           }
         }
       }
-
       /**
-       * @desc  对于不经过处理直接返回的接口信息进行处理
-       * @param  status 0 代表成功 100 token 失效 其他 错误信息
-       * @param  message
+       * @desc
+       * @param  serialShow 序列号字段输入框是否显示
+       * @param  serialFakerValue 序列号原始值
+       * @param  ouiShow 厂商OUI字段输入框是否显示
+       * @param  ouiFakerValue 厂商OUI原始值
+       * @function editClick edit图标点击事件
+       * @function cancelClick cancel图标点击事件
+       * @function setParameterClick right图标点击事件
        */
-      function responseJudgment(status, message) {
-        switch (status) {
-          case 0:
-            createMessage.success(message);
-            break;
-          case 100:
-            createMessage.error(message);
-            useUserStore().setToken(undefined);
-            useUserStore().logout(true);
-            break;
-          default:
-            createMessage.error(message);
+      let serialShow = ref<boolean>(false);
+      let serialFakerValue = ref<string>('');
+      let ouiShow = ref<boolean>(false);
+      let ouiFakerValue = ref<string>('');
+      function editClick(type, value) {
+        if (type === 'serialNumber') {
+          serialFakerValue.value = value;
+          serialShow.value = true;
+        } else {
+          ouiFakerValue.value = value;
+          ouiShow.value = true;
         }
       }
-
+      function cancelClick(type) {
+        if (type === 'serialNumber') {
+          info.value.serialNumber = serialFakerValue.value;
+          serialShow.value = false;
+        } else {
+          info.value.manufacturerOui = ouiFakerValue.value;
+          ouiShow.value = false;
+        }
+      }
       async function setParameterClick(type, value) {
         const paramNameOption = {
           manufacturerOui: 'InternetGatewayDevice.DeviceInfo.MU.ManufacturerOUI',
@@ -236,6 +252,26 @@
         await getInfo();
       }
 
+      /**
+       * @desc  对于不经过处理直接返回的接口信息进行处理
+       * @param  status 0 代表成功 100 token 失效 其他 错误信息
+       * @param  message
+       */
+      function responseJudgment(status, message) {
+        switch (status) {
+          case 0:
+            createMessage.success(message);
+            break;
+          case 100:
+            createMessage.error(message);
+            useUserStore().setToken(undefined);
+            useUserStore().logout(true);
+            break;
+          default:
+            createMessage.error(message);
+        }
+      }
+
       onMounted(() => {
         getInfo();
       });
@@ -243,8 +279,12 @@
       return {
         t,
         info,
-        serialShow,
+        editClick,
+        cancelClick,
         ouiShow,
+        serialShow,
+        ouiFakerValue,
+        serialFakerValue,
         hardwareSchema,
         softwareSchema,
         setParameterClick,
