@@ -11,7 +11,7 @@ const iframe: AppRouteModule = {
   redirect: '/frame/doc',
   meta: {
     orderNo: 1000,
-    icon: 'majesticons:external-link',
+    icon: 'octicon:link-external-24',
     title: t('routes.demo.iframe.frame'),
     hideMenu: !isDev,
   },

@@ -10,7 +10,7 @@ const system: AppRouteModule = {
   redirect: '/system/user',
   meta: {
     orderNo: 8,
-    icon: 'ic:baseline-settings-applications',
+    icon: 'icon-park-outline:setting-config',
     title: t('routes.system.system'),
   },
   children: [

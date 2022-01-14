@@ -10,7 +10,7 @@ const device: AppRouteModule = {
   redirect: '/device/parameter',
   meta: {
     orderNo: 7,
-    icon: 'ic:baseline-dashboard-customize',
+    icon: 'carbon:edge-device',
     title: t('routes.device.device'),
   },
   children: [

@@ -11,7 +11,7 @@ const information: AppRouteModule = {
   meta: {
     orderNo: 1,
     hideChildrenInMenu: true,
-    icon: 'bi:info-square-fill',
+    icon: 'ci:info-square-outline',
     title: t('routes.information.information'),
   },
   children: [
